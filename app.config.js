@@ -33,14 +33,14 @@ const appConfig = {
    * This app's primary color.
    * @see {@link https://github.com/wpengine/atlas-blueprint-portfolio/blob/main/src/components/ThemeStyles/ThemeStyles.js}
    */
-  themeColor: 'blue',
+  themeColor: 'green',
 
   /**
    * @type {[key: 'twitterUrl' | 'facebookUrl' | 'instagramUrl' | 'youtubeUrl' | 'githubUrl' | 'linkedinUrl']: string}
    */
   socialLinks: {
-    twitterUrl: 'https://twitter.com/wpengine',
-    facebookUrl: 'https://www.facebook.com/wpengine',
+    twitterUrl: 'https://x.com/CalPolyGradEd',
+    facebookUrl: 'https://www.facebook.com/CalPolyGradEd',
     instagramUrl: 'https://www.instagram.com/wpengine/',
     youtubeUrl: 'https://youtube.com/wpengine',
     githubUrl: 'https://github.com/wpengine',

@@ -22,10 +22,10 @@ function Projects({ projects, id, emptyText = 'No projects found.' }) {
     useFocusFirstNewResult(projects);
 
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <section {...(id && { id })}>
       {projects.map((project, i) => {
         const isFirstNewResult = i === firstNewResultIndex;
+        const href = project?.uri ?? '#';
 
         return (
           <div
@@ -41,10 +41,11 @@ function Projects({ projects, id, emptyText = 'No projects found.' }) {
               />
               <div className={cx('content')}>
                 <Heading level="h3">
-                  <Link legacyBehavior href={project?.uri ?? '#'}>
-                    <a ref={isFirstNewResult ? firstNewResultRef : null}>
-                      {project.projectFields.title}
-                    </a>
+                  <Link
+                    href={href}
+                    ref={isFirstNewResult ? firstNewResultRef : null}
+                  >
+                    {project.projectFields.title}
                   </Link>
                 </Heading>
                 <div>{project.projectFields.summary}</div>

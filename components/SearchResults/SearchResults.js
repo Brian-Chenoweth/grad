@@ -13,12 +13,10 @@ import styles from './SearchResults.module.scss';
  * @returns {React.ReactElement} The SearchResults component.
  */
 export default function SearchResults({ searchResults, isLoading }) {
-  // If there are no results, or are loading, return null.
   if (!isLoading && searchResults === undefined) {
     return null;
   }
 
-  // If there are no results, return a message.
   if (!isLoading && !searchResults?.length) {
     return (
       <div className={styles['no-results']}>
@@ -32,21 +30,21 @@ export default function SearchResults({ searchResults, isLoading }) {
     <>
       {searchResults?.map((node) => (
         <div key={node.databaseId} className={styles.result}>
-          <Link legacyBehavior href={node.uri}>
-            <a>
-              <h2 className={styles.title}>{node.title}</h2>
-            </a>
+          <Link href={node.uri}>
+            <h2 className={styles.title}>{node.title}</h2>
           </Link>
+
           <div className={styles.meta}>
             <time className={styles.date} dateTime={node.date}>
               <FormatDate date={node.date} />
             </time>
           </div>
+
           <div
             dangerouslySetInnerHTML={{
               __html: node.excerpt,
             }}
-          ></div>
+          />
         </div>
       ))}
 

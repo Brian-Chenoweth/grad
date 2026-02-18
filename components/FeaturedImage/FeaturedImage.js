@@ -1,7 +1,9 @@
 import { gql } from '@apollo/client';
 import Image from 'next/image';
+import { useRouter } from 'next/router'; // 👈 import useRouter
 
 import styles from './FeaturedImage.module.scss';
+
 /**
  * A page/post Featured Image component
  * @param {Props} props The props object.
@@ -18,6 +20,9 @@ export default function FeaturedImage({
   height,
   ...props
 }) {
+  const router = useRouter(); // 👈 use the router
+  const isHome = router.pathname === '/'; // 👈 check if it's the home page
+
   let src;
   if (image?.sourceUrl instanceof Function) {
     src = image?.sourceUrl();
@@ -29,8 +34,16 @@ export default function FeaturedImage({
   width = width ? width : image?.mediaDetails?.width;
   height = height ? height : image?.mediaDetails?.height;
 
+  const combinedClassName = [
+    styles['featured-image'],
+    className,
+    isHome ? styles['home-image'] : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return src && width && height ? (
-    <figure className={[styles['featured-image'], className].join(' ')}>
+    <figure className={combinedClassName}>
       <Image
         src={src}
         width={width}

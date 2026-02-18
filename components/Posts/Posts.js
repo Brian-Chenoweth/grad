@@ -22,7 +22,6 @@ function Posts({ posts, intro, id }) {
     useFocusFirstNewResult(posts);
 
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <section {...(id && { id })}>
       {intro && <p>{intro}</p>}
       <div className={cx('post-list')}>
@@ -37,6 +36,8 @@ function Posts({ posts, intro, id }) {
             };
           }
 
+          const href = post?.uri ?? '#';
+
           return (
             <div
               className={cx('container')}
@@ -44,25 +45,25 @@ function Posts({ posts, intro, id }) {
               id={`post-${post.id}`}
             >
               <div className={cx('card')}>
-                <Link legacyBehavior href={post?.uri ?? '#'}>
-                  <a className={cx('image-holder')} tabIndex="-1">
-                    <FeaturedImage
-                      className={cx('image')}
-                      image={image}
-                      width={340}
-                      height={340}
-                      priority={i < appConfig.postsAboveTheFold}
-                    />
-                  </a>
+                <Link href={href} className={cx('image-holder')} tabIndex={-1}>
+                  <FeaturedImage
+                    className={cx('image')}
+                    image={image}
+                    width={340}
+                    height={340}
+                    priority={i < appConfig.postsAboveTheFold}
+                  />
                 </Link>
 
                 <Heading level="h4" className={cx('header')}>
-                  <Link legacyBehavior href={post?.uri ?? '#'}>
-                    <a ref={isFirstNewResult ? firstNewResultRef : null}>
-                      {post.title}
-                    </a>
+                  <Link
+                    href={href}
+                    ref={isFirstNewResult ? firstNewResultRef : null}
+                  >
+                    {post.title}
                   </Link>
                 </Heading>
+
                 <PostInfo
                   className={cx('info')}
                   author={post?.author?.node?.name}

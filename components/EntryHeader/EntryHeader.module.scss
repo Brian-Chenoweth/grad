@@ -1,53 +1,93 @@
 @import 'styles/Variables';
 
 .entry-header {
-  margin-bottom: 2rem;
   color: var(--color-white);
-  background-color: var(--color-primary);
+  margin-top: 110px;
+}
 
-  @media (min-width: $breakpoint-small) {
-    margin-bottom: 10rem;
+.image {
+  position: relative;
+  display: block;
+  min-height: 315px;
+
+  figure {
+     margin: 0;
+     min-height: 315px;
+     object-fit: cover; 
+    }
+
+  figure img { 
+    min-height: 315px;
+    object-fit: cover; 
   }
+
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: flex; 
+  align-items: center;
+  background-color: rgba(0,0,0,0.3);
+  @media screen and (max-width: 767px) {
+    bottom: 10px;
+  }
+}
+
+.overlay > .container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.heading-home {
+  position: static;
+  margin: 0;
+  text-align: left;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  pointer-events: auto;
 }
 
 .text,
-.image {
-  margin: auto;
-  text-align: center;
-}
+.image { margin: auto; text-align: center; }
+.text { width: 100%; }
+.title { line-height: 1em; font-weight: 700; }
+.byline { font-weight: $font-weight-bold; font-size: 1.2rem; text-transform: uppercase; }
 
-.text {
-  width: 100%;
-  max-width: 82rem;
-  padding: 8.25rem 0;
-}
 
-.title {
-  line-height: 1.25;
-}
+.featured-image { margin: 0; position: relative; z-index: 1; }
 
-.byline {
-  font-weight: $font-weight-bold;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-}
 
-.image {
-  display: block;
+.heading-home {
   position: relative;
-
-  &:before {
-    content: ' ';
-    position: absolute;
-    height: 50%;
-    width: 100%;
-    background-color: var(--color-white);
-    bottom: 0;
-    left: 0;
-    z-index: 0;
-  }
-}
-
-.featured-image {
+  display: inline-block;
   margin: 0;
+  line-height: 1.05;
+  text-transform: uppercase;
+  text-align: left;
+  width: 100%;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -25px; 
+    width: 200px; 
+    height: 3px;  
+    background: #C69214;  
+  }
+
+  
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -25px;   
+    width: 200px;  
+    height: 3px;
+    background: #C69214;
+  }
 }

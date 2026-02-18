@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 
 import styles from './TaxonomyTerms.module.scss';
 let cx = classNames.bind(styles);
+
 /**
  * Renders a list of taxonomy terms and term links for a given post
  * @param {Props} props The props object.
@@ -13,16 +14,14 @@ let cx = classNames.bind(styles);
 export default function TaxonomyTerms({ post, taxonomy }) {
   const termLinks = post?.[taxonomy]?.edges.map((edge, index) => {
     const { name, uri } = edge.node;
-    return (
-      uri && (
-        <Link legacyBehavior key={index} href={uri}>
-          {name}
-        </Link>
-      )
-    );
+    return uri ? (
+      <Link key={index} href={uri}>
+        {name}
+      </Link>
+    ) : null;
   });
 
-  if (0 === termLinks.length) {
+  if (!termLinks?.length) {
     return null;
   }
 

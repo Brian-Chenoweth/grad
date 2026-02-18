@@ -1,0 +1,60 @@
+@import 'styles/Variables';
+
+
+.homeIntro {
+  padding: 4rem 0 !important;
+  @media (min-width: $breakpoint-small) {
+    padding: 10rem 0 !important;
+  }
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  p {
+    font-family: "utopia-std-display", serif;
+    font-style: normal;
+    font-weight: 400;
+    color: var(--color-primary);
+    @media (min-width: $breakpoint-small) {
+      font-size: 2.45rem;
+      line-height: 3.85rem;
+      text-align: center;
+    }
+  }
+}
+
+.heading h2 {
+    text-align: center;
+}
+
+.numberItem {
+  background-color: #fff;
+  padding: 4rem 2rem;
+}
+
+.numbers {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 4rem;
+  text-align: center;
+  margin: 5rem 0 0 0;
+
+  @media (max-width: $breakpoint-small) {
+    grid-template-columns: 1fr;
+    margin: 3rem 0 0 0;
+    grid-gap: 2rem;
+  }
+  
+  p {
+    margin: 0;
+    color: var(--color-primary);
+    font-family: "utopia-std-display", serif;
+    font-weight: 400;
+     @media (min-width: $breakpoint-small) {
+        font-size: 2.15rem;
+        line-height: 3.25rem;
+     }
+  }
+
+}

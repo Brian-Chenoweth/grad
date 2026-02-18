@@ -7,7 +7,7 @@ import styles from './Button.module.scss';
  *
  * @param {Props} props The props object.
  * @param {string} props.href The href attribute. If provided the button will be an <a> element.
- * @param {primary|secondary} props.styleType The type of the button
+ * @param {'primary'|'secondary'} props.styleType The type of the button
  * @param {string} props.className An optional className to be added to the button
  * @return {React.ReactElement} The Button component.
  */
@@ -18,30 +18,25 @@ export default function Button({
   children,
   ...props
 }) {
-  let buttonStyle;
-  switch (styleType) {
-    case 'secondary': {
-      buttonStyle = 'secondary';
-      break;
-    }
-    default: {
-      buttonStyle = 'primary';
-      break;
-    }
-  }
+  const buttonStyle = styleType === 'secondary' ? 'secondary' : 'primary';
 
-  let buttonClassName = [
+  const buttonClassName = [
     styles.button,
     styles[`button-${buttonStyle}`],
     className ?? undefined,
-  ].join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   if (href) {
     return (
-      <Link legacyBehavior href={href}>
-        <a role="button" href={href} className={buttonClassName} {...props}>
-          {children}
-        </a>
+      <Link
+        href={href}
+        className={buttonClassName}
+        role="button"
+        {...props}
+      >
+        {children}
       </Link>
     );
   }
