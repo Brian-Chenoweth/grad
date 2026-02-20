@@ -9,7 +9,7 @@ export default function HomepageIntro() {
 
           <div className={styles.content}>
             <p>
-              The strategic business partner to Cal Poly Solano Campus and Cal Poly Maritime Academy, the Graduate Education provides the campus and the local community with innovative services through strategic business partnerships that continuously improve value and enhance the overall experience of our cadets.
+              The strategic business partner to Cal Poly Solano Campus and Graduate Education, the Graduate Education provides the campus and the local community with innovative services through strategic business partnerships that continuously improve value and enhance the overall experience of our cadets.
             </p>
           </div>
 
@@ -17,7 +17,7 @@ export default function HomepageIntro() {
           
           <div className={styles.numberItem}>
             <h2>5<span className="blue">+</span></h2>
-            <p>Years Supporting Cal Poly Maritime Academy</p>
+            <p>Years Supporting Graduate Education</p>
           </div>
 
           <div className={styles.numberItem}>
@@ -27,7 +27,7 @@ export default function HomepageIntro() {
 
           <div className={styles.numberItem}>
             <h2>$6.5 million<span className="blue">+</span></h2>
-            <p>Generated Revenue in Support of Cal Poly Maritime Academy</p>
+            <p>Generated Revenue in Support of Graduate Education</p>
           </div>
 
         </div>

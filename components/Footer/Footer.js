@@ -31,19 +31,19 @@ export default function Footer({
             <div className={cx('footer-nav-contact-info')}>
 
               <div className={cx('about')}>
-                <h3>Quick Links</h3>
-                <NavigationMenu className={cx('quick')} menuItems={aboutMenuItems} />
+                <h3>Resources</h3>
+                <NavigationMenu className={cx('quick')} menuItems={menuItems} />
               </div>
 
               <div className={cx('resources')}>
-                <h3>Cal Poly Maritime Academy</h3>
+                <h3>Connect with Us</h3>
                 <NavigationMenu className={cx('quick')} menuItems={resourcesMenuItems} />
               </div>
               
-              <div className={cx('footer-nav')}>
+              {/* <div className={cx('footer-nav')}>
                 <h3>Integration</h3>
                 <NavigationMenu className={cx('quick')} menuItems={menuItems} />
-              </div>
+              </div> */}
 
               <div className={cx('contact-info')}>
                 {/* modern Link */}
@@ -51,17 +51,12 @@ export default function Footer({
                   {title ?? 'Graduate Education'}
                 </Link>
 
-                <a
-                  href="https://maps.app.goo.gl/wfAGSv2u8VPyjxgR6"
-                  target="_blank"
-                  rel="noreferrer"
-                  className={cx('phone')}
-                >
-                  200 Maritime Academy Dr., Vallejo, CA 94590
+                <a href="mailto:grad@calpoly.edu" className={cx('phone')}>
+                  grad@calpoly.edu
                 </a>
 
-                <a href="tel:7076541000" className={cx('phone')}>
-                  707-654-1000
+                <a href="tel:8057562328" className={cx('phone')}>
+                  805-756-2328
                 </a>
               </div>
             </div>
