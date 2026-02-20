@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
  * - url?: string (absolute canonical URL; else auto-built from NEXT_PUBLIC_SITE_URL + asPath)
  * - noindex?: boolean (default false)
  * - type?: 'website' | 'article' | string (default 'website')
- * - siteName?: string (default 'Cal Maritime Corporation')
+ * - siteName?: string (default 'Graduate Education')
  * - twitterHandle?: string (default '@CalPolyPartners')
  * - themeColor?: string (default brand green)
  * - locale?: string (default 'en_US')
@@ -26,13 +26,13 @@ import { useRouter } from 'next/router';
  */
 
 const DEFAULTS = {
-  siteName: 'Cal Maritime Corporation',
+  siteName: 'Graduate Education',
   twitterHandle: '@CalPolyPartners',
   themeColor: '#003831',
   locale: 'en_US',
   type: 'website',
-  defaultTitle: 'Cal Maritime Corporation',
-  defaultDescription: 'Official site for Cal Maritime Corporation.',
+  defaultTitle: 'Graduate Education',
+  defaultDescription: 'Official site for Graduate Education.',
   defaultImage: '/images/og-default.jpg',
 };
 

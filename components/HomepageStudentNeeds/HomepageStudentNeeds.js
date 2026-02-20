@@ -22,7 +22,7 @@ export default function HomepageStudentNeeds() {
               />
 
               <h2 className="wp-block-heading">Supporting Student Needs</h2>
-              <p>Through enterprise services like Maritime Shop and event coordination, Cal Maritime Corporation provides essential resources for students, cadets, faculty and visitors alike. From branded gear to facility rentals and conference planning, our Commercial Services operations generate revenue that directly benefits the university while keeping vital services running smoothly.</p>
+              <p>Through enterprise services like Maritime Shop and event coordination, Graduate Education provides essential resources for students, cadets, faculty and visitors alike. From branded gear to facility rentals and conference planning, our Commercial Services operations generate revenue that directly benefits the university while keeping vital services running smoothly.</p>
 
               <Button styleType="primary" href="https://maritime-archive.calpoly.edu/keelhauler-shops/index.html" target="_blank" rel="noopener noreferrer">
                 Maritime Shop

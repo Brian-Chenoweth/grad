@@ -28,7 +28,7 @@ export default function EntryHeader({ title, image, date, author, className }) {
                 )}
 
                 {isHome && (
-                  <Heading className={cx('heading-home')} level="h1">Cal Maritime Corporation</Heading>
+                  <Heading className={cx('heading-home')} level="h1">Graduate Education</Heading>
                 )}
                                 
               </div>

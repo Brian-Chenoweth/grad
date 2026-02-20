@@ -21,7 +21,7 @@ export default function HomepageCampusLife() {
                 src="/home/cal-maritime-marketplace-building-campus-life-support.jpg"
                 width={980}
                 height={630}
-                alt="Exterior of Cal Maritime Marketplace building with palm trees and clear blue sky, representing campus life improvements and student support services featured on Cal Maritime Corporation’s website."
+                alt="Exterior of Cal Maritime Marketplace building with palm trees and clear blue sky, representing campus life improvements and student support services featured on Graduate Education’s website."
                 layout="responsive"
               />
             </figure>
