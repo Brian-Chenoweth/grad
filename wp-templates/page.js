@@ -15,9 +15,6 @@ import {
   SEO,
 } from '../components';
 
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
 
 
@@ -41,8 +38,6 @@ export default function Component(props) {
 
   const page = props?.data?.page ?? { title: '' };
   const { title, content, featuredImage, seo: s } = page;
-
-  const htmlWithSlot = (content ?? '').split(TOKEN).join(SLOT_HTML);
 
   // ---- Yoast → SEO props with smart fallbacks ----
   const computedTitle =
@@ -87,8 +82,7 @@ export default function Component(props) {
         <>
           <EntryHeader title={title} image={featuredImage?.node} />
           <div className="container">
-            <ContentWrapper content={htmlWithSlot} />
-            <ContactFormIntoSlot />
+            <ContentWrapper content={content} />
           </div>
         </>
       </Main>
@@ -105,16 +99,21 @@ export default function Component(props) {
 }
 
 Component.variables = ({ databaseId }, ctx) => {
+  const fallbackFooterLocation = MENUS.FOOTER_LOCATION ?? null;
+
   return {
     databaseId,
     headerLocation: MENUS.PRIMARY_LOCATION,
     // was FOOTER_LOCATION — stop using it
-    footerLocation: MENUS.FOOTER_LOCATION,
-    quickFooterLocation: MENUS.QUICK_FOOTER_LOCATION,
-    aboutFooterLocation: MENUS.ABOUT_FOOTER_LOCATION,
-    footerSecondaryLocation: MENUS.FOOTER_SECONDARY_LOCATION,
-    footerTertiaryLocation: MENUS.FOOTER_TERTIARY_LOCATION,
-    resourcesFooterLocation: MENUS.RESOURCES_FOOTER_LOCATION,
+    footerLocation: fallbackFooterLocation,
+    quickFooterLocation: MENUS.QUICK_FOOTER_LOCATION ?? fallbackFooterLocation,
+    aboutFooterLocation: MENUS.ABOUT_FOOTER_LOCATION ?? fallbackFooterLocation,
+    footerSecondaryLocation:
+      MENUS.FOOTER_SECONDARY_LOCATION ?? fallbackFooterLocation,
+    footerTertiaryLocation:
+      MENUS.FOOTER_TERTIARY_LOCATION ?? fallbackFooterLocation,
+    resourcesFooterLocation:
+      MENUS.RESOURCES_FOOTER_LOCATION ?? fallbackFooterLocation,
     asPreview: ctx?.asPreview,
   };
 };

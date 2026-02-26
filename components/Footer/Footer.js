@@ -20,6 +20,39 @@ export default function Footer({
   navOneMenuItems,
   navTwoMenuItems,
 }) {
+  const allFooterItems = Array.isArray(menuItems) ? menuItems : [];
+
+  const deriveColumnMenus = (items) => {
+    const topLevel = items.filter((item) => !item?.parentId);
+    const leftRootIds = new Set(topLevel.filter((_, i) => i % 2 === 0).map((item) => item.id));
+    const rightRootIds = new Set(topLevel.filter((_, i) => i % 2 === 1).map((item) => item.id));
+
+    const rootById = new Map(topLevel.map((item) => [item.id, item.id]));
+    let changed = true;
+
+    // Resolve each item's top-level ancestor so child items stay with their parent column.
+    while (changed) {
+      changed = false;
+      items.forEach((item) => {
+        if (!item?.id || rootById.has(item.id)) return;
+        const parentRootId = rootById.get(item.parentId);
+        if (parentRootId) {
+          rootById.set(item.id, parentRootId);
+          changed = true;
+        }
+      });
+    }
+
+    const leftItems = items.filter((item) => leftRootIds.has(rootById.get(item.id)));
+    const rightItems = items.filter((item) => rightRootIds.has(rootById.get(item.id)));
+
+    return { leftItems, rightItems };
+  };
+
+  const { leftItems, rightItems } = deriveColumnMenus(allFooterItems);
+  const resolvedNavOneMenuItems = navOneMenuItems?.length ? navOneMenuItems : leftItems;
+  const resolvedNavTwoMenuItems = navTwoMenuItems?.length ? navTwoMenuItems : rightItems;
+
   return (
     <>
       <footer className={cx('footer')}>
@@ -34,6 +67,37 @@ export default function Footer({
 
               <div className={cx('resources')}>
                 <h3>Connect with Us</h3>
+                {appConfig?.socialLinks && (
+                  <div className={cx('social-links')}>
+                    <ul aria-label="Social media">
+                      {appConfig.socialLinks?.facebookUrl && (
+                        <li>
+                          <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={cx('social-icon-link')}
+                            href={appConfig.socialLinks.facebookUrl}
+                          >
+                            <FaFacebookF title="Facebook" className={cx('social-icon')} />
+                          </a>
+                        </li>
+                      )}
+
+                      {appConfig.socialLinks?.twitterUrl && (
+                        <li>
+                          <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={cx('social-icon-link')}
+                            href={appConfig.socialLinks.twitterUrl}
+                          >
+                            <FaXTwitter title="Twitter" className={cx('social-icon')} />
+                          </a>
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                )}
                 <a href="https://maps.calpoly.edu/place/bldg-052-0/@35.3006123,-120.6608836,16.6z" target="_blank" rel="noopener noreferrer" className={cx('address')}>Office: Building 52, Room D-27</a>
               </div>
               
@@ -73,11 +137,11 @@ export default function Footer({
             </div>
 
             <div className={cx('nav-one')}>
-              <NavigationMenu className={cx('nav')} menuItems={navOneMenuItems} />
+              <NavigationMenu className={cx('nav')} menuItems={resolvedNavOneMenuItems} />
             </div>
 
             <div className={cx('nav-two')}>
-              <NavigationMenu className={cx('nav')} menuItems={navTwoMenuItems} />
+              <NavigationMenu className={cx('nav')} menuItems={resolvedNavTwoMenuItems} />
             </div>
 
             <div className={cx('copyright')}>

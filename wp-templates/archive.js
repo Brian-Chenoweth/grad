@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
+import appConfig from 'app.config';
 import { pageTitle } from 'utilities';
 
 import * as MENUS from '../constants/menus';
@@ -14,7 +15,6 @@ import {
   FeaturedImage,
   SEO,
 } from '../components';
-import appConfig from 'app.config';
 
 export default function Archive(props) {
   const { uri, name, __typename } = props.data.nodeByUri;
@@ -30,6 +30,8 @@ export default function Archive(props) {
     data?.generalSettings;
   const primaryMenu = data?.headerMenuItems?.nodes ?? [];
   const footerMenu = data?.footerMenuItems?.nodes ?? [];
+  const footerNavOne = data?.footerSecondaryMenuItems?.nodes ?? [];
+  const footerNavTwo = data?.footerTertiaryMenuItems?.nodes ?? [];
   const postList = data.nodeByUri?.contentNodes?.edges.map((el) => el.node);
 
   return (
@@ -62,7 +64,12 @@ export default function Archive(props) {
           </div>
         </>
       </Main>
-      <Footer title={siteTitle} menuItems={footerMenu} />
+      <Footer
+        title={siteTitle}
+        menuItems={footerMenu}
+        navOneMenuItems={footerNavOne}
+        navTwoMenuItems={footerNavTwo}
+      />
     </>
   );
 }
@@ -77,6 +84,8 @@ Archive.query = gql`
     $after: String!
     $headerLocation: MenuLocationEnum
     $footerLocation: MenuLocationEnum
+    $footerSecondaryLocation: MenuLocationEnum
+    $footerTertiaryLocation: MenuLocationEnum
   ) {
     nodeByUri(uri: $uri) {
       __typename
@@ -196,6 +205,16 @@ Archive.query = gql`
         ...NavigationMenuItemFragment
       }
     }
+    footerSecondaryMenuItems: menuItems(where: { location: $footerSecondaryLocation }) {
+      nodes {
+        ...NavigationMenuItemFragment
+      }
+    }
+    footerTertiaryMenuItems: menuItems(where: { location: $footerTertiaryLocation }) {
+      nodes {
+        ...NavigationMenuItemFragment
+      }
+    }
   }
 `;
 
@@ -206,5 +225,7 @@ Archive.variables = ({ uri }) => {
     after: '',
     headerLocation: MENUS.PRIMARY_LOCATION,
     footerLocation: MENUS.FOOTER_LOCATION,
+    footerSecondaryLocation: MENUS.FOOTER_SECONDARY_LOCATION,
+    footerTertiaryLocation: MENUS.FOOTER_TERTIARY_LOCATION,
   };
 };

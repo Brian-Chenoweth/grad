@@ -25,6 +25,8 @@ export default function Component(props) {
     props?.data?.generalSettings;
   const primaryMenu = props?.data?.headerMenuItems?.nodes ?? [];
   const footerMenu = props?.data?.footerMenuItems?.nodes ?? [];
+  const footerNavOne = props?.data?.footerSecondaryMenuItems?.nodes ?? [];
+  const footerNavTwo = props?.data?.footerTertiaryMenuItems?.nodes ?? [];
   const { title, content, featuredImage, date, author } = props.data.post;
 
   return (
@@ -59,7 +61,12 @@ export default function Component(props) {
           </div>
         </>
       </Main>
-      <Footer title={siteTitle} menuItems={footerMenu} />
+      <Footer
+        title={siteTitle}
+        menuItems={footerMenu}
+        navOneMenuItems={footerNavOne}
+        navTwoMenuItems={footerNavTwo}
+      />
     </>
   );
 }
@@ -72,6 +79,8 @@ Component.query = gql`
     $databaseId: ID!
     $headerLocation: MenuLocationEnum
     $footerLocation: MenuLocationEnum
+    $footerSecondaryLocation: MenuLocationEnum
+    $footerTertiaryLocation: MenuLocationEnum
     $asPreview: Boolean = false
   ) {
     post(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
@@ -114,6 +123,16 @@ Component.query = gql`
         ...NavigationMenuItemFragment
       }
     }
+    footerSecondaryMenuItems: menuItems(where: { location: $footerSecondaryLocation }) {
+      nodes {
+        ...NavigationMenuItemFragment
+      }
+    }
+    footerTertiaryMenuItems: menuItems(where: { location: $footerTertiaryLocation }) {
+      nodes {
+        ...NavigationMenuItemFragment
+      }
+    }
   }
 `;
 
@@ -122,6 +141,8 @@ Component.variables = ({ databaseId }, ctx) => {
     databaseId,
     headerLocation: MENUS.PRIMARY_LOCATION,
     footerLocation: MENUS.FOOTER_LOCATION,
+    footerSecondaryLocation: MENUS.FOOTER_SECONDARY_LOCATION,
+    footerTertiaryLocation: MENUS.FOOTER_TERTIARY_LOCATION,
     asPreview: ctx?.asPreview,
   };
 };

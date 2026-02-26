@@ -30,6 +30,8 @@ export default function Page() {
   const { title: siteTitle } = data?.generalSettings;
   const primaryMenu = data?.headerMenuItems?.nodes ?? [];
   const footerMenu = data?.footerMenuItems?.nodes ?? [];
+  const footerNavOne = data?.footerSecondaryMenuItems?.nodes ?? [];
+  const footerNavTwo = data?.footerTertiaryMenuItems?.nodes ?? [];
   const postList = data.posts.edges.map((el) => el.node);
 
   return (
@@ -52,7 +54,12 @@ export default function Page() {
         </div>
       </Main>
 
-      <Footer title={siteTitle} menuItems={footerMenu} />
+      <Footer
+        title={siteTitle}
+        menuItems={footerMenu}
+        navOneMenuItems={footerNavOne}
+        navTwoMenuItems={footerNavTwo}
+      />
     </>
   );
 }
@@ -67,6 +74,8 @@ Page.query = gql`
     $after: String
     $headerLocation: MenuLocationEnum
     $footerLocation: MenuLocationEnum
+    $footerSecondaryLocation: MenuLocationEnum
+    $footerTertiaryLocation: MenuLocationEnum
   ) {
     posts(first: $first, after: $after) {
       edges {
@@ -94,6 +103,16 @@ Page.query = gql`
         ...NavigationMenuItemFragment
       }
     }
+    footerSecondaryMenuItems: menuItems(where: { location: $footerSecondaryLocation }) {
+      nodes {
+        ...NavigationMenuItemFragment
+      }
+    }
+    footerTertiaryMenuItems: menuItems(where: { location: $footerTertiaryLocation }) {
+      nodes {
+        ...NavigationMenuItemFragment
+      }
+    }
   }
 `;
 
@@ -103,6 +122,8 @@ Page.variables = () => {
     after: '',
     headerLocation: MENUS.PRIMARY_LOCATION,
     footerLocation: MENUS.FOOTER_LOCATION,
+    footerSecondaryLocation: MENUS.FOOTER_SECONDARY_LOCATION,
+    footerTertiaryLocation: MENUS.FOOTER_TERTIARY_LOCATION,
   };
 };
 
