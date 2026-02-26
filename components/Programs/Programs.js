@@ -7,20 +7,20 @@ import {
 import className from 'classnames/bind';
 import { Carousel } from 'react-responsive-carousel';
 
-import TestimonialItem from '../TestimonialItem';
+import ProgramItem from '../ProgramItem';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import styles from './Testimonials.module.scss';
+import styles from './Programs.module.scss';
 const cx = className.bind(styles);
 
 /**
- * Render the testimonials component
+ * Render the programs component
  *
  * @param {Props} props The props object.
- * @param {Testimonial[]} props.testimonials The array of testimonials.
- * @returns {React.ReactElement} The testimonials component.
+ * @param {Program[]} props.programs The array of programs.
+ * @returns {React.ReactElement} The programs component.
  */
-export default function Testimonials({ testimonials }) {
+export default function Programs({ programs }) {
   return (
     <>
       <div className={cx('container')}>
@@ -44,18 +44,18 @@ export default function Testimonials({ testimonials }) {
           infiniteLoop={true}
           showStatus={false}
         >
-          {testimonials.map((testimonial, index) => (
-            <TestimonialItem
-              author={testimonial?.testimonialFields?.testimonialAuthor}
+          {programs.map((program, index) => (
+            <ProgramItem
+              author={program?.programFields?.programAuthor}
               key={index}
             >
               <div
                 className={cx('slide-content')}
                 dangerouslySetInnerHTML={{
-                  __html: testimonial?.testimonialFields?.testimonialContent,
+                  __html: program?.programFields?.programContent,
                 }}
               />
-            </TestimonialItem>
+            </ProgramItem>
           ))}
         </Carousel>
       </div>
@@ -63,12 +63,12 @@ export default function Testimonials({ testimonials }) {
   );
 }
 
-Testimonials.fragments = {
+Programs.fragments = {
   entry: gql`
-    fragment TestimonialsFragment on Testimonial {
-      testimonialFields {
-        testimonialContent
-        testimonialAuthor
+    fragment ProgramsFragment on Program {
+      programFields {
+        programContent
+        programAuthor
       }
     }
   `,

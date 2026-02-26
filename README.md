@@ -1,6 +1,6 @@
 # Headless Platform Blueprint Portfolio
 
-This repository contains a starter Blueprint to get you up and running quickly on [WP Engine's Headless Platform](https://wpengine.com/atlas/) with a WordPress site complete with a blog, portfolio and testimonials.
+This repository contains a starter Blueprint to get you up and running quickly on [WP Engine's Headless Platform](https://wpengine.com/atlas/) with a WordPress site complete with a blog, portfolio and programs.
 
 ## For more information
 

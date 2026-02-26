@@ -34,43 +34,9 @@ export default function Footer({
 
               <div className={cx('resources')}>
                 <h3>Connect with Us</h3>
-                {appConfig?.socialLinks && (
-                  <div className={cx('social-links')}>
-                    <ul aria-label="Social media">
-
-                      {appConfig.socialLinks?.facebookUrl && (
-                        <li>
-                          <a
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={cx('social-icon-link')}
-                            href={appConfig.socialLinks.facebookUrl}
-                          >
-                            <FaFacebookF title="Facebook" className={cx('social-icon')} />
-                          </a>
-                        </li>
-                      )}
-
-                      {appConfig.socialLinks?.twitterUrl && (
-                        <li>
-                          <a
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={cx('social-icon-link')}
-                            href={appConfig.socialLinks.twitterUrl}
-                          >
-                            <FaXTwitter title="Twitter" className={cx('social-icon')} />
-                          </a>
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                )}
-
                 <a href="https://maps.calpoly.edu/place/bldg-052-0/@35.3006123,-120.6608836,16.6z" target="_blank" rel="noopener noreferrer" className={cx('address')}>Office: Building 52, Room D-27</a>
-                
               </div>
-
+              
               
 
               <div className={cx('contact-info')}>
@@ -102,6 +68,7 @@ export default function Footer({
               </div>
 
               <p>1 Grand Avenue, San Luis Obispo, CA 93407</p>
+              <a href="tel:8057561111" className={cx('phone')}>(805) 756-1111</a>
 
             </div>
 

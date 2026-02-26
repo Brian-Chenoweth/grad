@@ -14,7 +14,7 @@ import {
   Header,
   Footer,
   Posts,
-  Testimonials,
+  Programs,
 } from 'components';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 
@@ -104,14 +104,14 @@ export default function Component() {
               </span>
             </CTA>
           </section>
-          <section className={styles.testimonials}>
+          <section className={styles.programs}>
             <Heading className={styles.heading} level="h2">
-              Testimonials
+              Programs
             </Heading>
             <p className={styles.description}>
               Here are just a few of the nice things our customers have to say.
             </p>
-            <Testimonials testimonials={data?.testimonials?.nodes} />
+            <Programs programs={data?.programs?.nodes} />
           </section>
         </div>
       </Main>
@@ -132,7 +132,7 @@ Component.query = gql`
   ${BlogInfoFragment}
   ${NavigationMenu.fragments.entry}
   ${Posts.fragments.entry}
-  ${Testimonials.fragments.entry}
+  ${Programs.fragments.entry}
   query GetPageData(
     $headerLocation: MenuLocationEnum
     $footerLocation: MenuLocationEnum
@@ -143,9 +143,9 @@ Component.query = gql`
         ...PostsItemFragment
       }
     }
-    testimonials {
+    programs {
       nodes {
-        ...TestimonialsFragment
+        ...ProgramsFragment
       }
     }
     generalSettings {
