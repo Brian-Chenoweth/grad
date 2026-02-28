@@ -45,14 +45,11 @@ export default function Programs({ programs }) {
           showStatus={false}
         >
           {programs.map((program, index) => (
-            <ProgramItem
-              author={program?.programFields?.programAuthor}
-              key={index}
-            >
+            <ProgramItem author={program?.title} key={index}>
               <div
                 className={cx('slide-content')}
                 dangerouslySetInnerHTML={{
-                  __html: program?.programFields?.programContent,
+                  __html: program?.content,
                 }}
               />
             </ProgramItem>
@@ -66,10 +63,8 @@ export default function Programs({ programs }) {
 Programs.fragments = {
   entry: gql`
     fragment ProgramsFragment on Program {
-      programFields {
-        programContent
-        programAuthor
-      }
+      title
+      content
     }
   `,
 };

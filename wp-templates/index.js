@@ -2,6 +2,7 @@ import frontPage from './front-page';
 import page from './page';
 import single from './single';
 import project from './project';
+import program from './program';
 import archive from './archive';
 
 export default {
@@ -9,5 +10,6 @@ export default {
   page,
   single,
   project,
+  program,
   archive,
 };
