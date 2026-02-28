@@ -5,6 +5,7 @@ import { getNextStaticProps } from '@faustwp/core';
 import {
   Button,
   Header,
+  Footer,
   Main,
   NavigationMenu,
   SearchInput,
@@ -28,6 +29,9 @@ export default function Page() {
   const { title: siteTitle, description: siteDescription } =
     pageData.generalSettings;
   const primaryMenu = pageData.headerMenuItems.nodes ?? [];
+  const footerMenu = pageData.footerMenuItems.nodes ?? [];
+  const footerNavOne = pageData.footerSecondaryMenuItems.nodes ?? [];
+  const footerNavTwo = pageData.footerTertiaryMenuItems.nodes ?? [];
   const categories = pageData.categories.nodes;
 
   const {
@@ -106,6 +110,12 @@ export default function Page() {
           )}
         </div>
       </Main>
+      <Footer
+        title={siteTitle}
+        menuItems={footerMenu}
+        navOneMenuItems={footerNavOne}
+        navTwoMenuItems={footerNavTwo}
+      />
     </>
   );
 }
@@ -114,6 +124,8 @@ Page.variables = () => {
   return {
     headerLocation: MENUS.PRIMARY_LOCATION,
     footerLocation: MENUS.FOOTER_LOCATION,
+    footerSecondaryLocation: MENUS.FOOTER_SECONDARY_LOCATION,
+    footerTertiaryLocation: MENUS.FOOTER_TERTIARY_LOCATION,
   };
 };
 
@@ -123,16 +135,28 @@ Page.query = gql`
   query GetPageData(
     $headerLocation: MenuLocationEnum
     $footerLocation: MenuLocationEnum
+    $footerSecondaryLocation: MenuLocationEnum
+    $footerTertiaryLocation: MenuLocationEnum
   ) {
     generalSettings {
       ...BlogInfoFragment
     }
-    headerMenuItems: menuItems(where: { location: $headerLocation }) {
+    headerMenuItems: menuItems(where: { location: $headerLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
       }
     }
-    footerMenuItems: menuItems(where: { location: $footerLocation }) {
+    footerMenuItems: menuItems(where: { location: $footerLocation }, first: 100) {
+      nodes {
+        ...NavigationMenuItemFragment
+      }
+    }
+    footerSecondaryMenuItems: menuItems(where: { location: $footerSecondaryLocation }, first: 100) {
+      nodes {
+        ...NavigationMenuItemFragment
+      }
+    }
+    footerTertiaryMenuItems: menuItems(where: { location: $footerTertiaryLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
       }

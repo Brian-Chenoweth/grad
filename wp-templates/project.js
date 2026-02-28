@@ -80,22 +80,22 @@ Component.query = gql`
     generalSettings {
       ...BlogInfoFragment
     }
-    headerMenuItems: menuItems(where: { location: $headerLocation }) {
+    headerMenuItems: menuItems(where: { location: $headerLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
       }
     }
-    footerMenuItems: menuItems(where: { location: $footerLocation }) {
+    footerMenuItems: menuItems(where: { location: $footerLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
       }
     }
-    footerSecondaryMenuItems: menuItems(where: { location: $footerSecondaryLocation }) {
+    footerSecondaryMenuItems: menuItems(where: { location: $footerSecondaryLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
       }
     }
-    footerTertiaryMenuItems: menuItems(where: { location: $footerTertiaryLocation }) {
+    footerTertiaryMenuItems: menuItems(where: { location: $footerTertiaryLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
       }

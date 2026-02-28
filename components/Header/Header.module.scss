@@ -27,6 +27,82 @@
   }
 }
 
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+
+.top-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-left: auto;
+}
+
+.apply-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3.4rem;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 0.3rem;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: #ffffff;
+  }
+}
+
+.search-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 2rem;
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.scrolled-nav-search {
+  display: inline-flex !important;
+  align-items: center;
+  margin-left: 0.4rem;
+
+  :global(a)::before {
+    content: none !important;
+  }
+}
+
+.search-link-scrolled {
+  color: var(--color-primary);
+  width: 3.2rem;
+  height: 3.2rem;
+  font-size: 1.8rem;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(21, 71, 52, 0.08);
+  }
+}
+
 .header-content {
   transition: transform 0.4s ease-in-out;
 
@@ -51,6 +127,24 @@
 .logo {
   width: 160px;
   height: auto;
+}
+
+@media screen and (max-width: 767px) {
+  .top-actions {
+    gap: 0.7rem;
+  }
+
+  .apply-link {
+    min-height: 2.8rem;
+    padding: 0.35rem 0.8rem;
+    font-size: 1.1rem;
+  }
+
+  .search-link {
+    width: 2.8rem;
+    height: 2.8rem;
+    font-size: 1.6rem;
+  }
 }
 
 .titleName {

@@ -1,7 +1,9 @@
 import * as MENUS from 'constants/menus';
 
 import { useQuery, gql } from '@apollo/client';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight, FaClipboardList, FaUserFriends, FaUsers } from 'react-icons/fa';
+import Image from 'next/image';
+import Link from 'next/link';
 import styles from 'styles/pages/_Home.module.scss';
 import {
   EntryHeader,
@@ -19,6 +21,11 @@ import {
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 
 const postsPerPage = 3;
+const homeQuickLinks = [
+  { label: 'How to Apply', href: '/how-to-apply', icon: FaClipboardList },
+  { label: 'Coordinators', href: '/coordinators', icon: FaUsers },
+  { label: 'Staff', href: '/staff', icon: FaUserFriends },
+];
 
 export default function Component() {
   const { data, loading } = useQuery(Component.query, {
@@ -116,6 +123,45 @@ export default function Component() {
             <Programs programs={data?.programs?.nodes} />
           </section>
         </div>
+        <section className={styles.currentStudents}>
+          <div className={`container ${styles.currentStudentsInner}`}>
+            <div className={styles.currentStudentsContent}>
+              <Heading className={styles.currentStudentsTitle} level="h2">
+                Current Graduate Students
+              </Heading>
+              <Link href="/resources" className={styles.currentStudentsLink}>
+                Learn about orientation, forms, and other resources
+              </Link>
+            </div>
+            <div className={styles.currentStudentsImage}>
+              <Image
+                src="/home/cadets-smiling-in-uniform-cal-maritime.jpg"
+                alt="Graduate students studying together"
+                width={920}
+                height={520}
+              />
+            </div>
+          </div>
+        </section>
+        <section className={styles.homeQuickLinks} aria-label="Quick links">
+          <div className="container">
+            <ul className={styles.quickLinksList}>
+              {homeQuickLinks.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <li key={item.label}>
+                    <a href={item.href} className={styles.quickLinkItem}>
+                      <span className={styles.quickLinkIcon}>
+                        <Icon aria-hidden="true" />
+                      </span>
+                      <span className={styles.quickLinkLabel}>{item.label}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </section>
       </Main>
       <Footer
         menuItems={footerMenu}
@@ -161,22 +207,22 @@ Component.query = gql`
     generalSettings {
       ...BlogInfoFragment
     }
-    headerMenuItems: menuItems(where: { location: $headerLocation }) {
+    headerMenuItems: menuItems(where: { location: $headerLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
       }
     }
-    footerMenuItems: menuItems(where: { location: $footerLocation }) {
+    footerMenuItems: menuItems(where: { location: $footerLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
       }
     }
-    footerSecondaryMenuItems: menuItems(where: { location: $footerSecondaryLocation }) {
+    footerSecondaryMenuItems: menuItems(where: { location: $footerSecondaryLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
       }
     }
-    footerTertiaryMenuItems: menuItems(where: { location: $footerTertiaryLocation }) {
+    footerTertiaryMenuItems: menuItems(where: { location: $footerTertiaryLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
       }

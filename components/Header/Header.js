@@ -44,7 +44,7 @@ export default function Header({ className, menuItems }) {
   return (
     <header className={headerClasses}>
       <div className={logoWrapClasses}>
-        <div className="container">
+        <div className={cx('container', 'top-bar')}>
           <div className={cx('logo')}>
             <Link href="/" title="Home">
               <Image
@@ -54,6 +54,19 @@ export default function Header({ className, menuItems }) {
                 alt="Cal Poly University logo"
                 layout="responsive"
               />
+            </Link>
+          </div>
+          <div className={cx('top-actions')}>
+            <a
+              href="https://www.calpoly.edu/admissions/graduate-student/how-to-apply"
+              className={cx('apply-link')}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              How to Apply
+            </a>
+            <Link href="/search" title="Search" className={cx('search-link')}>
+              <FaSearch title="Search" role="img" />
             </Link>
           </div>
         </div>
@@ -80,13 +93,7 @@ export default function Header({ className, menuItems }) {
               className={cx('mobile-nav', { open: isNavShown })}
               menuItems={menuItems}
               onNavigate={() => setIsNavShown(false)}
-            >
-              <li>
-                <Link href="/search" title="Search">
-                  <FaSearch title="Search" role="img" />
-                </Link>
-              </li>
-            </MobileNav>
+            />
           ) : (
             <NavigationMenu
               id={cx('primary-navigation')}
@@ -94,11 +101,13 @@ export default function Header({ className, menuItems }) {
               menuItems={menuItems}
               ref={menuRef}
             >
-              <li>
-                <Link href="/search" title="Search">
-                  <FaSearch title="Search" role="img" />
-                </Link>
-              </li>
+              {isScrolled && (
+                <li className={cx('scrolled-nav-search')}>
+                  <Link href="/search" title="Search" className={cx('search-link', 'search-link-scrolled')}>
+                    <FaSearch title="Search" role="img" />
+                  </Link>
+                </li>
+              )}
             </NavigationMenu>
           )}
         </div>
