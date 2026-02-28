@@ -125,7 +125,7 @@ export default function Component() {
             </div>
             <div className={styles.prospectiveStudentsImage}>
               <Image
-                src="/home/cal-maritime-student-center-nonprofit-campus-support.jpg"
+                src="/home/prospective-students.jpg"
                 alt="Prospective graduate students talking on campus"
                 width={1100}
                 height={760}
@@ -138,7 +138,7 @@ export default function Component() {
           <div className={`container ${styles.requestInfoInner}`}>
             <div className={styles.requestInfoImage}>
               <Image
-                src="/home/cal-maritime-marketplace-building-campus-life-support.jpg"
+                src="/home/request-information.jpg"
                 alt="Student requesting program information"
                 width={1100}
                 height={760}
