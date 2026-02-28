@@ -1,0 +1,174 @@
+@import 'styles/Variables';
+
+.programContent {
+  max-width: 112rem;
+  margin: 0 auto;
+  padding-top: 3.2rem;
+
+  :global(> div > p:first-child) {
+    margin-top: 0;
+    margin-bottom: 3.2rem;
+    max-width: 96rem;
+    font-size: 1.9rem;
+    line-height: 1.75;
+    color: #1f3027;
+  }
+
+  a:not([role='button']) {
+    text-transform: none !important;
+    font-weight: 600 !important;
+    text-decoration: underline !important;
+    word-break: break-word;
+
+    &::before {
+      content: none !important;
+    }
+  }
+}
+
+.metaPanel {
+  margin-top: 3.2rem;
+  padding: 3.2rem;
+  border: 1px solid #d5dfd8;
+  border-radius: 0.6rem;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(7, 36, 20, 0.06);
+}
+
+.metaPanelTitle {
+  margin: 0 0 1.6rem;
+  font-size: 2.8rem;
+  line-height: 1.2;
+}
+
+.metaList,
+.contactList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.metaList {
+  grid-template-columns: 1fr;
+}
+
+.contactList {
+  grid-template-columns: 1fr;
+}
+
+.metaItem,
+.contactItem {
+  display: grid;
+  grid-template-columns: 10.4rem 1fr;
+  gap: 1.2rem;
+  align-items: start;
+  padding: 1.2rem 1.3rem;
+  border-radius: 0.6rem;
+  background-color: #ffffff;
+  border: 1px solid #e0e8e2;
+}
+
+.metaLabel {
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #4e6056;
+  font-weight: 700;
+}
+
+.metaValue {
+  font-size: 1.75rem;
+  color: #183025;
+  line-height: 1.4;
+}
+
+.contactTitle {
+  margin: 2.2rem 0 1.2rem;
+  font-size: 2.2rem;
+  line-height: 1.3;
+}
+
+.contactLink {
+  word-break: break-word;
+  font-size: 1.75rem;
+  color: #134e36 !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 2px;
+}
+
+.applyCta {
+  margin-top: 2.4rem;
+  display: flex;
+}
+
+.applyButton {
+  min-width: 20rem;
+  justify-content: center;
+  letter-spacing: 0.02em;
+  color: #ffffff !important;
+  background-color: #006b2f !important;
+  border-color: #006b2f !important;
+  text-decoration: none !important;
+
+  &::before {
+    content: none !important;
+  }
+
+  &:hover,
+  &:focus {
+    color: #ffffff !important;
+    background-color: #004f23 !important;
+    border-color: #004f23 !important;
+    text-decoration: none !important;
+  }
+}
+
+.applyCta :global(a[role='button']) {
+  color: #ffffff !important;
+  background-color: #006b2f !important;
+  border-color: #006b2f !important;
+  text-decoration: none !important;
+}
+
+.applyCta :global(a[role='button']:hover),
+.applyCta :global(a[role='button']:focus) {
+  color: #ffffff !important;
+  background-color: #004f23 !important;
+  border-color: #004f23 !important;
+  text-decoration: none !important;
+}
+
+@media (min-width: $breakpoint-small) {
+  .metaPanel {
+    padding: 3.2rem;
+  }
+
+  .metaList,
+  .contactList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .programContent {
+    padding-top: 2.2rem;
+
+    :global(> div > p:first-child) {
+      margin-bottom: 2.4rem;
+      font-size: 1.7rem;
+      line-height: 1.65;
+    }
+  }
+
+  .metaPanel {
+    padding: 2rem 1.6rem;
+  }
+
+  .metaItem,
+  .contactItem {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+}

@@ -15,6 +15,21 @@ import {
 } from 'components';
 import { pageTitle } from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
+import styles from 'styles/pages/_Program.module.scss';
+
+function toTitleCase(value) {
+  if (!value) return value;
+  const minorWords = new Set(['and', 'or', 'of', 'the', 'in', 'for', 'to', 'a']);
+  return String(value)
+    .toLowerCase()
+    .split(/\s+/)
+    .map((word, index) => {
+      if (!word) return word;
+      if (index > 0 && minorWords.has(word)) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
 
 export default function Component(props) {
   if (props.loading) {
@@ -36,7 +51,8 @@ export default function Component(props) {
     contactEmail,
     contactWeb,
   } = programFields ?? {};
-  const applyNowUrl = getProgramApplyLink(college) ?? contactWeb;
+  const collegeDisplay = toTitleCase(college);
+  const applyNowUrl = getProgramApplyLink(props.data.program) ?? contactWeb;
 
   return (
     <>
@@ -58,56 +74,71 @@ export default function Component(props) {
         <>
           <EntryHeader title={title} image={featuredImage?.node} />
           <div className="container">
-            <ContentWrapper content={content}>
+            <ContentWrapper className={styles.programContent} content={content}>
               {(college ||
                 blended ||
                 contactName ||
                 contactPhone ||
                 contactEmail ||
                 contactWeb) && (
-                <section>
-                  <h2>Program Details</h2>
-                  <ul>
+                <section className={styles.metaPanel}>
+                  <h2 className={styles.metaPanelTitle}>Program Details</h2>
+                  <ul className={styles.metaList}>
                     {college && (
-                      <li>
-                        <strong>College:</strong> {college}
+                      <li className={styles.metaItem}>
+                        <span className={styles.metaLabel}>College</span>
+                        <span className={styles.metaValue}>{collegeDisplay}</span>
                       </li>
                     )}
                     {typeof blended === 'boolean' && (
-                      <li>
-                        <strong>Blended:</strong> {blended ? 'Yes' : 'No'}
+                      <li className={styles.metaItem}>
+                        <span className={styles.metaLabel}>Blended Program</span>
+                        <span className={styles.metaValue}>
+                          {blended ? 'Yes' : 'No'}
+                        </span>
                       </li>
                     )}
                   </ul>
 
                   {(contactName || contactPhone || contactEmail || contactWeb) && (
                     <>
-                      <h3>Contact</h3>
-                      <ul>
+                      <h3 className={styles.contactTitle}>Contact</h3>
+                      <ul className={styles.contactList}>
                         {contactName && (
-                          <li>
-                            <strong>Name:</strong> {contactName}
+                          <li className={styles.contactItem}>
+                            <span className={styles.metaLabel}>Name</span>
+                            <span className={styles.metaValue}>{contactName}</span>
                           </li>
                         )}
                         {contactPhone && (
-                          <li>
-                            <strong>Phone:</strong>{' '}
-                            <a href={`tel:${String(contactPhone).replace(/[^\d+]/g, '')}`}>
+                          <li className={styles.contactItem}>
+                            <span className={styles.metaLabel}>Phone</span>
+                            <a
+                              className={styles.contactLink}
+                              href={`tel:${String(contactPhone).replace(/[^\d+]/g, '')}`}
+                            >
                               {contactPhone}
                             </a>
                           </li>
                         )}
                         {contactEmail && (
-                          <li>
-                            <strong>Email:</strong>{' '}
-                            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+                          <li className={styles.contactItem}>
+                            <span className={styles.metaLabel}>Email</span>
+                            <a className={styles.contactLink} href={`mailto:${contactEmail}`}>
+                              {contactEmail}
+                            </a>
                           </li>
                         )}
                         {contactWeb && (
-                          <li>
-                            <strong>Web:</strong>{' '}
-                            <a href={contactWeb} target="_blank" rel="noopener noreferrer">
-                              {contactWeb}
+                          <li className={styles.contactItem}>
+                            <span className={styles.metaLabel}>Website</span>
+                            <a
+                              className={styles.contactLink}
+                              href={contactWeb}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Visit Program Website
                             </a>
                           </li>
                         )}
@@ -116,15 +147,16 @@ export default function Component(props) {
                   )}
 
                   {applyNowUrl && (
-                    <p>
+                    <div className={styles.applyCta}>
                       <Button
+                        className={styles.applyButton}
                         href={applyNowUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         Apply Now
                       </Button>
-                    </p>
+                    </div>
                   )}
                 </section>
               )}
@@ -155,6 +187,7 @@ Component.query = gql`
     $asPreview: Boolean = false
   ) {
     program(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      uri
       title
       content
       programFields {

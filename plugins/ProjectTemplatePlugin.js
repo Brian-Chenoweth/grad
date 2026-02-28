@@ -9,6 +9,14 @@ export class ProjectTemplatePlugin {
       if (data?.seedNode?.__typename === 'Program') {
         return Array.from(new Set(['program', ...templates]));
       }
+      if (
+        (data?.seedNode?.__typename === 'ContentType' ||
+          data?.seedNode?.__typename === 'Page') &&
+        (data?.seedNode?.uri === '/programs/' ||
+          data?.seedNode?.uri === '/programs')
+      ) {
+        return Array.from(new Set(['programs', ...templates]));
+      }
       return templates;
     });
   }

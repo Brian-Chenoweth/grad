@@ -3,6 +3,7 @@ import page from './page';
 import single from './single';
 import project from './project';
 import program from './program';
+import programs from './programs';
 import archive from './archive';
 
 export default {
@@ -11,5 +12,6 @@ export default {
   single,
   project,
   program,
+  programs,
   archive,
 };
