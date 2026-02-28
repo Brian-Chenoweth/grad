@@ -23,6 +23,14 @@
 
 }
 
+.video {
+  width: 100%;
+  min-height: 315px;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
 .overlay {
   position: absolute;
   inset: 0;

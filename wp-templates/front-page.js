@@ -69,12 +69,6 @@ export default function Component() {
   const footerMenu = data?.footerMenuItems?.nodes ?? [];
   const footerNavOne = data?.footerSecondaryMenuItems?.nodes ?? [];
   const footerNavTwo = data?.footerTertiaryMenuItems?.nodes ?? [];
-
-  const mainBanner = {
-    sourceUrl: '/static/banner.jpeg',
-    mediaDetails: { width: 1200, height: 600 },
-    altText: 'Portfolio Banner',
-  };
   return (
     <>
       <SEO title={siteTitle} description={siteDescription} />
@@ -86,11 +80,11 @@ export default function Component() {
       />
 
       <Main className={styles.home}>
-        <EntryHeader image={mainBanner} />
+        <EntryHeader videoSrc="/static/GraduateEd_WebLoop.mp4" />
         <section className={styles.graduateIntroBand}>
           <div className={`container ${styles.graduateIntroWrap}`}>
             <article className={styles.graduateIntroCard}>
-              <Heading className={styles.graduateIntroTitle} level="h2">
+              <Heading className={styles.graduateIntroTitle} level="h1">
                 Graduate Education
               </Heading>
               <p className={styles.graduateIntroSubTitle}>

@@ -4,6 +4,25 @@
   section {
     margin-bottom: 8rem;
   }
+
+  h2 {
+    font-family: abolition, sans-serif;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+    font-weight: 400;
+    margin: 0 0 0.5rem;
+    font-size: 3.75em;
+  }
+
+  h3 {
+    font-family: abolition, sans-serif;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    font-weight: 400;
+    margin: 0 0 0.5rem;
+    font-size: 2.4em;
+    text-transform: none;
+  }
 }
 
 .heading {
@@ -45,12 +64,13 @@
 .graduateIntroBand {
   background: #e3ebe8;
   margin-bottom: 0 !important;
-  padding: 0 0 8rem;
+  padding: 0 0 6rem;
 }
 
 .graduateIntroWrap {
   position: relative;
-  margin-top: -16rem;
+  margin-top: 0;
+  transform: translateY(-38%);
   z-index: 2;
 }
 
@@ -571,11 +591,11 @@
 
 @media (min-width: $breakpoint-small) {
   .graduateIntroBand {
-    padding: 0 0 10rem;
+    padding: 0 0 0;
   }
 
   .graduateIntroWrap {
-    margin-top: -26rem;
+    transform: translateY(-50%);
   }
 
   .graduateIntroCard {
