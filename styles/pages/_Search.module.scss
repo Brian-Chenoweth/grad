@@ -1,8 +1,18 @@
 .search-header-text {
   text-align: center;
   color: var(--color-white);
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+  margin: 0;
+}
+
+.search-page-title {
+  text-align: center;
+  color: var(--color-white);
+  margin: 0;
   padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding-bottom: 1.2rem;
+   margin-top: 11rem;
 }
 
 .search-header-pane {

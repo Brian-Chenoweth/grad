@@ -15,6 +15,9 @@ export const GetSearchResults = gql`
           ... on NodeWithExcerpt {
             excerpt
           }
+          ... on NodeWithContentEditor {
+            content
+          }
         }
       }
       pageInfo {

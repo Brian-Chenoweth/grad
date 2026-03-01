@@ -98,9 +98,22 @@ export default function Component(props) {
                         </span>
                       </li>
                     )}
+                    {contactWeb && (
+                      <li className={styles.metaItem}>
+                        <span className={styles.metaLabel}>Program Website</span>
+                        <a
+                          className={styles.contactLink}
+                          href={contactWeb}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Visit Program Website
+                        </a>
+                      </li>
+                    )}
                   </ul>
 
-                  {(contactName || contactPhone || contactEmail || contactWeb) && (
+                  {(contactName || contactPhone || contactEmail) && (
                     <>
                       <h3 className={styles.contactTitle}>Contact</h3>
                       <ul className={styles.contactList}>
@@ -126,19 +139,6 @@ export default function Component(props) {
                             <span className={styles.metaLabel}>Email</span>
                             <a className={styles.contactLink} href={`mailto:${contactEmail}`}>
                               {contactEmail}
-                            </a>
-                          </li>
-                        )}
-                        {contactWeb && (
-                          <li className={styles.contactItem}>
-                            <span className={styles.metaLabel}>Website</span>
-                            <a
-                              className={styles.contactLink}
-                              href={contactWeb}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Visit Program Website
                             </a>
                           </li>
                         )}

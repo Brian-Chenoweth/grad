@@ -114,7 +114,7 @@ export default function ProgramsArchive(props) {
         <>
           <EntryHeader title={archiveLabel} />
           <div className={`container ${styles.archiveContainer}`}>
-            <h1 className={styles.pageTitle}>Programs</h1>
+            {/* <h1 className={styles.pageTitle}>Programs</h1> */}
             <section className={styles.filters}>
               <h2 className={styles.filtersTitle}>Find a Program</h2>
               <div className={styles.filterGrid}>

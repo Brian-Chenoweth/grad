@@ -13,9 +13,10 @@ $color-grey: #777;
   color: var(--color-black);
 }
 
-.meta {
-  font-size: small;
-  margin-bottom: 2rem;
+.excerpt {
+  margin-top: 0.8rem;
+  color: #2f2f2f;
+  line-height: 1.6;
 }
 
 .no-results {

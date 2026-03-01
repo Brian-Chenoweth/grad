@@ -4,11 +4,12 @@
   max-width: 112rem;
   margin: 0 auto;
   padding-top: 3.2rem;
+  // margin-top: 15rem;
 
   :global(> div > p:first-child) {
     margin-top: 0;
     margin-bottom: 3.2rem;
-    max-width: 96rem;
+    // max-width: 96rem;
     font-size: 1.9rem;
     line-height: 1.75;
     color: #1f3027;
@@ -148,6 +149,11 @@
   .metaList,
   .contactList {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metaList > .metaItem:last-child:nth-child(odd),
+  .contactList > .contactItem:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 }
 

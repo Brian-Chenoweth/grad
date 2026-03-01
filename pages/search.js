@@ -19,6 +19,11 @@ import { GetSearchResults } from 'queries/GetSearchResults';
 import styles from 'styles/pages/_Search.module.scss';
 import appConfig from 'app.config';
 
+const PROGRAM_TYPES = [
+  { name: 'All Graduate Programs', uri: '/programs' },
+  { name: 'Blended Programs', uri: '/blended-programs' },
+];
+
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -32,7 +37,6 @@ export default function Page() {
   const footerMenu = pageData.footerMenuItems.nodes ?? [];
   const footerNavOne = pageData.footerSecondaryMenuItems.nodes ?? [];
   const footerNavTwo = pageData.footerTertiaryMenuItems.nodes ?? [];
-  const categories = pageData.categories.nodes;
 
   const {
     data: searchResultsData,
@@ -62,11 +66,12 @@ export default function Page() {
       <Main>
         <div className={styles['search-header-pane']}>
           <div className="container small">
-            <h2 className={styles['search-header-text']}>
-              {searchQuery && !searchResultsLoading
-                ? `Showing results for "${searchQuery}"`
-                : `Search`}
-            </h2>
+            <h1 className={styles['search-page-title']}>Search</h1>
+            {searchQuery && !searchResultsLoading && (
+              <h2 className={styles['search-header-text']}>
+                Showing results for &quot;{searchQuery}&quot;
+              </h2>
+            )}
             <SearchInput
               value={searchQuery}
               onChange={(newValue) => setSearchQuery(newValue)}
@@ -106,7 +111,7 @@ export default function Page() {
           )}
 
           {!searchResultsLoading && searchResultsData === undefined && (
-            <SearchRecommendations categories={categories} />
+            <SearchRecommendations programTypes={PROGRAM_TYPES} />
           )}
         </div>
       </Main>
@@ -159,13 +164,6 @@ Page.query = gql`
     footerTertiaryMenuItems: menuItems(where: { location: $footerTertiaryLocation }, first: 100) {
       nodes {
         ...NavigationMenuItemFragment
-      }
-    }
-    categories {
-      nodes {
-        databaseId
-        uri
-        name
       }
     }
   }

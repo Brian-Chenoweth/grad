@@ -1,8 +1,34 @@
 import Link from 'next/link';
-import { FormatDate, LoadingSearchResult } from 'components';
+import { LoadingSearchResult } from 'components';
 import { FaSearch } from 'react-icons/fa';
 
 import styles from './SearchResults.module.scss';
+
+function stripHtml(value = '') {
+  return value.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function decodeHtmlEntities(value = '') {
+  return value
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) =>
+      String.fromCharCode(parseInt(code, 16))
+    )
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;|&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
+function buildSnippet(node) {
+  const excerptText = decodeHtmlEntities(stripHtml(node?.excerpt ?? ''));
+  const contentText = decodeHtmlEntities(stripHtml(node?.content ?? ''));
+  const fallback =
+    excerptText || contentText || decodeHtmlEntities(stripHtml(node?.title ?? ''));
+  if (!fallback) return '';
+  return fallback.length > 220 ? `${fallback.slice(0, 220).trim()}...` : fallback;
+}
 
 /**
  * Renders the search results list.
@@ -34,17 +60,7 @@ export default function SearchResults({ searchResults, isLoading }) {
             <h2 className={styles.title}>{node.title}</h2>
           </Link>
 
-          <div className={styles.meta}>
-            <time className={styles.date} dateTime={node.date}>
-              <FormatDate date={node.date} />
-            </time>
-          </div>
-
-          <div
-            dangerouslySetInnerHTML={{
-              __html: node.excerpt,
-            }}
-          />
+          <p className={styles.excerpt}>{buildSnippet(node)}</p>
         </div>
       ))}
 

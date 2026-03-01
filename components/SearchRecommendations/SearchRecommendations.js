@@ -6,18 +6,18 @@ import styles from './SearchRecommendations.module.scss';
  * Render the SearchRecommendations component.
  *
  * @param {Props} props The props object.
- * @param {Array} props.categories Array of categories from WordPress
+ * @param {Array} props.programTypes Program type links to show
  *
  * @returns {React.ReactElement} The SearchRecommendations component.
  */
-export default function SearchRecommendations({ categories }) {
+export default function SearchRecommendations({ programTypes }) {
   return (
     <div className={styles.recommendations}>
-      <h4>Browse by Category</h4>
+      <h4>Browse by Program Type</h4>
       <ul>
-        {categories?.map((node) => (
-          <li key={node.databaseId}>
-            <Link href={node.uri}>{node.name}</Link>
+        {programTypes?.map((type) => (
+          <li key={type.uri}>
+            <Link href={type.uri}>{type.name}</Link>
           </li>
         ))}
       </ul>
