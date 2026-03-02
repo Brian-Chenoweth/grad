@@ -1,0 +1,72 @@
+@import 'styles/Variables';
+
+.directorySection {
+  margin-top: 3.2rem;
+}
+
+.directoryTitle {
+  margin: 0 0 2.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #154734;
+}
+
+.collegeBlock {
+  margin-bottom: 3rem;
+}
+
+.collegeTitle {
+  margin: 0 0 0.8rem;
+  color: #1f3229;
+  font-size: 2.4rem;
+  line-height: 1.2;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.directoryTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+
+  thead th {
+    background: #0f563f;
+    color: #ffffff;
+    font-size: 1.2rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 1rem 1.1rem;
+    border: 0;
+  }
+
+  tbody td {
+    padding: 0.95rem 1.1rem;
+    border-bottom: 1px solid #d9e1dd;
+    font-size: 1.5rem;
+    line-height: 1.35;
+    vertical-align: top;
+  }
+
+  tbody tr:nth-child(even) td {
+    background: #f5f7f6;
+  }
+
+  a {
+    color: #155a44 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 2px;
+    font-weight: 600;
+  }
+}
+
+.multiLineValue {
+  display: block;
+  margin-bottom: 0.2rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

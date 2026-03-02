@@ -2,7 +2,9 @@ import * as MENUS from 'constants/menus';
 
 import { gql } from '@apollo/client';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
+import { useRouter } from 'next/router';
 import { pageTitle } from 'utilities';
+import styles from 'styles/pages/_CoordinatorDirectory.module.scss';
 
 import {
   Header,
@@ -15,8 +17,45 @@ import {
   SEO,
 } from '../components';
 
-import { useRouter } from 'next/router';
+function normalize(value) {
+  return String(value ?? '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) =>
+      String.fromCharCode(parseInt(code, 16))
+    )
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;|&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .trim();
+}
 
+function toTitleCase(value) {
+  if (!value) return '';
+  const minorWords = new Set(['and', 'or', 'of', 'the', 'in', 'for', 'to', 'a']);
+  return String(value)
+    .toLowerCase()
+    .split(/\s+/)
+    .map((word, index) => {
+      if (!word) return word;
+      if (index > 0 && minorWords.has(word)) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
+
+function formatPhoneForHref(value = '') {
+  return String(value).replace(/[^\d+]/g, '');
+}
+
+function splitMulti(value = '') {
+  return String(value)
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
 
 export default function Component(props) {
   const router = useRouter();
@@ -37,7 +76,32 @@ export default function Component(props) {
   const resources    = props?.data?.resourcesFooterMenuItems?.nodes ?? [];
 
   const page = props?.data?.page ?? { title: '' };
-  const { title, content, featuredImage, seo: s } = page;
+  const { title, content, featuredImage, seo: s, uri } = page;
+  const isCoordinatorPage =
+    String(uri ?? '').replace(/\/+$/, '') === '/graduate-program-coordinators';
+  const programNodes = props?.data?.programs?.nodes ?? [];
+
+  const groupedPrograms = programNodes
+    .map((program) => {
+      const fields = program?.programFields ?? {};
+      return {
+        title: normalize(program?.title),
+        college: toTitleCase(normalize(fields.college)) || 'Other Programs',
+        coordinator: normalize(fields.contactName),
+        contact: normalize(fields.contactEmail),
+        phone: normalize(fields.contactPhone),
+      };
+    })
+    .filter((program) => program.title && (program.coordinator || program.contact || program.phone))
+    .sort((a, b) => a.title.localeCompare(b.title))
+    .reduce((acc, program) => {
+      if (!acc[program.college]) acc[program.college] = [];
+      acc[program.college].push(program);
+      return acc;
+    }, {});
+  const groupedByCollege = Object.entries(groupedPrograms).sort(([a], [b]) =>
+    a.localeCompare(b)
+  );
 
   // ---- Yoast → SEO props with smart fallbacks ----
   const computedTitle =
@@ -82,7 +146,71 @@ export default function Component(props) {
         <>
           <EntryHeader title={title} image={featuredImage?.node} />
           <div className="container">
-            <ContentWrapper content={content} />
+            {/* <ContentWrapper content={content} /> */}
+            {isCoordinatorPage && (
+              <section className={styles.directorySection}>
+                {/* <h2 className={styles.directoryTitle}>Graduate Program Coordinators</h2> */}
+                {groupedByCollege.map(([college, programs]) => (
+                  <div key={college} className={styles.collegeBlock}>
+                    <h3 className={styles.collegeTitle}>{college}</h3>
+                    <div className={styles.tableWrap}>
+                      <table className={styles.directoryTable}>
+                        <thead>
+                          <tr>
+                            <th>Program</th>
+                            <th>Coordinator</th>
+                            <th>Contact</th>
+                            <th>Phone</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {programs.map((program) => (
+                            <tr key={`${college}-${program.title}`}>
+                              <td>{program.title}</td>
+                              <td>
+                                {splitMulti(program.coordinator).length ? (
+                                  splitMulti(program.coordinator).map((name) => (
+                                    <span key={`${program.title}-${name}`} className={styles.multiLineValue}>
+                                      {name}
+                                    </span>
+                                  ))
+                                ) : (
+                                  '-'
+                                )}
+                              </td>
+                              <td>
+                                {splitMulti(program.contact).length ? (
+                                  splitMulti(program.contact).map((email) => (
+                                    <span key={`${program.title}-${email}`} className={styles.multiLineValue}>
+                                      <a href={`mailto:${email}`}>{email}</a>
+                                    </span>
+                                  ))
+                                ) : (
+                                  '-'
+                                )}
+                              </td>
+                              <td>
+                                {splitMulti(program.phone).length ? (
+                                  splitMulti(program.phone).map((phone) => (
+                                    <span key={`${program.title}-${phone}`} className={styles.multiLineValue}>
+                                      <a href={`tel:${formatPhoneForHref(phone)}`}>
+                                        {phone}
+                                      </a>
+                                    </span>
+                                  ))
+                                ) : (
+                                  '-'
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                ))}
+              </section>
+            )}
           </div>
         </>
       </Main>
@@ -135,6 +263,7 @@ Component.query = gql`
     page(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
       title
       content
+      uri
       ...FeaturedImageFragment
       seo {
         title
@@ -147,6 +276,17 @@ Component.query = gql`
         }
         metaRobotsNoindex
         metaRobotsNofollow
+      }
+    }
+    programs(first: 500) {
+      nodes {
+        title
+        programFields {
+          college
+          contactName
+          contactEmail
+          contactPhone
+        }
       }
     }
     generalSettings {
