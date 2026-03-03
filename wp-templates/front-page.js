@@ -36,6 +36,20 @@ function stripHtml(value = '') {
   return value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+function decodeHtmlEntities(value = '') {
+  return value
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) =>
+      String.fromCharCode(parseInt(code, 16))
+    )
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;|&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ');
+}
+
 function truncate(value = '', max = 220) {
   if (value.length <= max) return value;
   return `${value.slice(0, max).trim()}...`;
@@ -190,7 +204,10 @@ export default function Component() {
                   {highlightedProgram.title}
                 </h3>
                 <p className={styles.highlightedProgramBlurb}>
-                  {truncate(stripHtml(highlightedProgram?.content || ''), 240)}
+                  {truncate(
+                    decodeHtmlEntities(stripHtml(highlightedProgram?.content || '')),
+                    240
+                  )}
                 </p>
                 {highlightedProgram?.uri && (
                   <Link

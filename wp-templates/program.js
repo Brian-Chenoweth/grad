@@ -146,8 +146,8 @@ export default function Component(props) {
                     </>
                   )}
 
-                  {applyNowUrl && (
-                    <div className={styles.applyCta}>
+                  <div className={styles.actionRow}>
+                    {applyNowUrl && (
                       <Button
                         className={styles.applyButton}
                         href={applyNowUrl}
@@ -156,8 +156,12 @@ export default function Component(props) {
                       >
                         Apply Now
                       </Button>
-                    </div>
-                  )}
+                    )}
+
+                    <Button className={styles.backButton} href="/programs">
+                      Back to Programs
+                    </Button>
+                  </div>
                 </section>
               )}
             </ContentWrapper>

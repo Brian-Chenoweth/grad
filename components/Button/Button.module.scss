@@ -13,13 +13,13 @@
   font-weight: $font-weight-bold;
 
   &.button-primary {
-    color: var(--color-white);
+    color: var(--color-white) !important;
     border-color: #00882E;
     background-color: #00882E;
   }
 
   &.button-secondary {
-    color: var(--color-white);
+    color: var(--color-primary) !important;
     border-color: var(--color-primary);
     background-color: var(--color-primary);
   }
