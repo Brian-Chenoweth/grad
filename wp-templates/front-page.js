@@ -189,7 +189,7 @@ export default function Component() {
                   />
                 ) : (
                   <Image
-                    src="/home/cal-maritime-marketplace-building-campus-life-support.jpg"
+                    src="/home/current-students.jpg"
                     alt={highlightedProgram.title}
                     width={980}
                     height={620}
@@ -240,7 +240,7 @@ export default function Component() {
           <div className={`container ${styles.graduateRecognitionInner}`}>
             <div className={styles.graduateRecognitionImage}>
               <Image
-                src="/home/cal-maritime-student-center-nonprofit-campus-support.jpg"
+                src="/home/grad-recognition.jpg"
                 alt="Graduates celebrating recognition"
                 width={1100}
                 height={760}
@@ -294,7 +294,7 @@ export default function Component() {
             </div>
             <div className={styles.currentStudentsImage}>
               <Image
-                src="/home/cadets-smiling-in-uniform-cal-maritime.jpg"
+                src="/home/current-students.jpg"
                 alt="Graduate students studying together"
                 width={920}
                 height={520}
