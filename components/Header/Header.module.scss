@@ -1,9 +1,11 @@
 @import 'styles/Variables';
 
+$header-scroll-offset: 55px;
+
 .header {
   color: var(--color-white);
-  background-color: #f8f8f7;
-  transition: background-color 0.4s ease-in-out, transform 0.4s ease-in-out;
+  background-color: var(--color-white);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, height 0.2s ease;
   position: fixed;
   top: 0;
   width: 100%;
@@ -16,12 +18,12 @@
 }
 
 .logo-wrap {
-  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+  transition: none;
   padding: .4rem 0;
   background-color: var(--color-primary);
 
   &.scrolled {
-    transform: translateY(-20px);
+    transform: translateY(-$header-scroll-offset);
     opacity: 0;
     pointer-events: none;
   }
@@ -104,15 +106,28 @@
 }
 
 .header-content {
-  transition: transform 0.4s ease-in-out;
-
-  @media screen and (max-width: 767px) {
-    background-color: var(--color-white);
-    
-  }
+  transition: none;
+  background-color: var(--color-white);
 
   &.scrolled {
-    transform: translateY(-55px);
+    transform: translateY(-$header-scroll-offset);
+  }
+}
+
+/* At medium desktop widths the nav can wrap; keep full header visible on scroll. */
+@media screen and (max-width: 1280px) and (min-width: 768px) {
+  .header.scrolled {
+    height: auto;
+  }
+
+  .logo-wrap.scrolled {
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .header-content.scrolled {
+    transform: none;
   }
 }
 
@@ -122,6 +137,7 @@
   flex-wrap: wrap;
   padding: 0;
   gap: 2rem;
+  background-color: var(--color-white);
 }
 
 .logo {
