@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import { FaBars, FaSearch } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import NavigationMenu from '../NavigationMenu';
 import SkipNavigationLink from '../SkipNavigationLink';
@@ -25,6 +26,7 @@ function useIsMobile(bp = 767) {
 }
 
 export default function Header({ className, menuItems }) {
+  const router = useRouter();
   const [isNavShown, setIsNavShown] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const isMobile = useIsMobile(767);
@@ -40,6 +42,44 @@ export default function Header({ className, menuItems }) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!(isMobile && isNavShown)) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMobile, isNavShown]);
+
+  useEffect(() => {
+    if (!isNavShown) return undefined;
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setIsNavShown(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isNavShown]);
+
+  useEffect(() => {
+    const closeNav = () => setIsNavShown(false);
+    router.events.on('routeChangeStart', closeNav);
+    return () => router.events.off('routeChangeStart', closeNav);
+  }, [router.events]);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setIsNavShown(false);
+    }
+  }, [isMobile]);
 
   return (
     <header className={headerClasses}>
@@ -82,7 +122,7 @@ export default function Header({ className, menuItems }) {
             type="button"
             className={cx('nav-toggle')}
             onClick={() => setIsNavShown(!isNavShown)}
-            aria-label="Toggle navigation"
+            aria-label={isNavShown ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={isNavShown}
           >
             <FaBars />
@@ -93,6 +133,8 @@ export default function Header({ className, menuItems }) {
               className={cx('mobile-nav', { open: isNavShown })}
               menuItems={menuItems}
               onNavigate={() => setIsNavShown(false)}
+              onClose={() => setIsNavShown(false)}
+              isOpen={isNavShown}
             />
           ) : (
             <NavigationMenu

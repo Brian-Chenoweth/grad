@@ -17,10 +17,14 @@ export default function Footer({
   siteTitle,
   title,
   menuItems,
+  resourcesMenuItems,
   navOneMenuItems,
   navTwoMenuItems,
 }) {
   const allFooterItems = Array.isArray(menuItems) ? menuItems : [];
+  const resolvedResourcesMenuItems = resourcesMenuItems?.length
+    ? resourcesMenuItems
+    : allFooterItems;
 
   const deriveColumnMenus = (items) => {
     const topLevel = items.filter((item) => !item?.parentId);
@@ -62,7 +66,10 @@ export default function Footer({
 
               <div className={cx('about')}>
                 <h3>Resources</h3>
-                <NavigationMenu className={cx('quick')} menuItems={menuItems} />
+                <NavigationMenu
+                  className={cx('quick')}
+                  menuItems={resolvedResourcesMenuItems}
+                />
               </div>
 
               <div className={cx('resources')}>

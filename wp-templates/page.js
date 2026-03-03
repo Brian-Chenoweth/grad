@@ -70,6 +70,7 @@ export default function Component(props) {
   const primaryMenu = props?.data?.headerMenuItems?.nodes ?? [];
 
   const quickLinks   = props?.data?.quickFooterMenuItems?.nodes ?? [];
+  const footerMenu   = props?.data?.footerMenuItems?.nodes ?? [];
   const aboutLinks   = props?.data?.aboutFooterMenuItems?.nodes ?? [];
   const navOne       = props?.data?.footerSecondaryMenuItems?.nodes ?? [];
   const navTwo       = props?.data?.footerTertiaryMenuItems?.nodes ?? [];
@@ -146,7 +147,7 @@ export default function Component(props) {
         <>
           <EntryHeader title={title} image={featuredImage?.node} />
           <div className="container">
-            {/* <ContentWrapper content={content} /> */}
+            <ContentWrapper content={content} />
             {isCoordinatorPage && (
               <section className={styles.directorySection}>
                 {/* <h2 className={styles.directoryTitle}>Graduate Program Coordinators</h2> */}
@@ -216,7 +217,7 @@ export default function Component(props) {
       </Main>
       <Footer
         title={siteTitle}
-        menuItems={quickLinks}                // left column: Quick Footer
+        menuItems={footerMenu}               // fallback resources source (FOOTER)
         navOneMenuItems={navOne}              // middle: Footer Secondary
         navTwoMenuItems={navTwo}              // right: Footer Tertiary
         resourcesMenuItems={resources}        // new Resources block
@@ -253,6 +254,7 @@ Component.query = gql`
   query GetPageData(
     $databaseId: ID!
     $headerLocation: MenuLocationEnum
+    $footerLocation: MenuLocationEnum
     $quickFooterLocation: MenuLocationEnum
     $aboutFooterLocation: MenuLocationEnum
     $footerSecondaryLocation: MenuLocationEnum
@@ -296,6 +298,9 @@ Component.query = gql`
       nodes {
         ...NavigationMenuItemFragment
       }
+    }
+    footerMenuItems: menuItems(where: { location: $footerLocation }, first: 100) {
+      nodes { ...NavigationMenuItemFragment }
     }
     quickFooterMenuItems: menuItems(where: { location: $quickFooterLocation }, first: 100) {
       nodes { ...NavigationMenuItemFragment }

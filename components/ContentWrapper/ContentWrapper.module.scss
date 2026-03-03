@@ -10,27 +10,13 @@
     transition: all .3s;
     color: var(--color-primary) !important;
     font-weight: 700;
-    text-transform: uppercase;
-    text-decoration: none !important;
-    // &:hover {
-    //   color: var(--color-secondary) !important;
-    // }
-    transition: all .3s;
-    &::before {
-      font-family: 'Font Awesome 6 Free';
-      display: inline-block;
-      text-rendering: auto;
-      -webkit-font-smoothing: antialiased;
-       content: '\f061';
-       color: $gold;
-       margin-right: .5rem;
-       transition: all .3s;
-    }
-    &:hover{
-      &:before {
-        transform: translateX(4px);
-        transition: all .3s;
-      }
+    text-transform: none;
+    text-decoration: underline !important;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      color: var(--color-secondary) !important;
     }
   }
 
@@ -65,12 +51,103 @@
     a {
       color: var(--color-secondary);
       text-decoration: underline;
+      cursor: pointer;
 
       &:hover,
       &:focus {
-        color: var(--color-secondary);
+        color: var(--color-primary);
         text-decoration: none;
       }
+    }
+
+    .wp-block-accordion {
+      margin: 2.4rem 0;
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .wp-block-accordion-item {
+      border: 1px solid #d8e2dd;
+      border-radius: 0.8rem;
+      background: #ffffff;
+      overflow: clip;
+      box-shadow: 0 4px 12px rgba(15, 47, 36, 0.06);
+    }
+
+    .wp-block-accordion-heading {
+      margin: 0;
+    }
+
+    .wp-block-accordion-heading__toggle,
+    .wp-block-accordion-heading-toggle {
+      width: 100%;
+      margin: 0;
+      border: 0;
+      background: #ffffff;
+      color: #173228;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.4rem;
+      padding: 1.2rem 1.6rem;
+      font-size: clamp(1.8rem, 2vw, 2.8rem);
+      line-height: 1.12;
+      font-family: source-sans-pro, sans-serif;
+      letter-spacing: 0;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .wp-block-accordion-heading__toggle:hover,
+    .wp-block-accordion-heading-toggle:hover {
+      background: #f3f7f5;
+      color: #0f6048;
+    }
+
+    .wp-block-accordion-heading__toggle:focus-visible,
+    .wp-block-accordion-heading-toggle:focus-visible {
+      outline: 2px solid #0f6048;
+      outline-offset: -2px;
+    }
+
+    .wp-block-accordion-heading__toggle-title,
+    .wp-block-accordion-heading-toggle-title {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .wp-block-accordion-heading__toggle-icon,
+    .wp-block-accordion-heading-toggle-icon {
+      flex: 0 0 auto;
+      width: 2.8rem;
+      height: 2.8rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: #edf5f1;
+      text-align: center;
+      color: #0f6048;
+      font-size: 2.2rem;
+      line-height: 1;
+      transition: transform 0.2s ease;
+    }
+
+    .wp-block-accordion-item.is-open .wp-block-accordion-heading__toggle-icon,
+    .wp-block-accordion-item.is-open .wp-block-accordion-heading-toggle-icon {
+      transform: rotate(45deg);
+    }
+
+    .wp-block-accordion-panel {
+      border-top: 1px solid #e5eeea;
+      padding: 1.4rem 1.6rem 1.6rem;
+      background: #fbfdfc;
+    }
+
+    .wp-block-accordion-panel[hidden] {
+      display: none !important;
     }
 
     li {
@@ -165,5 +242,3 @@
     }
   }
 }
-
-
