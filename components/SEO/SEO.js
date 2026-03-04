@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
  * - noindex?: boolean (default false)
  * - type?: 'website' | 'article' | string (default 'website')
  * - siteName?: string (default 'Graduate Education')
- * - twitterHandle?: string (default '@CalPolyPartners')
+ * - twitterHandle?: string (default '@CalPolyGradEd')
  * - themeColor?: string (default brand green)
  * - locale?: string (default 'en_US')
  * - schema?: object (extra JSON-LD to merge/override)
@@ -27,7 +27,7 @@ import { useRouter } from 'next/router';
 
 const DEFAULTS = {
   siteName: 'Graduate Education',
-  twitterHandle: '@CalPolyPartners',
+  twitterHandle: '@CalPolyGradEd',
   themeColor: '#003831',
   locale: 'en_US',
   type: 'website',

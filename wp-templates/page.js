@@ -110,7 +110,7 @@ export default function Component(props) {
     pageTitle(props?.data?.generalSettings, title, props?.data?.generalSettings?.title);
 
   const computedDescription =
-    s?.metaDesc || siteDescription || 'Official site for Cal Poly Partners.';
+    s?.metaDesc || siteDescription || 'Official site for Cal Poly Graduate Education.';
 
   const computedImageUrl =
     s?.opengraphImage?.mediaItemUrl ||
