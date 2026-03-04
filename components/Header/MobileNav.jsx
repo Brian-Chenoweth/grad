@@ -104,7 +104,6 @@ export default function MobileNav({
 
       <aside className={cx('mnav__drawer')}>
         <div className={cx('mnav__header')}>
-          <span className={cx('mnav__title')}>Menu</span>
           <button type="button" className={cx('mnav__close')} aria-label="Close menu" onClick={onClose}>
             <FaXmark aria-hidden="true" />
           </button>

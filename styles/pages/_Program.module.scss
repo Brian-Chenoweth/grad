@@ -42,8 +42,7 @@
   line-height: 1.2;
 }
 
-.metaList,
-.contactList {
+.metaList {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -55,8 +54,51 @@
   grid-template-columns: 1fr;
 }
 
-.contactList {
-  grid-template-columns: 1fr;
+.contactCards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.contactCard {
+  display: grid;
+  gap: 0.8rem;
+  border-radius: 0.6rem;
+  background-color: #ffffff;
+  border: 1px solid #e0e8e2;
+  padding: 1.2rem 1.3rem;
+}
+
+.contactCardTitle {
+  margin: 0 0 0.8rem;
+  font-size: 2rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.contactCardSingle {
+  padding: 1.4rem 1.6rem;
+
+  .contactCardTitle {
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #e2eae4;
+  }
+
+  .contactItem {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 1rem 0;
+    grid-template-columns: 12rem 1fr;
+    gap: 1rem;
+  }
+
+  .contactItem + .contactItem {
+    border-top: 1px solid #e6ede8;
+  }
 }
 
 .metaItem,
@@ -155,12 +197,12 @@
   }
 
   .metaList,
-  .contactList {
+  .contactCards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .metaList > .metaItem:last-child:nth-child(odd),
-  .contactList > .contactItem:last-child:nth-child(odd) {
+  .contactCards > .contactCard:last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
 }

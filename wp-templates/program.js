@@ -31,6 +31,17 @@ function toTitleCase(value) {
     .join(' ');
 }
 
+function splitMulti(value = '') {
+  return String(value)
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function formatPhoneForHref(value = '') {
+  return String(value).replace(/[^\d+]/g, '');
+}
+
 export default function Component(props) {
   if (props.loading) {
     return <>Loading...</>;
@@ -53,6 +64,19 @@ export default function Component(props) {
   } = programFields ?? {};
   const collegeDisplay = toTitleCase(college);
   const applyNowUrl = getProgramApplyLink(props.data.program) ?? contactWeb;
+  const contactNames = splitMulti(contactName);
+  const contactPhones = splitMulti(contactPhone);
+  const contactEmails = splitMulti(contactEmail);
+  const contactCount = Math.max(
+    contactNames.length,
+    contactPhones.length,
+    contactEmails.length
+  );
+  const contacts = Array.from({ length: contactCount }, (_, index) => ({
+    name: contactNames[index] ?? '',
+    phone: contactPhones[index] ?? '',
+    email: contactEmails[index] ?? '',
+  })).filter((contact) => contact.name || contact.phone || contact.email);
 
   return (
     <>
@@ -113,35 +137,58 @@ export default function Component(props) {
                     )}
                   </ul>
 
-                  {(contactName || contactPhone || contactEmail) && (
+                  {contacts.length > 0 && (
                     <>
                       <h3 className={styles.contactTitle}>Contact</h3>
-                      <ul className={styles.contactList}>
-                        {contactName && (
-                          <li className={styles.contactItem}>
-                            <span className={styles.metaLabel}>Name</span>
-                            <span className={styles.metaValue}>{contactName}</span>
-                          </li>
-                        )}
-                        {contactPhone && (
-                          <li className={styles.contactItem}>
-                            <span className={styles.metaLabel}>Phone</span>
-                            <a
-                              className={styles.contactLink}
-                              href={`tel:${String(contactPhone).replace(/[^\d+]/g, '')}`}
+                      <ul className={styles.contactCards}>
+                        {contacts.map((contact, index) => {
+                          const isSingleContact = contacts.length === 1;
+                          const showNameAsHeading = Boolean(contact.name);
+                          const fallbackHeading = isSingleContact
+                            ? 'Contact'
+                            : `Contact ${index + 1}`;
+
+                          return (
+                            <li
+                              className={`${styles.contactCard} ${
+                                isSingleContact ? styles.contactCardSingle : ''
+                              }`}
+                              key={`${contact.name}-${contact.email}-${contact.phone}-${index}`}
                             >
-                              {contactPhone}
-                            </a>
-                          </li>
-                        )}
-                        {contactEmail && (
-                          <li className={styles.contactItem}>
-                            <span className={styles.metaLabel}>Email</span>
-                            <a className={styles.contactLink} href={`mailto:${contactEmail}`}>
-                              {contactEmail}
-                            </a>
-                          </li>
-                        )}
+                              <h4 className={styles.contactCardTitle}>
+                                {showNameAsHeading ? contact.name : fallbackHeading}
+                              </h4>
+                              {!showNameAsHeading && contact.name && (
+                                <div className={styles.contactItem}>
+                                  <span className={styles.metaLabel}>Name</span>
+                                  <span className={styles.metaValue}>{contact.name}</span>
+                                </div>
+                              )}
+                              {contact.phone && (
+                                <div className={styles.contactItem}>
+                                  <span className={styles.metaLabel}>Phone</span>
+                                  <a
+                                    className={styles.contactLink}
+                                    href={`tel:${formatPhoneForHref(contact.phone)}`}
+                                  >
+                                    {contact.phone}
+                                  </a>
+                                </div>
+                              )}
+                              {contact.email && (
+                                <div className={styles.contactItem}>
+                                  <span className={styles.metaLabel}>Email</span>
+                                  <a
+                                    className={styles.contactLink}
+                                    href={`mailto:${contact.email}`}
+                                  >
+                                    {contact.email}
+                                  </a>
+                                </div>
+                              )}
+                            </li>
+                          );
+                        })}
                       </ul>
                     </>
                   )}

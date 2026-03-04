@@ -17,6 +17,42 @@ $header-scroll-offset: 55px;
   }
 }
 
+@media screen and (max-width: 1280px) and (min-width: 768px) {
+  .header.scrolled {
+    height: 65px;
+  }
+
+  .header.scrolled .bar {
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.4rem;
+  }
+
+  .header.scrolled .titleName {
+    font-size: 2.2rem;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .header.scrolled .primary-navigation {
+    flex: 0 1 auto;
+    min-width: 0;
+    width: auto;
+    margin-left: auto;
+  }
+
+  .header.scrolled .primary-navigation :global(.menu) {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
+
+  .header.scrolled .primary-navigation :global(.menu > li > a) {
+    white-space: nowrap;
+    padding: 0 0.85rem;
+  }
+}
+
 .logo-wrap {
   transition: none;
   padding: .4rem 0;
@@ -111,23 +147,6 @@ $header-scroll-offset: 55px;
 
   &.scrolled {
     transform: translateY(-$header-scroll-offset);
-  }
-}
-
-/* At medium desktop widths the nav can wrap; keep full header visible on scroll. */
-@media screen and (max-width: 1280px) and (min-width: 768px) {
-  .header.scrolled {
-    height: auto;
-  }
-
-  .logo-wrap.scrolled {
-    transform: none;
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .header-content.scrolled {
-    transform: none;
   }
 }
 
