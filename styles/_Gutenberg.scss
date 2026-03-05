@@ -8,3 +8,67 @@
 @import '@wordpress/base-styles/variables';
 @import '@wordpress/base-styles/breakpoints';
 @import '@wordpress/block-library/src/style';
+
+// Homepage utility cards (Orientation / Steps to Graduation / Program Coordinators)
+// Scoped to this specific WP block instance class to avoid side effects elsewhere.
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179 {
+  gap: 1.5rem !important;
+  padding: 0 !important;
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179
+  > .wp-block-column.has-black-background-color.has-background {
+  // background: #e6e6e6 !important;
+  padding: .5rem !important;
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179
+  > .wp-block-column.has-black-background-color.has-background
+  > .wp-block-image {
+  margin: 0 !important;
+  position: relative;
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179
+  > .wp-block-column.has-black-background-color.has-background
+  > .wp-block-image::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1.125rem;
+  background: #789F90;
+  // margin-bottom: .75rem;
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179
+  > .wp-block-column.has-black-background-color.has-background
+  > .wp-block-image
+  img {
+  display: block !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179
+  > .wp-block-column.has-black-background-color.has-background
+  > .wp-block-group {
+  padding: 1.75rem 0 0 !important;
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179 h3.wp-block-heading,
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179 h3.wp-block-heading.has-white-color {
+  color: #154734 !important;
+  font-family: abolition, 'Arial Narrow', sans-serif !important;
+  font-weight: 500 !important;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  line-height: .95 !important;
+  // font-size: clamp(3rem, 3.6vw, 4.25rem) !important;
+  margin: 0 !important;
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179 p.has-white-color,
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179 p.has-white-color a {
+  color: #154734 !important;
+}
