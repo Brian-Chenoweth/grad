@@ -20,6 +20,7 @@
   > .wp-block-column.has-black-background-color.has-background {
   // background: #e6e6e6 !important;
   padding: .5rem !important;
+  position: relative;
 }
 
 .wp-block-columns.wp-container-core-columns-is-layout-6c3b9179
@@ -71,4 +72,14 @@
 .wp-block-columns.wp-container-core-columns-is-layout-6c3b9179 p.has-white-color,
 .wp-block-columns.wp-container-core-columns-is-layout-6c3b9179 p.has-white-color a {
   color: #154734 !important;
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-6c3b9179
+  > .wp-block-column.has-black-background-color.has-background
+  p.has-white-color
+  a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
