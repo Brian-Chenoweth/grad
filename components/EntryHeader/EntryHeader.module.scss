@@ -54,6 +54,7 @@
   position: static;
   margin: 0;
   text-align: left;
+  color: #ffffff !important;
   letter-spacing: 2px;
   text-transform: uppercase;
   pointer-events: auto;
@@ -61,6 +62,7 @@
 
 .breadcrumbs {
   margin: 0;
+  margin-bottom: 2rem;
   font-size: 1.4rem;
   line-height: 1.4;
   color: #3c4f45;
@@ -70,6 +72,10 @@
     text-decoration: underline;
     text-underline-offset: 2px;
   }
+}
+
+.no-image-header .breadcrumbs {
+  margin-bottom: 2rem;
 }
 
 .separator {
