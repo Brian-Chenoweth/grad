@@ -1,0 +1,137 @@
+@import 'styles/Variables';
+
+.form {
+  margin: 3rem 0 4rem;
+  padding: 2.4rem;
+  border: 1px solid #d6e3dc;
+  border-radius: 0.8rem;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(21, 71, 52, 0.06);
+}
+
+.grid {
+  display: grid;
+  gap: 1.6rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: $breakpoint-small) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.8rem;
+  }
+}
+
+.field {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  span {
+    margin: 0;
+    color: #173228;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    margin: 0;
+    border: 1px solid #b4c7be;
+    border-radius: 0.4rem;
+    background: #fff;
+    color: #1f2b25;
+    padding: 1rem 1.2rem;
+    font-family: $font-family;
+    font-size: 1.6rem;
+    line-height: 1.4;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus-visible {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(21, 71, 52, 0.15);
+    }
+
+    &::placeholder {
+      color: #7e9389;
+      opacity: 1;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 14rem;
+  }
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.errors {
+  margin-top: 1.4rem;
+
+  :global(ul),
+  :global(li),
+  :global(p) {
+    margin: 0.4rem 0;
+    color: #8a1f1f;
+    font-size: 1.5rem;
+    font-weight: 600;
+    list-style: none;
+  }
+}
+
+.errorMsg {
+  margin: 0.4rem 0;
+  color: #8a1f1f;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.submitBtn {
+  margin: 2rem 0 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16rem;
+  padding: 1.1rem 2.2rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 0.4rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-family: $font-family;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    border-color: #0f6048;
+    background-color: #0f6048;
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.successMsg {
+  margin: 3rem 0 4rem;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid #b9d5c8;
+  border-radius: 0.6rem;
+  background: #f3faf6;
+  color: #154734;
+  font-size: 1.8rem;
+  font-weight: 600;
+}

@@ -2,7 +2,10 @@ import * as MENUS from 'constants/menus';
 
 import { gql } from '@apollo/client';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { createPortal } from 'react-dom';
+import { useEffect, useState } from 'react';
 import { pageTitle } from 'utilities';
 import styles from 'styles/pages/_CoordinatorDirectory.module.scss';
 
@@ -16,6 +19,24 @@ import {
   FeaturedImage,
   SEO,
 } from '../components';
+
+// Client-only form to avoid SSR/client mismatch.
+const ContactForm = dynamic(() => import('components/ContactForm'), { ssr: false });
+
+const TOKEN = '<!-- FORMSPREE_CONTACT -->';
+const SLOT_HTML = '<div id="contact-form-slot"></div>';
+
+// Portals ContactForm into placeholder div after mount.
+function ContactFormIntoSlot() {
+  const [slot, setSlot] = useState(null);
+
+  useEffect(() => {
+    setSlot(document.getElementById('contact-form-slot'));
+  }, []);
+
+  if (!slot) return null;
+  return createPortal(<ContactForm />, slot);
+}
 
 function normalize(value) {
   return String(value ?? '')
@@ -103,6 +124,7 @@ export default function Component(props) {
   const groupedByCollege = Object.entries(groupedPrograms).sort(([a], [b]) =>
     a.localeCompare(b)
   );
+  const htmlWithSlot = (content ?? '').split(TOKEN).join(SLOT_HTML);
 
   // ---- Yoast → SEO props with smart fallbacks ----
   const computedTitle =
@@ -147,7 +169,8 @@ export default function Component(props) {
         <>
           <EntryHeader title={title} image={featuredImage?.node} />
           <div className="container">
-            <ContentWrapper content={content} />
+            <ContentWrapper content={htmlWithSlot} />
+            <ContactFormIntoSlot />
             {isCoordinatorPage && (
               <section className={styles.directorySection}>
                 {/* <h2 className={styles.directoryTitle}>Graduate Program Coordinators</h2> */}
