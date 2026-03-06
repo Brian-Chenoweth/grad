@@ -32,8 +32,16 @@
     }
   }
 
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #fafafa !important;
+  }
+
   h3 {
-    color: var(--color-lime);
     font-family: abolition, sans-serif;
     font-style: normal;
     font-weight: 400;
