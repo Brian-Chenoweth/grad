@@ -78,6 +78,16 @@ function splitMulti(value = '') {
     .filter(Boolean);
 }
 
+function hasRenderableContent(value = '') {
+  const textOnly = String(value)
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;|&#160;/gi, ' ')
+    .trim();
+
+  return Boolean(textOnly);
+}
+
 export default function Component(props) {
   const router = useRouter();
 
@@ -125,6 +135,7 @@ export default function Component(props) {
     a.localeCompare(b)
   );
   const htmlWithSlot = (content ?? '').split(TOKEN).join(SLOT_HTML);
+  const showContentWrapper = htmlWithSlot.includes(SLOT_HTML) || hasRenderableContent(content);
 
   // ---- Yoast → SEO props with smart fallbacks ----
   const computedTitle =
@@ -169,7 +180,7 @@ export default function Component(props) {
         <>
           <EntryHeader title={title} image={featuredImage?.node} />
           <div className="container">
-            <ContentWrapper content={htmlWithSlot} />
+            {showContentWrapper && <ContentWrapper content={htmlWithSlot} />}
             <ContactFormIntoSlot />
             {isCoordinatorPage && (
               <section className={styles.directorySection}>

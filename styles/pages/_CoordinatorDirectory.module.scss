@@ -12,7 +12,7 @@
 }
 
 .collegeBlock {
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
 }
 
 .collegeTitle {
@@ -29,17 +29,30 @@
 .directoryTable {
   width: 100%;
   border-collapse: collapse;
-  background: #ffffff;
+  margin: 0;
+  background: transparent;
 
   thead th {
     background: #0f563f;
     color: #ffffff;
     font-size: 1.2rem;
+    font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     text-align: left;
     padding: 1rem 1.1rem;
     border: 0;
+    vertical-align: top;
+  }
+
+  tbody th {
+    padding: 0.95rem 1.1rem;
+    border-bottom: 1px solid #d9e1dd;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-align: left;
+    vertical-align: top;
   }
 
   tbody td {
@@ -50,7 +63,7 @@
     vertical-align: top;
   }
 
-  tbody tr:nth-child(even) td {
+  tbody tr:nth-child(even) {
     background: #f5f7f6;
   }
 
@@ -59,6 +72,11 @@
     text-decoration: underline !important;
     text-underline-offset: 2px;
     font-weight: 600;
+
+    &:hover,
+    &:focus {
+      color: #0f563f !important;
+    }
   }
 }
 

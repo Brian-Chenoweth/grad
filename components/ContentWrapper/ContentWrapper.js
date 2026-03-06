@@ -5,6 +5,27 @@ import styles from './ContentWrapper.module.scss';
 
 const cx = className.bind(styles);
 
+function hasVisibleContent(value = '') {
+  const html = String(value ?? '');
+
+  const hasRenderableElements = /<(img|svg|video|audio|iframe|embed|object|table|ul|ol|dl|blockquote|pre|hr|form)\b/i.test(
+    html
+  );
+
+  if (hasRenderableElements) {
+    return true;
+  }
+
+  const textOnly = html
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;|&#160;|&#xfeff;|&ZeroWidthSpace;/gi, ' ')
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    .trim();
+
+  return Boolean(textOnly);
+}
+
 /**
  * A basic Container Wrapper component
  * @param {Props} props The props object.
@@ -15,8 +36,11 @@ const cx = className.bind(styles);
  */
 export default function ContentWrapper({ content, className, children }) {
   const contentRef = useRef(null);
+  const shouldRender = hasVisibleContent(content) || Boolean(children);
 
   useEffect(() => {
+    if (!shouldRender) return undefined;
+
     const root = contentRef.current;
     if (!root) return undefined;
 
@@ -106,7 +130,11 @@ export default function ContentWrapper({ content, className, children }) {
 
     root.addEventListener('click', handleClick);
     return () => root.removeEventListener('click', handleClick);
-  }, [content]);
+  }, [content, shouldRender]);
+
+  if (!shouldRender) {
+    return null;
+  }
 
   return (
     <article className={cx('content', className)}>
