@@ -5,7 +5,6 @@ import {
   FaClipboardList,
   FaUserFriends,
   FaUsers,
-  FaLink,
 } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -230,8 +229,7 @@ export default function Component() {
               Orfalea College of Business Events
             </p>
             <Link href="/events" className={styles.importantDatesLink}>
-              <FaLink aria-hidden="true" />
-              <span>View OCOB Info Session Schedule</span>
+              View OCOB Info Session Schedule
             </Link>
           </div>
         </section>
