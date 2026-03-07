@@ -13,14 +13,6 @@ import styles from './SearchRecommendations.module.scss';
 export default function SearchRecommendations({ programTypes }) {
   return (
     <div className={styles.recommendations}>
-      <h4>Browse by Program Type</h4>
-      <ul>
-        {programTypes?.map((type) => (
-          <li key={type.uri}>
-            <Link href={type.uri}>{type.name}</Link>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

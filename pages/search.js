@@ -110,9 +110,6 @@ export default function Page() {
             </div>
           )}
 
-          {!searchResultsLoading && searchResultsData === undefined && (
-            <SearchRecommendations programTypes={PROGRAM_TYPES} />
-          )}
         </div>
       </Main>
       <Footer
