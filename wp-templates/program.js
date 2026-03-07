@@ -56,13 +56,14 @@ export default function Component(props) {
   const { title, content, featuredImage, programFields } = props.data.program;
   const {
     college,
-    blended,
+    programType,
     contactName,
     contactPhone,
     contactEmail,
     contactWeb,
   } = programFields ?? {};
   const collegeDisplay = toTitleCase(college);
+  const programTypeDisplay = toTitleCase(programType);
   const applyNowUrl = getProgramApplyLink(props.data.program) ?? contactWeb;
   const contactNames = splitMulti(contactName);
   const contactPhones = splitMulti(contactPhone);
@@ -100,7 +101,7 @@ export default function Component(props) {
           <div className="container">
             <ContentWrapper className={styles.programContent} content={content}>
               {(college ||
-                blended ||
+                programType ||
                 contactName ||
                 contactPhone ||
                 contactEmail ||
@@ -114,12 +115,10 @@ export default function Component(props) {
                         <span className={styles.metaValue}>{collegeDisplay}</span>
                       </li>
                     )}
-                    {typeof blended === 'boolean' && (
+                    {programTypeDisplay && (
                       <li className={styles.metaItem}>
-                        <span className={styles.metaLabel}>Blended Program</span>
-                        <span className={styles.metaValue}>
-                          {blended ? 'Yes' : 'No'}
-                        </span>
+                        <span className={styles.metaLabel}>Program Type</span>
+                        <span className={styles.metaValue}>{programTypeDisplay}</span>
                       </li>
                     )}
                     {contactWeb && (
@@ -243,7 +242,7 @@ Component.query = gql`
       content
       programFields {
         college
-        blended
+        programType
         contactName
         contactPhone
         contactEmail

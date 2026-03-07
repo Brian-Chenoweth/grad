@@ -39,7 +39,7 @@ export default function ProgramsArchive(props) {
 
   const [search, setSearch] = useState('');
   const [collegeFilter, setCollegeFilter] = useState('all');
-  const [formatFilter, setFormatFilter] = useState('all');
+  const [programTypeFilter, setProgramTypeFilter] = useState('all');
 
   const { title: siteTitle, description: siteDescription } =
     data?.generalSettings ?? {};
@@ -68,13 +68,23 @@ export default function ProgramsArchive(props) {
     return Array.from(uniques).sort((a, b) => a.localeCompare(b));
   }, [programs]);
 
+  const programTypeOptions = useMemo(() => {
+    const uniques = new Set(
+      programs
+        .map((program) => program?.programFields?.programType)
+        .filter(Boolean)
+        .map((value) => toTitleCase(value))
+    );
+    return Array.from(uniques).sort((a, b) => a.localeCompare(b));
+  }, [programs]);
+
   const filteredPrograms = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase();
     return programs.filter((program) => {
       const title = program?.title ?? '';
       const collegeRaw = program?.programFields?.college ?? '';
       const college = toTitleCase(collegeRaw);
-      const blended = program?.programFields?.blended === true;
+      const programType = toTitleCase(program?.programFields?.programType ?? '');
 
       const matchesSearch =
         !normalizedSearch ||
@@ -82,14 +92,12 @@ export default function ProgramsArchive(props) {
         college.toLowerCase().includes(normalizedSearch);
       const matchesCollege =
         collegeFilter === 'all' || college === collegeFilter;
-      const matchesFormat =
-        formatFilter === 'all' ||
-        (formatFilter === 'blended' && blended) ||
-        (formatFilter === 'not-blended' && !blended);
+      const matchesProgramType =
+        programTypeFilter === 'all' || programType === programTypeFilter;
 
-      return matchesSearch && matchesCollege && matchesFormat;
+      return matchesSearch && matchesCollege && matchesProgramType;
     });
-  }, [programs, search, collegeFilter, formatFilter]);
+  }, [programs, search, collegeFilter, programTypeFilter]);
 
   if (loading) {
     return null;
@@ -142,14 +150,17 @@ export default function ProgramsArchive(props) {
                   </select>
                 </label>
                 <label className={styles.filterField}>
-                  <span>Blended Program</span>
+                  <span>Program Type</span>
                   <select
-                    value={formatFilter}
-                    onChange={(event) => setFormatFilter(event.target.value)}
+                    value={programTypeFilter}
+                    onChange={(event) => setProgramTypeFilter(event.target.value)}
                   >
-                    <option value="all">All formats</option>
-                    <option value="blended">Blended only</option>
-                    <option value="not-blended">Non-blended only</option>
+                    <option value="all">All program types</option>
+                    {programTypeOptions.map((programType) => (
+                      <option key={programType} value={programType}>
+                        {programType}
+                      </option>
+                    ))}
                   </select>
                 </label>
               </div>
@@ -167,7 +178,7 @@ export default function ProgramsArchive(props) {
               <ul className={styles.programList}>
                 {filteredPrograms.map((program) => {
                   const college = toTitleCase(program?.programFields?.college);
-                  const blended = program?.programFields?.blended === true;
+                  const programType = toTitleCase(program?.programFields?.programType ?? '');
                   return (
                     <li key={program?.id} className={styles.programCard}>
                       <h3 className={styles.programTitle}>{program?.title}</h3>
@@ -175,7 +186,7 @@ export default function ProgramsArchive(props) {
                         {college || 'College not specified'}
                       </p>
                       <p className={styles.programMeta}>
-                        Blended Program: {blended ? 'Yes' : 'No'}
+                        Program Type: {programType || 'Not specified'}
                       </p>
                       {program?.uri && (
                         <Button href={program.uri} className={styles.viewButton}>
@@ -229,7 +240,7 @@ ProgramsArchive.query = gql`
         title
         programFields {
           college
-          blended
+          programType
         }
       }
     }
