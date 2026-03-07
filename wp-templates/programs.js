@@ -31,6 +31,18 @@ function toTitleCase(value) {
     .join(' ');
 }
 
+function cleanFieldValue(value = '') {
+  const normalized = String(value ?? '')
+    .replace(/<[^>]+>/g, '')
+    .trim();
+
+  if (!normalized) return '';
+  if (/^(null|undefined|n\/a|na)$/i.test(normalized)) return '';
+  if (/^[:;,\-]+$/.test(normalized)) return '';
+
+  return normalized;
+}
+
 export default function ProgramsArchive(props) {
   const { uri = '/programs/' } = props?.data?.nodeByUri ?? {};
   const { data, loading } = useQuery(ProgramsArchive.query, {
@@ -63,7 +75,8 @@ export default function ProgramsArchive(props) {
       programs
         .map((program) => program?.programFields?.college)
         .filter(Boolean)
-        .map((value) => toTitleCase(value))
+        .map((value) => toTitleCase(cleanFieldValue(value)))
+        .filter(Boolean)
     );
     return Array.from(uniques).sort((a, b) => a.localeCompare(b));
   }, [programs]);
@@ -73,7 +86,8 @@ export default function ProgramsArchive(props) {
       programs
         .map((program) => program?.programFields?.programType)
         .filter(Boolean)
-        .map((value) => toTitleCase(value))
+        .map((value) => toTitleCase(cleanFieldValue(value)))
+        .filter(Boolean)
     );
     return Array.from(uniques).sort((a, b) => a.localeCompare(b));
   }, [programs]);
@@ -82,9 +96,11 @@ export default function ProgramsArchive(props) {
     const normalizedSearch = search.trim().toLowerCase();
     return programs.filter((program) => {
       const title = program?.title ?? '';
-      const collegeRaw = program?.programFields?.college ?? '';
+      const collegeRaw = cleanFieldValue(program?.programFields?.college);
       const college = toTitleCase(collegeRaw);
-      const programType = toTitleCase(program?.programFields?.programType ?? '');
+      const programType = toTitleCase(
+        cleanFieldValue(program?.programFields?.programType)
+      );
 
       const matchesSearch =
         !normalizedSearch ||
@@ -177,17 +193,23 @@ export default function ProgramsArchive(props) {
               )}
               <ul className={styles.programList}>
                 {filteredPrograms.map((program) => {
-                  const college = toTitleCase(program?.programFields?.college);
-                  const programType = toTitleCase(program?.programFields?.programType ?? '');
+                  const college = toTitleCase(
+                    cleanFieldValue(program?.programFields?.college)
+                  );
+                  const programType = toTitleCase(
+                    cleanFieldValue(program?.programFields?.programType)
+                  );
                   return (
                     <li key={program?.id} className={styles.programCard}>
                       <h3 className={styles.programTitle}>{program?.title}</h3>
-                      <p className={styles.programMeta}>
-                        {college || 'College not specified'}
-                      </p>
-                      <p className={styles.programMeta}>
-                        Program Type: {programType || 'Not specified'}
-                      </p>
+                      {college && (
+                        <p className={styles.programMeta}>{college}</p>
+                      )}
+                      {programType && (
+                        <p className={styles.programMeta}>
+                          Program Type: {programType}
+                        </p>
+                      )}
                       {program?.uri && (
                         <Button href={program.uri} className={styles.viewButton}>
                           View Program

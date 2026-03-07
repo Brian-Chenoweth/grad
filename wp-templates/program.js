@@ -31,10 +31,22 @@ function toTitleCase(value) {
     .join(' ');
 }
 
+function cleanFieldValue(value = '') {
+  const normalized = String(value ?? '')
+    .replace(/<[^>]+>/g, '')
+    .trim();
+
+  if (!normalized) return '';
+  if (/^(null|undefined|n\/a|na)$/i.test(normalized)) return '';
+  if (/^[:;,\-]+$/.test(normalized)) return '';
+
+  return normalized;
+}
+
 function splitMulti(value = '') {
-  return String(value)
+  return cleanFieldValue(value)
     .split(',')
-    .map((item) => item.trim())
+    .map((item) => cleanFieldValue(item))
     .filter(Boolean);
 }
 
@@ -62,9 +74,10 @@ export default function Component(props) {
     contactEmail,
     contactWeb,
   } = programFields ?? {};
-  const collegeDisplay = toTitleCase(college);
-  const programTypeDisplay = toTitleCase(programType);
-  const applyNowUrl = getProgramApplyLink(props.data.program) ?? contactWeb;
+  const collegeDisplay = toTitleCase(cleanFieldValue(college));
+  const programTypeDisplay = toTitleCase(cleanFieldValue(programType));
+  const contactWebValue = cleanFieldValue(contactWeb);
+  const applyNowUrl = getProgramApplyLink(props.data.program) ?? contactWebValue;
   const contactNames = splitMulti(contactName);
   const contactPhones = splitMulti(contactPhone);
   const contactEmails = splitMulti(contactEmail);
@@ -78,6 +91,9 @@ export default function Component(props) {
     phone: contactPhones[index] ?? '',
     email: contactEmails[index] ?? '',
   })).filter((contact) => contact.name || contact.phone || contact.email);
+  const hasProgramMeta = Boolean(collegeDisplay || programTypeDisplay || contactWebValue);
+  const hasContacts = contacts.length > 0;
+  const showMetaPanel = hasProgramMeta || hasContacts || Boolean(applyNowUrl);
 
   return (
     <>
@@ -100,43 +116,42 @@ export default function Component(props) {
           <EntryHeader title={title} image={featuredImage?.node} />
           <div className="container">
             <ContentWrapper className={styles.programContent} content={content}>
-              {(college ||
-                programType ||
-                contactName ||
-                contactPhone ||
-                contactEmail ||
-                contactWeb) && (
+              {showMetaPanel && (
                 <section className={styles.metaPanel}>
-                  <h2 className={styles.metaPanelTitle}>Program Details</h2>
-                  <ul className={styles.metaList}>
-                    {college && (
-                      <li className={styles.metaItem}>
-                        <span className={styles.metaLabel}>College</span>
-                        <span className={styles.metaValue}>{collegeDisplay}</span>
-                      </li>
-                    )}
-                    {programTypeDisplay && (
-                      <li className={styles.metaItem}>
-                        <span className={styles.metaLabel}>Program Type</span>
-                        <span className={styles.metaValue}>{programTypeDisplay}</span>
-                      </li>
-                    )}
-                    {contactWeb && (
-                      <li className={styles.metaItem}>
-                        <span className={styles.metaLabel}>Program Website</span>
-                        <a
-                          className={styles.contactLink}
-                          href={contactWeb}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Visit Program Website
-                        </a>
-                      </li>
-                    )}
-                  </ul>
+                  {hasProgramMeta && (
+                    <>
+                      <h2 className={styles.metaPanelTitle}>Program Details</h2>
+                      <ul className={styles.metaList}>
+                        {collegeDisplay && (
+                          <li className={styles.metaItem}>
+                            <span className={styles.metaLabel}>College</span>
+                            <span className={styles.metaValue}>{collegeDisplay}</span>
+                          </li>
+                        )}
+                        {programTypeDisplay && (
+                          <li className={styles.metaItem}>
+                            <span className={styles.metaLabel}>Program Type</span>
+                            <span className={styles.metaValue}>{programTypeDisplay}</span>
+                          </li>
+                        )}
+                        {contactWebValue && (
+                          <li className={styles.metaItem}>
+                            <span className={styles.metaLabel}>Program Website</span>
+                            <a
+                              className={styles.contactLink}
+                              href={contactWebValue}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Visit Program Website
+                            </a>
+                          </li>
+                        )}
+                      </ul>
+                    </>
+                  )}
 
-                  {contacts.length > 0 && (
+                  {hasContacts && (
                     <>
                       <h3 className={styles.contactTitle}>Contact</h3>
                       <ul className={styles.contactCards}>
