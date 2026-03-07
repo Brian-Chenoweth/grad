@@ -11,6 +11,7 @@ export const PROGRAM_APPLY_LINK_OVERRIDES = {
   // '/program/example-program/': 'https://www.calpoly.edu/apply-example',
   '/program/business-analytics': 'https://calstate2026.cas.myliaison.com/applicant-ux/#/login',
   '/program/quantitative-economics': 'https://calstate2026.cas.myliaison.com/applicant-ux/#/login',
+  '/program/graduate-certificate-in-emergency-management-at-cal-poly-maritime-academy': 'https://forms.office.com/Pages/ResponsePage.aspx?id=7FxEXsesV0-_0uMHcy0HBNHbpWxz32VJqPMOgGC_rLFUMVhRU0hFNUxMTE5HMEZTSkw3OVFKRjk0OC4u&wdLOR=cDF830F7A-0ED2-4EE2-B9C1-724FFCF25065',
 };
 
 function normalizeProgramUri(value) {
