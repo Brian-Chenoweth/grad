@@ -27,7 +27,7 @@ const TOKEN = '<!-- FORMSPREE_CONTACT -->';
 const SLOT_HTML = '<div id="contact-form-slot"></div>';
 
 // Portals ContactForm into placeholder div after mount.
-function ContactFormIntoSlot() {
+function ContactFormIntoSlot({ programOptions = [] }) {
   const [slot, setSlot] = useState(null);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function ContactFormIntoSlot() {
   }, []);
 
   if (!slot) return null;
-  return createPortal(<ContactForm />, slot);
+  return createPortal(<ContactForm programOptions={programOptions} />, slot);
 }
 
 function normalize(value) {
@@ -134,6 +134,18 @@ export default function Component(props) {
   const groupedByCollege = Object.entries(groupedPrograms).sort(([a], [b]) =>
     a.localeCompare(b)
   );
+  const contactProgramOptions = Array.from(
+    new Set(
+      programNodes
+        .map((program) => normalize(program?.title))
+        .filter((title) => title && !title.toLowerCase().includes('suspended'))
+    )
+  )
+    .sort((a, b) =>
+      a.localeCompare(b, undefined, {
+        sensitivity: 'base',
+      })
+    );
   const htmlWithSlot = (content ?? '').split(TOKEN).join(SLOT_HTML);
   const showContentWrapper = htmlWithSlot.includes(SLOT_HTML) || hasRenderableContent(content);
 
@@ -181,7 +193,7 @@ export default function Component(props) {
           <EntryHeader title={title} image={featuredImage?.node} />
           <div className="container">
             {showContentWrapper && <ContentWrapper content={htmlWithSlot} />}
-            <ContactFormIntoSlot />
+            <ContactFormIntoSlot programOptions={contactProgramOptions} />
             {isCoordinatorPage && (
               <section className={styles.directorySection}>
                 {/* <h2 className={styles.directoryTitle}>Graduate Program Coordinators</h2> */}

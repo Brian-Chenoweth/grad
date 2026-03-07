@@ -35,6 +35,7 @@
   }
 
   input,
+  select,
   textarea {
     width: 100%;
     margin: 0;
@@ -60,8 +61,21 @@
     }
   }
 
+  select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, #155a44 50%),
+      linear-gradient(135deg, #155a44 50%, transparent 50%);
+    background-position:
+      calc(100% - 2rem) calc(50% - 0.2rem),
+      calc(100% - 1.4rem) calc(50% - 0.2rem);
+    background-size: 0.6rem 0.6rem, 0.6rem 0.6rem;
+    background-repeat: no-repeat;
+    padding-right: 3.8rem;
+  }
+
   textarea {
-    resize: vertical;
+    resize: none;
     min-height: 14rem;
   }
 }

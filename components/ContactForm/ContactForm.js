@@ -5,7 +5,7 @@ import { useForm, ValidationError } from '@formspree/react';
 
 import styles from './ContactForm.module.scss';
 
-export default function ContactForm() {
+export default function ContactForm({ programOptions = [] }) {
   const [state, formspreeSubmit] = useForm('mvgqleqb');
   const [confirmError, setConfirmError] = useState('');
 
@@ -61,7 +61,7 @@ export default function ContactForm() {
           <input id="confirmEmail" name="confirmEmail" type="email" required />
         </label>
 
-        <label htmlFor="phone" className={`${styles.field} ${styles.fullWidth}`}>
+        <label htmlFor="phone" className={styles.field}>
           <span>Phone (Optional)</span>
           <input
             id="phone"
@@ -71,6 +71,22 @@ export default function ContactForm() {
             autoComplete="tel"
             placeholder="(555) 123-4567"
           />
+        </label>
+
+        <label htmlFor="programOfInterest" className={styles.field}>
+          <span>Program of Interest (Optional)</span>
+          <select
+            id="programOfInterest"
+            name="programOfInterest"
+            defaultValue=""
+          >
+            <option value="">Select a program</option>
+            {programOptions.map((program) => (
+              <option key={program} value={program}>
+                {program}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label htmlFor="message" className={`${styles.field} ${styles.fullWidth}`}>
