@@ -12,6 +12,7 @@ import SkipNavigationLink from '../SkipNavigationLink';
 import MobileNav from './MobileNav';
 import styles from './Header.module.scss';
 let cx = classNames.bind(styles);
+const HEADER_NAV_BREAKPOINT = 1100;
 
 function useIsMobile(bp = 767) {
   const [isMobile, set] = useState(false);
@@ -29,7 +30,7 @@ export default function Header({ className, menuItems }) {
   const router = useRouter();
   const [isNavShown, setIsNavShown] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const isMobile = useIsMobile(767);
+  const isMobile = useIsMobile(HEADER_NAV_BREAKPOINT);
   const menuRef = useRef(null);
 
   const headerClasses = cx('header', className, { scrolled: isScrolled });
