@@ -19,32 +19,33 @@ $header-scroll-offset: 55px;
 
 @media screen and (max-width: 1280px) and (min-width: 768px) {
   .header.scrolled {
-    height: 65px;
+    // height: auto;
   }
 
   .header.scrolled .bar {
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
     gap: 1.4rem;
   }
 
   .header.scrolled .titleName {
     font-size: 2.2rem;
     white-space: nowrap;
-    flex: 0 0 auto;
+    flex: 0 0 100%;
+    width: 100%;
   }
 
   .header.scrolled .primary-navigation {
-    flex: 0 1 auto;
+    flex: 0 0 100%;
     min-width: 0;
-    width: auto;
-    margin-left: auto;
+    width: 100%;
+    margin-left: 0;
   }
 
   .header.scrolled .primary-navigation :global(.menu) {
     flex-wrap: nowrap;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 
   .header.scrolled .primary-navigation :global(.menu > li > a) {
@@ -147,6 +148,10 @@ $header-scroll-offset: 55px;
 
   &.scrolled {
     transform: translateY(-$header-scroll-offset);
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 

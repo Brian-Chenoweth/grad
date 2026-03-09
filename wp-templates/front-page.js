@@ -265,7 +265,7 @@ export default function Component() {
           </div>
         </section>
 
-        <section className={styles.graduateRecognition}>
+        {/* <section className={styles.graduateRecognition}>
           <div className={`container ${styles.graduateRecognitionInner}`}>
             <div className={styles.graduateRecognitionImage}>
               <Image
@@ -292,6 +292,27 @@ export default function Component() {
               </Link>
             </div>
           </div>
+        </section> */}
+
+        <section className={styles.currentStudents}>
+          <div className={`container ${styles.currentStudentsInner}`}>
+            <div className={styles.currentStudentsImage}>
+              <Image
+                src="/home/current-students.jpg"
+                alt="Graduate students studying together"
+                width={920}
+                height={520}
+              />
+            </div>
+            <div className={styles.currentStudentsContent}>
+              <Heading className={styles.currentStudentsTitle} level="h2">
+                Current Graduate Students
+              </Heading>
+              <Link href="/current-students" className={styles.currentStudentsLink}>
+                Learn about orientation, forms, and other resources
+              </Link>
+            </div>
+          </div>
         </section>
         <section className={styles.degreeProgramsCta}>
           <div className={`container ${styles.degreeProgramsInner}`}>
@@ -309,26 +330,6 @@ export default function Component() {
               >
                 How to Apply
               </Button>
-            </div>
-          </div>
-        </section>
-        <section className={styles.currentStudents}>
-          <div className={`container ${styles.currentStudentsInner}`}>
-            <div className={styles.currentStudentsContent}>
-              <Heading className={styles.currentStudentsTitle} level="h2">
-                Current Graduate Students
-              </Heading>
-              <Link href="/current-students" className={styles.currentStudentsLink}>
-                Learn about orientation, forms, and other resources
-              </Link>
-            </div>
-            <div className={styles.currentStudentsImage}>
-              <Image
-                src="/home/current-students.jpg"
-                alt="Graduate students studying together"
-                width={920}
-                height={520}
-              />
             </div>
           </div>
         </section>
