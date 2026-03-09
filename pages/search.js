@@ -11,12 +11,18 @@ import {
   SearchInput,
   SearchResults,
   SEO,
+  SearchRecommendations,
 } from 'components';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import { useState } from 'react';
 import { GetSearchResults } from 'queries/GetSearchResults';
 import styles from 'styles/pages/_Search.module.scss';
 import appConfig from 'app.config';
+
+const PROGRAM_TYPES = [
+  { name: 'All Graduate Programs', uri: '/programs' },
+  { name: 'Blended Programs', uri: '/blended-programs' },
+];
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState('');
