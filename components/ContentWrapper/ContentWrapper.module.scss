@@ -160,6 +160,11 @@
     }
 
     .wp-block-buttons .wp-block-button {
+      width: auto;
+      flex: 0 0 auto;
+    }
+
+    .wp-block-buttons .wp-block-button:not(:only-child) {
       width: 100%;
       flex: 1 1 24rem;
     }
@@ -171,7 +176,7 @@
       justify-content: center;
       width: auto;
       min-height: 6.4rem;
-      padding: 1.2rem 2rem;
+      padding: 1.5rem 2.5rem;
       border-radius: 0 !important;
       border: 1px solid #00882e;
       background: #00882e;
@@ -196,6 +201,11 @@
 
     .wp-block-buttons .wp-block-button__link,
     .wp-block-buttons a.wp-block-button__link {
+      width: auto;
+    }
+
+    .wp-block-buttons .wp-block-button:not(:only-child) .wp-block-button__link,
+    .wp-block-buttons .wp-block-button:not(:only-child) a.wp-block-button__link {
       width: 100%;
     }
 
