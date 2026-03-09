@@ -33,3 +33,5 @@ All external contributors to WP Engine products must have a signed Contributor L
 3. 📥 Receive copy of signed CLA
 
 ❤️ Thank you for helping us fulfill our legal obligations in order to continue empowering builders through headless WordPress.
+
+tets deploy
