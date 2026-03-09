@@ -89,7 +89,10 @@ export default function ContactForm({ programOptions = [] }) {
           </select>
         </label>
 
-        <label htmlFor="currentCalPolyUndergrad" className={styles.field}>
+        <label
+          htmlFor="currentCalPolyUndergrad"
+          className={`${styles.field} ${styles.fullWidth}`}
+        >
           <span>Are you a current Cal Poly Undergrad? (Required)</span>
           <select
             id="currentCalPolyUndergrad"
