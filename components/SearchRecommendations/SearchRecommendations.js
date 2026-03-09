@@ -7,7 +7,7 @@ import styles from './SearchRecommendations.module.scss';
  *
  * @returns {React.ReactElement} The SearchRecommendations component.
  */
-export default function SearchRecommendations({ }) {
+export default function SearchRecommendations() {
   return (
     <div className={styles.recommendations}>
     </div>
