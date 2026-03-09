@@ -44,6 +44,52 @@ export default function ContentWrapper({ content, className, children }) {
     const root = contentRef.current;
     if (!root) return undefined;
 
+    const unwrapHalfWidthRows = () => {
+      const rows = Array.from(root.querySelectorAll('[data-half-width-row="true"]'));
+      rows.forEach((row) => {
+        const parent = row.parentNode;
+        if (!parent) return;
+
+        while (row.firstChild) {
+          parent.insertBefore(row.firstChild, row);
+        }
+
+        parent.removeChild(row);
+      });
+    };
+
+    const wrapHalfWidthRows = () => {
+      unwrapHalfWidthRows();
+
+      const directChildren = Array.from(root.children);
+      let index = 0;
+
+      while (index < directChildren.length) {
+        const child = directChildren[index];
+        const isHalfWidth = child.classList?.contains('half-width');
+
+        if (!isHalfWidth) {
+          index += 1;
+          continue;
+        }
+
+        const row = root.ownerDocument.createElement('div');
+        row.setAttribute('data-half-width-row', 'true');
+
+        root.insertBefore(row, child);
+
+        while (
+          index < directChildren.length &&
+          directChildren[index].classList?.contains('half-width')
+        ) {
+          row.appendChild(directChildren[index]);
+          index += 1;
+        }
+      }
+    };
+
+    wrapHalfWidthRows();
+
     const setItemState = (item, button, panel, isOpen) => {
       button.setAttribute('aria-expanded', String(isOpen));
       item.classList.toggle('is-open', isOpen);
