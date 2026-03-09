@@ -26,9 +26,9 @@ import { BlogInfoFragment } from 'fragments/GeneralSettings';
 
 const postsPerPage = 3;
 const homeQuickLinks = [
-  { label: 'How to Apply', href: '/how-to-apply', icon: FaClipboardList },
-  { label: 'Coordinators', href: '/coordinators', icon: FaUsers },
-  { label: 'Staff', href: '/staff', icon: FaUserFriends },
+  { label: 'How to Apply', href: 'https://www.calpoly.edu/admissions/graduate-student/how-to-apply', icon: FaClipboardList },
+  { label: 'Coordinators', href: '/graduate-program-coordinators', icon: FaUsers },
+  { label: 'Staff', href: '/staff-profiles', icon: FaUserFriends },
 ];
 
 function stripHtml(value = '') {
@@ -52,6 +52,32 @@ function decodeHtmlEntities(value = '') {
 function truncate(value = '', max = 220) {
   if (value.length <= max) return value;
   return `${value.slice(0, max).trim()}...`;
+}
+
+function cleanFieldValue(value = '') {
+  const normalized = String(value ?? '')
+    .replace(/<[^>]+>/g, '')
+    .trim();
+
+  if (!normalized) return '';
+  if (/^(null|undefined|n\/a|na)$/i.test(normalized)) return '';
+  if (/^[:;,\-]+$/.test(normalized)) return '';
+
+  return normalized;
+}
+
+function toTitleCase(value) {
+  if (!value) return value;
+  const minorWords = new Set(['and', 'or', 'of', 'the', 'in', 'for', 'to', 'a']);
+  return String(value)
+    .toLowerCase()
+    .split(/\s+/)
+    .map((word, index) => {
+      if (!word) return word;
+      if (index > 0 && minorWords.has(word)) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
 }
 
 export default function Component() {
@@ -82,6 +108,9 @@ export default function Component() {
   const footerMenu = data?.footerMenuItems?.nodes ?? [];
   const footerNavOne = data?.footerSecondaryMenuItems?.nodes ?? [];
   const footerNavTwo = data?.footerTertiaryMenuItems?.nodes ?? [];
+  const highlightedProgramType = toTitleCase(
+    cleanFieldValue(highlightedProgram?.programFields?.programType)
+  );
   return (
     <>
       <SEO title={siteTitle} description={siteDescription} />
@@ -163,9 +192,6 @@ export default function Component() {
               </Heading>
               <ul className={styles.requestInfoLinks}>
                 <li>
-                  <Link href="/request-information">Fill Out a Request Form</Link>
-                </li>
-                <li>
                   <Link href="/contact-us">Contact Us</Link>
                 </li>
                 <li>
@@ -202,6 +228,11 @@ export default function Component() {
                 <h3 className={styles.highlightedProgramTitle}>
                   {highlightedProgram.title}
                 </h3>
+                {highlightedProgramType && (
+                  <h4 className={styles.highlightedProgramType}>
+                    {highlightedProgramType} Program
+                  </h4>
+                )}
                 <p className={styles.highlightedProgramBlurb}>
                   {truncate(
                     decodeHtmlEntities(stripHtml(highlightedProgram?.content || '')),
@@ -228,7 +259,7 @@ export default function Component() {
             <p className={styles.importantDatesSubTitle}>
               Orfalea College of Business Events
             </p>
-            <Link href="/events" className={styles.importantDatesLink}>
+            <Link href="https://orfalea.calpoly.edu/graduate-programs#information-sessions" className={styles.importantDatesLink} target='blank'>
               View OCOB Info Session Schedule
             </Link>
           </div>
@@ -274,6 +305,7 @@ export default function Component() {
               <Button
                 href="https://www.calpoly.edu/admissions/graduate-student/how-to-apply"
                 className={styles.degreeProgramsButton}
+                target="_blank"
               >
                 How to Apply
               </Button>
@@ -286,7 +318,7 @@ export default function Component() {
               <Heading className={styles.currentStudentsTitle} level="h2">
                 Current Graduate Students
               </Heading>
-              <Link href="/resources" className={styles.currentStudentsLink}>
+              <Link href="/current-students" className={styles.currentStudentsLink}>
                 Learn about orientation, forms, and other resources
               </Link>
             </div>
@@ -360,6 +392,9 @@ Component.query = gql`
       nodes {
         ...ProgramsFragment
         uri
+        programFields {
+          programType
+        }
         featuredImage {
           node {
             sourceUrl

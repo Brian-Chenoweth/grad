@@ -89,6 +89,20 @@ export default function ContactForm({ programOptions = [] }) {
           </select>
         </label>
 
+        <label htmlFor="currentCalPolyUndergrad" className={styles.field}>
+          <span>Are you a current Cal Poly Undergrad? (Required)</span>
+          <select
+            id="currentCalPolyUndergrad"
+            name="currentCalPolyUndergrad"
+            defaultValue=""
+            required
+          >
+            <option value="">Select an option</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </label>
+
         <label htmlFor="message" className={`${styles.field} ${styles.fullWidth}`}>
           <span>Message</span>
           <textarea id="message" name="message" rows={6} />
