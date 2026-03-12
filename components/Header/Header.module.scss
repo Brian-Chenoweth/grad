@@ -193,6 +193,14 @@ $header-nav-breakpoint: 1100px;
 }
 
 @media (max-width: $header-nav-breakpoint) {
+  .logo-wrap.scrolled {
+    display: none;
+  }
+
+  .header-content.scrolled {
+    transform: none;
+  }
+
   .bar {
     justify-content: space-between;
     align-items: center;
