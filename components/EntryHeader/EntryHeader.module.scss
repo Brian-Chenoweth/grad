@@ -108,6 +108,12 @@
   // margin-bottom: 1.5rem;
   color: #154734;
   text-transform: uppercase;
+
+  @media screen and (max-width: 767px) {
+    font-size: 3.8rem;
+    line-height: 1.1;
+    margin-top: 0;
+  }
 }
 
 
