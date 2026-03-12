@@ -18,7 +18,8 @@
 
 .wp-block-columns.wp-container-core-columns-is-layout-6c3b9179
   > .wp-block-column.has-black-background-color.has-background {
-  // background: #e6e6e6 !important;
+  background: #f8f8f7 !important;
+  border: 2px solid #154734;
   padding: .5rem !important;
   position: relative;
 }
@@ -82,4 +83,46 @@
   position: absolute;
   inset: 0;
   z-index: 1;
+}
+
+// Predoctoral Program utility cards
+// Scoped to this specific 3-column WP block instance.
+.wp-block-columns.wp-container-core-columns-is-layout-28f84493 {
+  gap: 2rem !important;
+  align-items: stretch !important;
+  margin: 2.8rem 0 3.2rem !important;
+
+  @media (min-width: 782px) {
+    flex-wrap: nowrap !important;
+  }
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-28f84493 > .wp-block-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1.4rem;
+  padding: 2.4rem 2.2rem 2.6rem !important;
+  background: #f8f8f7 !important;
+  border: 2px solid #154734;
+  min-height: 100%;
+  box-shadow: 0 10px 24px rgba(21, 71, 52, 0.08);
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-28f84493 > .wp-block-column > .wp-block-image {
+  margin: 0 0 0.8rem !important;
+  display: flex;
+  justify-content: center;
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-28f84493 > .wp-block-column > .wp-block-image img {
+  width: clamp(7.2rem, 9vw, 10.5rem) !important;
+  height: auto;
+}
+
+.wp-block-columns.wp-container-core-columns-is-layout-28f84493 p {
+  margin: 0;
+  color: #154734 !important;
+  text-align: center;
+  line-height: 1.45;
 }
