@@ -1,6 +1,7 @@
 @import 'styles/Variables';
 
 $header-scroll-offset: 55px;
+$header-nav-breakpoint: 1100px;
 
 .header {
   color: var(--color-white);
@@ -17,7 +18,7 @@ $header-scroll-offset: 55px;
   }
 }
 
-@media (min-width: $breakpoint-small) {
+@media (min-width: $header-nav-breakpoint) {
   .header.scrolled .bar {
     align-items: stretch;
   }
@@ -191,6 +192,15 @@ $header-scroll-offset: 55px;
   background-color: var(--color-white);
 }
 
+@media (max-width: $header-nav-breakpoint) {
+  .bar {
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 1rem;
+  }
+}
+
 .logo {
   width: 160px;
   height: auto;
@@ -230,6 +240,14 @@ $header-scroll-offset: 55px;
   }
 }
 
+@media (max-width: $header-nav-breakpoint) {
+  .titleName {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
+  }
+}
+
 .nav-toggle {
   display: flex;
   align-items: center;
@@ -246,8 +264,15 @@ $header-scroll-offset: 55px;
     color: var(--color-primary);
   }
 
-  @media (min-width: $breakpoint-small) {
+  @media (min-width: $header-nav-breakpoint) {
     display: none;
+  }
+}
+
+@media (max-width: $header-nav-breakpoint) {
+  .nav-toggle {
+    flex: 0 0 auto;
+    margin-left: auto;
   }
 }
 
@@ -260,7 +285,7 @@ $header-scroll-offset: 55px;
     display: block;
   }
 
-  @media (min-width: $breakpoint-small) {
+  @media (min-width: $header-nav-breakpoint) {
     display: block;
     width: auto;
   }
@@ -295,7 +320,7 @@ $header-scroll-offset: 55px;
       margin-left: 0.5rem;
     }
 
-    @media (min-width: $breakpoint-small) {
+    @media (min-width: $header-nav-breakpoint) {
       flex-direction: row;
     }
 
@@ -308,7 +333,7 @@ $header-scroll-offset: 55px;
 
 
 
-@media (min-width: $breakpoint-small) {
+@media (min-width: $header-nav-breakpoint) {
   
 }
 
@@ -328,7 +353,7 @@ $header-scroll-offset: 55px;
   ul {
     position: absolute;
     // top: 112%;
-    @media (min-width: $breakpoint-small) {
+    @media (min-width: $header-nav-breakpoint) {
       // right: 0;
     }
     margin: 0;
@@ -362,7 +387,7 @@ $header-scroll-offset: 55px;
       ul {
         // border-top: 3px solid var(--color-primary) !important;
         // top: 100%;
-        @media (min-width: $breakpoint-small) {
+        @media (min-width: $header-nav-breakpoint) {
           right: 100%;
           top: 0;
         }
@@ -412,7 +437,7 @@ $header-scroll-offset: 55px;
 
 
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: $header-nav-breakpoint) {
   .primary-navigation {
     position: relative;
     z-index: 1001;
@@ -500,7 +525,7 @@ $header-scroll-offset: 55px;
 }
 
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: $header-nav-breakpoint) {
   .primary-navigation {
     :global(.menu) {
       /* each item row full width */
@@ -536,7 +561,7 @@ $header-scroll-offset: 55px;
 
 .mobile-nav { display: none; }               /* hidden on desktop */
 
-@media (max-width: 767px) {
+@media (max-width: $header-nav-breakpoint) {
   .primary-navigation { display: none !important; } /* hide desktop menu */
   .mobile-nav { display: block; width: 100%; }
 
@@ -626,7 +651,7 @@ $header-scroll-offset: 55px;
 }
 
 /* Keep desktop behavior untouched */
-@media (min-width: $breakpoint-small) {
+@media (min-width: calc(#{$header-nav-breakpoint} + 1px)) {
   .mobile-nav { display: none !important; }
 }
 
@@ -651,7 +676,7 @@ $header-scroll-offset: 55px;
 .mnav__li:nth-child(even) .mnav__panel { background: #f9f9f9; }
 
 /* === Mobile caret + background fixes (drop-in) === */
-@media (max-width: 767px) {
+@media (max-width: $header-nav-breakpoint) {
   /* Make sure the chevron can rotate */
   .mnav__caret {
     display: inline-block;
@@ -696,7 +721,7 @@ $header-scroll-offset: 55px;
 }
 
 /* === Caret rotation: only rotate when its own submenu is open === */
-@media (max-width: 767px) {
+@media (max-width: $header-nav-breakpoint) {
   /* make the icon rotatable */
   .mnav__caret {
     display: inline-block;
@@ -734,7 +759,7 @@ $header-scroll-offset: 55px;
 /* ===========================
    MODERN MOBILE MENU OVERRIDES
    =========================== */
-@media (max-width: 767px) {
+@media (max-width: $header-nav-breakpoint) {
   .mobile-nav {
     display: block;
     position: fixed;
