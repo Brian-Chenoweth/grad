@@ -518,6 +518,20 @@
       background: #0f563f;
     }
 
+    .wp-block-group.full-width.green {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      a,
+      li {
+        color: #ffffff !important;
+      }
+    }
+
     .wp-block-group.half-width.lime-green,
     .wp-block-group.full-width.lime-green {
       background: #43a047;

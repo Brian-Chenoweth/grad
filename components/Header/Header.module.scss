@@ -187,7 +187,7 @@ $header-nav-breakpoint: 1100px;
 
 .bar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
   padding: 0;
   gap: 2rem;
@@ -954,12 +954,17 @@ $header-nav-breakpoint: 1100px;
   }
 
   .mnav__caret {
+    transform: rotate(0deg);
     transition: transform 0.2s ease;
     font-size: 1.6rem;
   }
 
   .mnav__li.open > .mnav__itemRow .mnav__caret {
     transform: rotate(-180deg);
+  }
+
+  .mnav__li.open .mnav__panel .mnav__li:not(.open) > .mnav__itemRow .mnav__caret {
+    transform: rotate(0deg);
   }
 
   .mnav__panel {
