@@ -47,7 +47,7 @@ $header-nav-breakpoint: 1100px;
   }
 
   .header.scrolled .header-content {
-    padding-bottom: 1.6rem;
+    // padding-bottom: 1.6rem;
   }
 
   .header.scrolled .bar {
@@ -173,6 +173,8 @@ $header-nav-breakpoint: 1100px;
 .header-content {
   transition: none;
   background-color: var(--color-white);
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
 
   &.scrolled {
     transform: translateY(-$header-scroll-offset);
@@ -207,8 +209,8 @@ $header-nav-breakpoint: 1100px;
 
   .header-content.scrolled {
     transform: none;
-    padding-top: 1.2rem;
-    padding-bottom: 1.2rem;
+    // padding-top: 1.2rem;
+    // padding-bottom: 1.2rem;
   }
 
   .bar {
