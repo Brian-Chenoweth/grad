@@ -523,7 +523,7 @@
       h5,
       h6,
       p,
-      a,
+      a:not(.wp-block-button__link),
       li {
         color: #154734 !important;
       }
@@ -540,7 +540,7 @@
       h5,
       h6,
       p,
-      a,
+      a:not(.wp-block-button__link),
       li {
         color: #154734 !important;
       }
@@ -557,7 +557,7 @@
       h5,
       h6,
       p,
-      a,
+      a:not(.wp-block-button__link),
       li {
         color: #154734 !important;
       }
