@@ -429,7 +429,8 @@
       }
     }
 
-    .wp-block-group.half-width {
+    .wp-block-group.half-width,
+    .wp-block-group.full-width {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -473,6 +474,22 @@
       }
     }
 
+    .wp-block-group.full-width {
+      margin: 3rem 0;
+
+      @media (min-width: $breakpoint-small) {
+        position: relative;
+        left: 50%;
+        right: 50%;
+        width: 100vw;
+        max-width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        padding-left: max(2.8rem, calc((100vw - #{$content-max-width}) / 2 + 2.8rem)) !important;
+        padding-right: max(2.8rem, calc((100vw - #{$content-max-width}) / 2 + 2.8rem)) !important;
+      }
+    }
+
     @media (min-width: $breakpoint-small) {
       .wp-block-group.half-width:nth-child(odd) {
         padding-left: max(2.8rem, calc((100vw - #{$content-max-width}) / 2 + 2.8rem)) !important;
@@ -485,15 +502,18 @@
       }
     }
 
-    .wp-block-group.half-width.green {
+    .wp-block-group.half-width.green,
+    .wp-block-group.full-width.green {
       background: #0f563f;
     }
 
-    .wp-block-group.half-width.lime-green {
+    .wp-block-group.half-width.lime-green,
+    .wp-block-group.full-width.lime-green {
       background: #43a047;
     }
 
-    .wp-block-group.half-width.light-green {
+    .wp-block-group.half-width.light-green,
+    .wp-block-group.full-width.light-green {
       background: #e3ece7;
 
       h1,
@@ -509,7 +529,8 @@
       }
     }
 
-    .wp-block-group.half-width.grey {
+    .wp-block-group.half-width.grey,
+    .wp-block-group.full-width.grey {
       background: #f8f8f7;
 
       h1,
@@ -525,7 +546,8 @@
       }
     }
 
-    .wp-block-group.half-width.light-yellow {
+    .wp-block-group.half-width.light-yellow,
+    .wp-block-group.full-width.light-yellow {
       background: #f8e08e;
 
       h1,
@@ -541,22 +563,28 @@
       }
     }
 
-    .wp-block-group.half-width.gold {
+    .wp-block-group.half-width.gold,
+    .wp-block-group.full-width.gold {
       background: $gold;
     }
 
-    .wp-block-group.half-width.yellow {
+    .wp-block-group.half-width.yellow,
+    .wp-block-group.full-width.yellow {
       background: #c69210;
     }
 
     .wp-block-image.half-width,
-    figure.half-width.image {
+    figure.half-width.image,
+    .wp-block-image.full-width,
+    figure.full-width.image {
       margin: 0;
       line-height: 0;
     }
 
     .wp-block-image.half-width img,
-    figure.half-width.image img {
+    figure.half-width.image img,
+    .wp-block-image.full-width img,
+    figure.full-width.image img {
       width: 100%;
       height: 100%;
       min-height: 32rem;
@@ -564,6 +592,21 @@
 
       @media (min-width: $breakpoint-small) {
         // min-height: 40rem;
+      }
+    }
+
+    .wp-block-image.full-width,
+    figure.full-width.image {
+      margin: 3rem 0;
+
+      @media (min-width: $breakpoint-small) {
+        position: relative;
+        left: 50%;
+        right: 50%;
+        width: 100vw;
+        max-width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
       }
     }
 
