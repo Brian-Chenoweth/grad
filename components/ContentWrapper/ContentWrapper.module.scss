@@ -403,16 +403,7 @@
       align-items: stretch;
       gap: 0;
       margin: 3rem 0;
-
-      @media (min-width: $breakpoint-small) {
-        position: relative;
-        left: 50%;
-        right: 50%;
-        width: 100vw;
-        max-width: 100vw;
-        margin-left: -50vw;
-        margin-right: -50vw;
-      }
+      overflow: visible;
     }
 
     [data-half-width-row='true'] > .half-width {
@@ -436,11 +427,13 @@
       justify-content: center;
       min-height: 32rem;
       padding: 3.2rem 2.8rem !important;
+      position: relative;
+      z-index: 0;
 
       @media (min-width: $breakpoint-small) {
-        min-height: 40rem;
-        padding-top: 4rem !important;
-        padding-bottom: 4rem !important;
+        // min-height: 40rem;
+        // padding-top: 4rem !important;
+        padding: 0 !important;
       }
 
       h1,
@@ -474,31 +467,49 @@
       }
     }
 
+    @media (min-width: $breakpoint-small) {
+      .wp-block-group.half-width::before,
+      .wp-block-group.full-width::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        background: inherit;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      .wp-block-group.half-width:nth-child(odd)::before {
+        left: calc(50% - 50vw);
+        right: 0;
+      }
+
+      .wp-block-group.half-width:nth-child(even)::before {
+        left: 0;
+        right: calc(50% - 50vw);
+      }
+    }
+
     .wp-block-group.full-width {
       margin: 3rem 0;
 
       @media (min-width: $breakpoint-small) {
-        position: relative;
-        left: 50%;
-        right: 50%;
-        width: 100vw;
-        max-width: 100vw;
-        margin-left: -50vw;
-        margin-right: -50vw;
-        padding-left: max(2.8rem, calc((100vw - #{$content-max-width}) / 2 + 2.8rem)) !important;
-        padding-right: max(2.8rem, calc((100vw - #{$content-max-width}) / 2 + 2.8rem)) !important;
+        &::before {
+          left: calc(50% - 50vw);
+          right: calc(50% - 50vw);
+        }
       }
     }
 
     @media (min-width: $breakpoint-small) {
       .wp-block-group.half-width:nth-child(odd) {
-        padding-left: max(2.8rem, calc((100vw - #{$content-max-width}) / 2 + 2.8rem)) !important;
+        padding-left: 0 !important;
         padding-right: 5rem !important;
       }
 
       .wp-block-group.half-width:nth-child(even) {
         padding-left: 5rem !important;
-        padding-right: max(2.8rem, calc((100vw - #{$content-max-width}) / 2 + 2.8rem)) !important;
+        padding-right: 0 !important;
       }
     }
 
@@ -598,16 +609,6 @@
     .wp-block-image.full-width,
     figure.full-width.image {
       margin: 3rem 0;
-
-      @media (min-width: $breakpoint-small) {
-        position: relative;
-        left: 50%;
-        right: 50%;
-        width: 100vw;
-        max-width: 100vw;
-        margin-left: -50vw;
-        margin-right: -50vw;
-      }
     }
 
     .highlight {
