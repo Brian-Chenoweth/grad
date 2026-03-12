@@ -198,6 +198,7 @@ $header-nav-breakpoint: 1100px;
     align-items: center;
     flex-wrap: nowrap;
     gap: 1rem;
+    min-height: 7.2rem;
   }
 }
 
@@ -245,6 +246,11 @@ $header-nav-breakpoint: 1100px;
     flex: 1 1 auto;
     min-width: 0;
     text-align: left;
+    font-size: 2.4rem;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
