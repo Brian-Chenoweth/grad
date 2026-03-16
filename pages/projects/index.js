@@ -14,7 +14,7 @@ import {
   NavigationMenu,
 } from 'components';
 import { getNextStaticProps } from '@faustwp/core';
-import { pageTitle } from 'utilities';
+import { buildKeywordString, pageTitle } from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import appConfig from 'app.config';
 
@@ -33,9 +33,21 @@ export default function Page() {
   const footerNavOne = data?.footerSecondaryMenuItems?.nodes ?? [];
   const footerNavTwo = data?.footerTertiaryMenuItems?.nodes ?? [];
   const projectList = data?.projects?.nodes ?? [];
+  const description =
+    'Browse graduate education projects, initiatives, and featured work from Cal Poly.';
+  const keywords = buildKeywordString({
+    title: 'Projects',
+    content: description,
+    seedKeywords: ['graduate projects', 'cal poly', 'graduate education'],
+  });
+
   return (
     <>
-      <SEO title={pageTitle(data?.generalSettings, 'Projects')} />
+      <SEO
+        title={pageTitle(data?.generalSettings, 'Projects')}
+        description={description}
+        keywords={keywords}
+      />
 
       <Header menuItems={primaryMenu} />
 

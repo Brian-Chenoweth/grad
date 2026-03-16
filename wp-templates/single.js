@@ -12,7 +12,7 @@ import {
   SEO,
   TaxonomyTerms,
 } from 'components';
-import { pageTitle } from 'utilities';
+import { buildKeywordString, buildMetaDescription, pageTitle } from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 
 export default function Component(props) {
@@ -28,6 +28,16 @@ export default function Component(props) {
   const footerNavOne = props?.data?.footerSecondaryMenuItems?.nodes ?? [];
   const footerNavTwo = props?.data?.footerTertiaryMenuItems?.nodes ?? [];
   const { title, content, featuredImage, date, author } = props.data.post;
+  const description = buildMetaDescription({
+    title,
+    content,
+    fallback: siteDescription,
+  });
+  const keywords = buildKeywordString({
+    title,
+    content,
+    seedKeywords: ['blog', 'graduate education', 'cal poly'],
+  });
 
   return (
     <>
@@ -37,7 +47,8 @@ export default function Component(props) {
           title,
           props?.data?.generalSettings?.title
         )}
-        description={siteDescription}
+        description={description}
+        keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
       />
       <Header

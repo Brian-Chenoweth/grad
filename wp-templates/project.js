@@ -13,6 +13,7 @@ import {
   SEO,
 } from 'components';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
+import { buildKeywordString, buildMetaDescription } from 'utilities';
 
 export default function Component(props) {
   // Loading state for previews
@@ -26,10 +27,23 @@ export default function Component(props) {
   const footerNavTwo = props?.data?.footerTertiaryMenuItems?.nodes ?? [];
   const { featuredImage } = props.data.project;
   const { title, summary, contentArea } = props.data.project.projectFields;
+  const description = buildMetaDescription({
+    title,
+    content: `${summary ?? ''} ${contentArea ?? ''}`,
+    fallback: `Explore the ${title} project from ${siteTitle}.`,
+  });
+  const keywords = buildKeywordString({
+    title,
+    content: `${summary ?? ''} ${contentArea ?? ''}`,
+    seedKeywords: ['project', 'graduate education', 'cal poly'],
+  });
+
   return (
     <>
       <SEO
         title={`${title} - ${props?.data?.generalSettings?.title}`}
+        description={description}
+        keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
       />
 

@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import styles from 'styles/pages/_Home.module.scss';
+import { buildKeywordString, buildMetaDescription } from 'utilities';
 import {
   EntryHeader,
   Main,
@@ -61,7 +62,7 @@ function cleanFieldValue(value = '') {
 
   if (!normalized) return '';
   if (/^(null|undefined|n\/a|na)$/i.test(normalized)) return '';
-  if (/^[:;,\-]+$/.test(normalized)) return '';
+  if (/^[:;,-]+$/.test(normalized)) return '';
 
   return normalized;
 }
@@ -111,9 +112,33 @@ export default function Component() {
   const highlightedProgramType = toTitleCase(
     cleanFieldValue(highlightedProgram?.programFields?.programType)
   );
+  const homeDescription = buildMetaDescription({
+    title: siteTitle,
+    content: [
+      'Welcome to Cal Poly Graduate Education.',
+      'Explore graduate programs, admissions support, campus resources, and student opportunities.',
+    ].join(' '),
+    fallback: siteDescription,
+  });
+  const homeKeywords = buildKeywordString({
+    title: siteTitle,
+    content: [
+      homeDescription,
+      highlightedProgram?.title,
+      highlightedProgramType,
+    ]
+      .filter(Boolean)
+      .join(' '),
+    seedKeywords: ['graduate education', 'cal poly', 'graduate programs'],
+  });
+
   return (
     <>
-      <SEO title={siteTitle} description={siteDescription} />
+      <SEO
+        title={siteTitle}
+        description={homeDescription}
+        keywords={homeKeywords}
+      />
 
       <Header
         title={siteTitle}

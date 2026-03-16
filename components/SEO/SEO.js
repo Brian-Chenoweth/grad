@@ -48,6 +48,7 @@ function toAbsoluteUrl(urlOrPath, base) {
 export default function SEO({
   title,
   description,
+  keywords,
   imageUrl,
   url,
   noindex = false,
@@ -183,6 +184,7 @@ export default function SEO({
             <meta property="twitter:description" content={resolvedDescription} />
           </>
         )}
+        {keywords && <meta name="keywords" content={keywords} />}
 
         {/* Canonical */}
         {canonical && <link rel="canonical" href={canonical} />}

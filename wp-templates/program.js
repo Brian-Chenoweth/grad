@@ -13,7 +13,7 @@ import {
   FeaturedImage,
   SEO,
 } from 'components';
-import { pageTitle } from 'utilities';
+import { buildKeywordString, buildMetaDescription, pageTitle } from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import styles from 'styles/pages/_Program.module.scss';
 
@@ -38,7 +38,7 @@ function cleanFieldValue(value = '') {
 
   if (!normalized) return '';
   if (/^(null|undefined|n\/a|na)$/i.test(normalized)) return '';
-  if (/^[:;,\-]+$/.test(normalized)) return '';
+  if (/^[:;,-]+$/.test(normalized)) return '';
 
   return normalized;
 }
@@ -94,6 +94,36 @@ export default function Component(props) {
   const hasProgramMeta = Boolean(collegeDisplay || programTypeDisplay || contactWebValue);
   const hasContacts = contacts.length > 0;
   const showMetaPanel = hasProgramMeta || hasContacts || Boolean(applyNowUrl);
+  const description = buildMetaDescription({
+    title,
+    content: [
+      content,
+      collegeDisplay,
+      programTypeDisplay,
+      contactWebValue,
+    ]
+      .filter(Boolean)
+      .join(' '),
+    fallback: siteDescription,
+  });
+  const keywords = buildKeywordString({
+    title,
+    content: [
+      content,
+      collegeDisplay,
+      programTypeDisplay,
+      contactNames.join(' '),
+    ]
+      .filter(Boolean)
+      .join(' '),
+    seedKeywords: [
+      'graduate program',
+      'graduate education',
+      'cal poly',
+      collegeDisplay,
+      programTypeDisplay,
+    ],
+  });
 
   return (
     <>
@@ -103,7 +133,8 @@ export default function Component(props) {
           title,
           props?.data?.generalSettings?.title
         )}
-        description={siteDescription}
+        description={description}
+        keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
       />
       <Header

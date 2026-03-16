@@ -6,7 +6,11 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { createPortal } from 'react-dom';
 import { useEffect, useState } from 'react';
-import { pageTitle } from 'utilities';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  pageTitle,
+} from 'utilities';
 import styles from 'styles/pages/_CoordinatorDirectory.module.scss';
 
 import {
@@ -100,7 +104,6 @@ export default function Component(props) {
     props?.data?.generalSettings;
   const primaryMenu = props?.data?.headerMenuItems?.nodes ?? [];
 
-  const quickLinks   = props?.data?.quickFooterMenuItems?.nodes ?? [];
   const footerMenu   = props?.data?.footerMenuItems?.nodes ?? [];
   const aboutLinks   = props?.data?.aboutFooterMenuItems?.nodes ?? [];
   const navOne       = props?.data?.footerSecondaryMenuItems?.nodes ?? [];
@@ -155,7 +158,18 @@ export default function Component(props) {
     pageTitle(props?.data?.generalSettings, title, props?.data?.generalSettings?.title);
 
   const computedDescription =
-    s?.metaDesc || siteDescription || 'Official site for Cal Poly Graduate Education.';
+    s?.metaDesc ||
+    buildMetaDescription({
+      title,
+      content,
+      fallback:
+        siteDescription || 'Official site for Cal Poly Graduate Education.',
+    });
+  const computedKeywords = buildKeywordString({
+    title,
+    content,
+    seedKeywords: ['graduate education', 'cal poly'],
+  });
 
   const computedImageUrl =
     s?.opengraphImage?.mediaItemUrl ||
@@ -177,6 +191,7 @@ export default function Component(props) {
       <SEO
         title={computedTitle}
         description={computedDescription}
+        keywords={computedKeywords}
         imageUrl={computedImageUrl}
         url={computedCanonical}
         type={ogType}

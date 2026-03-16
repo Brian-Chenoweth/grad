@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { GetSearchResults } from 'queries/GetSearchResults';
 import styles from 'styles/pages/_Search.module.scss';
 import appConfig from 'app.config';
+import { buildKeywordString } from 'utilities';
 
 // const PROGRAM_TYPES = [
 //   { name: 'All Graduate Programs', uri: '/programs' },
@@ -36,6 +37,14 @@ export default function Page() {
   const footerMenu = pageData.footerMenuItems.nodes ?? [];
   const footerNavOne = pageData.footerSecondaryMenuItems.nodes ?? [];
   const footerNavTwo = pageData.footerTertiaryMenuItems.nodes ?? [];
+  const searchDescription = searchQuery
+    ? `Search results for "${searchQuery}" across Cal Poly Graduate Education content.`
+    : 'Search the site for graduate programs, admissions information, news, and resources.';
+  const searchKeywords = buildKeywordString({
+    title: 'Search',
+    content: `${searchDescription} ${searchQuery}`,
+    seedKeywords: ['site search', 'graduate education', 'cal poly'],
+  });
 
   const {
     data: searchResultsData,
@@ -54,7 +63,11 @@ export default function Page() {
 
   return (
     <>
-      <SEO title={siteTitle} description={siteDescription} />
+      <SEO
+        title={searchQuery ? `${searchQuery} Search | ${siteTitle}` : `Search | ${siteTitle}`}
+        description={searchDescription || siteDescription}
+        keywords={searchKeywords}
+      />
 
       <Header
         title={siteTitle}
