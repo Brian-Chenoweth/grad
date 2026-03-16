@@ -11,7 +11,7 @@ import {
   SEO,
   Button,
 } from 'components';
-import { pageTitle } from 'utilities';
+import { buildKeywordString, buildMetaDescription, pageTitle } from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import styles from 'styles/pages/_ProgramsArchive.module.scss';
 
@@ -38,7 +38,7 @@ function cleanFieldValue(value = '') {
 
   if (!normalized) return '';
   if (/^(null|undefined|n\/a|na)$/i.test(normalized)) return '';
-  if (/^[:;,\-]+$/.test(normalized)) return '';
+  if (/^[:;,-]+$/.test(normalized)) return '';
 
   return normalized;
 }
@@ -119,6 +119,30 @@ export default function ProgramsArchive(props) {
     return null;
   }
 
+  const programText = programs
+    .map((program) =>
+      [
+        program?.title,
+        toTitleCase(cleanFieldValue(program?.programFields?.college)),
+        toTitleCase(cleanFieldValue(program?.programFields?.programType)),
+      ]
+        .filter(Boolean)
+        .join(' ')
+    )
+    .join(' ');
+  const description = buildMetaDescription({
+    title: archiveLabel,
+    content: `${archiveLabel} ${programText}`,
+    fallback:
+      siteDescription ||
+      'Explore Cal Poly graduate programs by college and program type.',
+  });
+  const keywords = buildKeywordString({
+    title: archiveLabel,
+    content: `${description} ${programText}`,
+    seedKeywords: ['graduate programs', 'graduate education', 'cal poly'],
+  });
+
   return (
     <>
       <SEO
@@ -127,7 +151,8 @@ export default function ProgramsArchive(props) {
           archiveLabel,
           data?.generalSettings?.title
         )}
-        description={siteDescription}
+        description={description}
+        keywords={keywords}
       />
       <Header
         title={siteTitle}
