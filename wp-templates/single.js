@@ -27,7 +27,11 @@ export default function Component(props) {
   const footerMenu = props?.data?.footerMenuItems?.nodes ?? [];
   const footerNavOne = props?.data?.footerSecondaryMenuItems?.nodes ?? [];
   const footerNavTwo = props?.data?.footerTertiaryMenuItems?.nodes ?? [];
-  const { title, content, featuredImage, date, author } = props.data.post;
+  const { title, content, featuredImage, date, modified, author } = props.data.post;
+  const categoryNames =
+    props?.data?.post?.categories?.edges?.map(({ node }) => node?.name).filter(Boolean) ?? [];
+  const tagNames =
+    props?.data?.post?.tags?.edges?.map(({ node }) => node?.name).filter(Boolean) ?? [];
   const description = buildMetaDescription({
     title,
     content,
@@ -50,6 +54,14 @@ export default function Component(props) {
         description={description}
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
+        type="article"
+        article={{
+          publishedTime: date,
+          modifiedTime: modified,
+          authors: author?.node?.name ? [author.node.name] : [],
+          section: categoryNames[0],
+          tags: tagNames,
+        }}
       />
       <Header
         title={siteTitle}
@@ -98,6 +110,7 @@ Component.query = gql`
       title
       content
       date
+      modified
       author {
         node {
           name

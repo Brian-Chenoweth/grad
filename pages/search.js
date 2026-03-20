@@ -67,6 +67,8 @@ export default function Page() {
         title={searchQuery ? `${searchQuery} Search | ${siteTitle}` : `Search | ${siteTitle}`}
         description={searchDescription || siteDescription}
         keywords={searchKeywords}
+        noindex
+        schemaType="SearchResultsPage"
       />
 
       <Header

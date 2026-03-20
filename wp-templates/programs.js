@@ -153,6 +153,7 @@ export default function ProgramsArchive(props) {
         )}
         description={description}
         keywords={keywords}
+        schemaType="CollectionPage"
       />
       <Header
         title={siteTitle}

@@ -44,9 +44,10 @@ export default function Page() {
   return (
     <>
       <SEO
-        title={pageTitle(data?.generalSettings)}
+        title={pageTitle(data?.generalSettings, 'Latest Posts')}
         description={description}
         keywords={keywords}
+        schemaType="CollectionPage"
       />
 
       <Header menuItems={primaryMenu} />

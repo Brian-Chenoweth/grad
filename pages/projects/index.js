@@ -47,6 +47,7 @@ export default function Page() {
         title={pageTitle(data?.generalSettings, 'Projects')}
         description={description}
         keywords={keywords}
+        schemaType="CollectionPage"
       />
 
       <Header menuItems={primaryMenu} />

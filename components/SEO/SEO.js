@@ -1,5 +1,11 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import {
+  buildBreadcrumbs,
+  getSiteUrl,
+  normalizeCanonicalUrl,
+  toAbsoluteUrl,
+} from 'utilities';
 
 /**
  * SEO component for Faust/Next.js
@@ -15,6 +21,8 @@ import { useRouter } from 'next/router';
  * - twitterHandle?: string (default '@CalPolyGradEd')
  * - themeColor?: string (default brand green)
  * - locale?: string (default 'en_US')
+ * - schemaType?: string (default 'WebPage')
+ * - breadcrumbs?: Array<{ href: string, label: string }>
  * - schema?: object (extra JSON-LD to merge/override)
  * - article?: {
  *     publishedTime?: string (ISO)
@@ -31,19 +39,11 @@ const DEFAULTS = {
   themeColor: '#003831',
   locale: 'en_US',
   type: 'website',
+  schemaType: 'WebPage',
   defaultTitle: 'Graduate Education',
   defaultDescription: 'Official site for Graduate Education.',
-  defaultImage: '/images/og-default.jpg',
+  defaultImage: '/static/banner.jpeg',
 };
-
-function toAbsoluteUrl(urlOrPath, base) {
-  if (!urlOrPath) return undefined;
-  try {
-    return new URL(urlOrPath, base).toString();
-  } catch {
-    return urlOrPath; // fall back
-  }
-}
 
 export default function SEO({
   title,
@@ -57,17 +57,14 @@ export default function SEO({
   twitterHandle = DEFAULTS.twitterHandle,
   themeColor = DEFAULTS.themeColor,
   locale = DEFAULTS.locale,
+  schemaType = DEFAULTS.schemaType,
+  breadcrumbs,
   schema,
   article,
 }) {
   const router = useRouter();
-
-  const baseUrl =
-    typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_SITE_URL : undefined;
-
-  const canonical =
-    url ||
-    (baseUrl && router?.asPath ? toAbsoluteUrl(router.asPath, baseUrl) : undefined);
+  const baseUrl = getSiteUrl();
+  const canonical = normalizeCanonicalUrl(url || router?.asPath, baseUrl);
 
   const resolvedTitle = title || DEFAULTS.defaultTitle;
   const resolvedDescription = description || DEFAULTS.defaultDescription;
@@ -75,8 +72,14 @@ export default function SEO({
     imageUrl || DEFAULTS.defaultImage,
     baseUrl
   );
+  const breadcrumbItems =
+    breadcrumbs?.length
+      ? breadcrumbs
+      : buildBreadcrumbs(router?.asPath, resolvedTitle);
 
-  const robots = noindex ? 'noindex, nofollow' : 'index, follow';
+  const robots = noindex
+    ? 'noindex, nofollow, noarchive'
+    : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
 
   // Base Organization schema (safe default)
   const orgSchema = {
@@ -84,7 +87,7 @@ export default function SEO({
     '@type': 'Organization',
     name: siteName,
     url: baseUrl || canonical,
-    logo: toAbsoluteUrl('/images/logo.png', baseUrl),
+    logo: toAbsoluteUrl('/logo.png', baseUrl),
   };
 
   // Optional WebSite schema for Sitelinks Search
@@ -94,13 +97,54 @@ export default function SEO({
         '@type': 'WebSite',
         url: baseUrl,
         name: siteName,
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: `${baseUrl}/search?s={search_term_string}`,
-          'query-input': 'required name=search_term_string',
-        },
       }
     : null;
+
+  const webPageSchema =
+    !noindex && canonical
+      ? {
+          '@context': 'https://schema.org',
+          '@type': schemaType,
+          name: resolvedTitle,
+          description: resolvedDescription,
+          url: canonical,
+          isPartOf: baseUrl
+            ? {
+                '@type': 'WebSite',
+                name: siteName,
+                url: baseUrl,
+              }
+            : undefined,
+          primaryImageOfPage: resolvedImageAbs
+            ? {
+                '@type': 'ImageObject',
+                url: resolvedImageAbs,
+              }
+            : undefined,
+        }
+      : null;
+
+  const breadcrumbSchema =
+    !noindex && canonical && breadcrumbItems.length
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: 'Home',
+              item: toAbsoluteUrl('/', baseUrl),
+            },
+            ...breadcrumbItems.map((item, index) => ({
+              '@type': 'ListItem',
+              position: index + 2,
+              name: item.label,
+              item: toAbsoluteUrl(item.href, baseUrl),
+            })),
+          ],
+        }
+      : null;
 
   // Optional Article schema when type is article or article props exist
   const articleSchema =
@@ -125,14 +169,21 @@ export default function SEO({
             name: siteName,
             logo: {
               '@type': 'ImageObject',
-              url: toAbsoluteUrl('/images/logo.png', baseUrl),
+              url: toAbsoluteUrl('/logo.png', baseUrl),
             },
           },
         }
       : null;
 
   // Merge in any custom schema (last wins)
-  const jsonLd = [orgSchema, webSiteSchema, articleSchema, schema]
+  const jsonLd = [
+    orgSchema,
+    webSiteSchema,
+    webPageSchema,
+    breadcrumbSchema,
+    articleSchema,
+    schema,
+  ]
     .filter(Boolean)
     .map((obj) => JSON.stringify(obj));
 

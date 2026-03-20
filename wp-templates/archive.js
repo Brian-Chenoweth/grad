@@ -51,6 +51,7 @@ export default function Archive(props) {
         title={pageTitle(props?.data?.generalSettings, archiveTitle, siteTitle)}
         description={archiveDescription}
         keywords={archiveKeywords}
+        schemaType="CollectionPage"
       />
       <Header
         title={siteTitle}
