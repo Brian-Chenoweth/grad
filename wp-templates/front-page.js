@@ -319,7 +319,7 @@ export default function Component() {
           </div>
         </section> */}
 
-        <section className={styles.currentStudents}>
+        {/* <section className={styles.currentStudents}>
           <div className={`container ${styles.currentStudentsInner}`}>
             <div className={styles.currentStudentsImage}>
               <Image
@@ -338,7 +338,7 @@ export default function Component() {
               </Link>
             </div>
           </div>
-        </section>
+        </section> */}
         <section className={styles.degreeProgramsCta}>
           <div className={`container ${styles.degreeProgramsInner}`}>
             <Heading className={styles.degreeProgramsTitle} level="h2">
