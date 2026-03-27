@@ -43,6 +43,37 @@ function cleanFieldValue(value = '') {
   return normalized;
 }
 
+function getProgramTypeDetails(value = '') {
+  const normalized = toTitleCase(cleanFieldValue(value));
+  const compact = normalized.toLowerCase();
+
+  if (!compact) {
+    return {
+      filterValue: '',
+      displayValue: '',
+    };
+  }
+
+  if (compact.includes('blended')) {
+    return {
+      filterValue: 'Blended Graduate',
+      displayValue: 'Graduate Program with Blended Format',
+    };
+  }
+
+  if (compact.includes('graduate')) {
+    return {
+      filterValue: 'Graduate',
+      displayValue: 'Graduate Program',
+    };
+  }
+
+  return {
+    filterValue: normalized,
+    displayValue: normalized,
+  };
+}
+
 function splitMulti(value = '') {
   return cleanFieldValue(value)
     .split(',')
@@ -75,7 +106,7 @@ export default function Component(props) {
     contactWeb,
   } = programFields ?? {};
   const collegeDisplay = toTitleCase(cleanFieldValue(college));
-  const programTypeDisplay = toTitleCase(cleanFieldValue(programType));
+  const programTypeDisplay = getProgramTypeDetails(programType).displayValue;
   const contactWebValue = cleanFieldValue(contactWeb);
   const applyNowUrl = getProgramApplyLink(props.data.program) ?? contactWebValue;
   const contactNames = splitMulti(contactName);
@@ -161,7 +192,7 @@ export default function Component(props) {
                         )}
                         {programTypeDisplay && (
                           <li className={styles.metaItem}>
-                            <span className={styles.metaLabel}>Program Type</span>
+                            <span className={styles.metaLabel}>Program Format</span>
                             <span className={styles.metaValue}>{programTypeDisplay}</span>
                           </li>
                         )}

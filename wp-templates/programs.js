@@ -43,6 +43,37 @@ function cleanFieldValue(value = '') {
   return normalized;
 }
 
+function getProgramTypeDetails(value = '') {
+  const normalized = toTitleCase(cleanFieldValue(value));
+  const compact = normalized.toLowerCase();
+
+  if (!compact) {
+    return {
+      filterValue: '',
+      displayValue: '',
+    };
+  }
+
+  if (compact.includes('blended')) {
+    return {
+      filterValue: 'Blended Graduate',
+      displayValue: 'Graduate Program with Blended Format',
+    };
+  }
+
+  if (compact.includes('graduate')) {
+    return {
+      filterValue: 'Graduate',
+      displayValue: 'Graduate Program',
+    };
+  }
+
+  return {
+    filterValue: normalized,
+    displayValue: normalized,
+  };
+}
+
 export default function ProgramsArchive(props) {
   const { uri = '/programs/' } = props?.data?.nodeByUri ?? {};
   const { data, loading } = useQuery(ProgramsArchive.query, {
@@ -84,9 +115,9 @@ export default function ProgramsArchive(props) {
   const programTypeOptions = useMemo(() => {
     const uniques = new Set(
       programs
-        .map((program) => program?.programFields?.programType)
-        .filter(Boolean)
-        .map((value) => toTitleCase(cleanFieldValue(value)))
+        .map((program) =>
+          getProgramTypeDetails(program?.programFields?.programType).filterValue
+        )
         .filter(Boolean)
     );
     return Array.from(uniques).sort((a, b) => a.localeCompare(b));
@@ -98,9 +129,9 @@ export default function ProgramsArchive(props) {
       const title = program?.title ?? '';
       const collegeRaw = cleanFieldValue(program?.programFields?.college);
       const college = toTitleCase(collegeRaw);
-      const programType = toTitleCase(
-        cleanFieldValue(program?.programFields?.programType)
-      );
+      const programType = getProgramTypeDetails(
+        program?.programFields?.programType
+      ).filterValue;
 
       const matchesSearch =
         !normalizedSearch ||
@@ -124,7 +155,7 @@ export default function ProgramsArchive(props) {
       [
         program?.title,
         toTitleCase(cleanFieldValue(program?.programFields?.college)),
-        toTitleCase(cleanFieldValue(program?.programFields?.programType)),
+        getProgramTypeDetails(program?.programFields?.programType).displayValue,
       ]
         .filter(Boolean)
         .join(' ')
@@ -192,12 +223,12 @@ export default function ProgramsArchive(props) {
                   </select>
                 </label>
                 <label className={styles.filterField}>
-                  <span>Program Type</span>
+                  <span>Program Format</span>
                   <select
                     value={programTypeFilter}
                     onChange={(event) => setProgramTypeFilter(event.target.value)}
                   >
-                    <option value="all">All program types</option>
+                    <option value="all">All program formats</option>
                     {programTypeOptions.map((programType) => (
                       <option key={programType} value={programType}>
                         {programType}
@@ -222,9 +253,9 @@ export default function ProgramsArchive(props) {
                   const college = toTitleCase(
                     cleanFieldValue(program?.programFields?.college)
                   );
-                  const programType = toTitleCase(
-                    cleanFieldValue(program?.programFields?.programType)
-                  );
+                  const programType = getProgramTypeDetails(
+                    program?.programFields?.programType
+                  ).displayValue;
                   return (
                     <li key={program?.id} className={styles.programCard}>
                       <h3 className={styles.programTitle}>{program?.title}</h3>
@@ -233,7 +264,7 @@ export default function ProgramsArchive(props) {
                       )}
                       {programType && (
                         <p className={styles.programMeta}>
-                          Program Type: {programType}
+                          Program Format: {programType}
                         </p>
                       )}
                       {program?.uri && (
