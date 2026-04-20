@@ -37,14 +37,6 @@ const NavigationMenu = forwardRef(function NavigationMenu(
   const hasMenu = Array.isArray(menuItems) && menuItems.length > 0;
 
   const isOpen = (id) => openIds.has(id);
-  const toggle = (id) =>
-    setOpenIds((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  const toggleMobileExclusive = (id) =>
-    setOpenIds((prev) => (prev.has(id) ? new Set() : new Set([id])));
 
   const closeAll = () => setOpenIds(new Set());
 
