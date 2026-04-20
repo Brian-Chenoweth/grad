@@ -96,24 +96,26 @@ const NavigationMenu = forwardRef(function NavigationMenu(
       const open = isOpen(item.id);
       const submenuId = `submenu-${item.id}`;
 
+      // MOBILE: Expand/collapse with button, parent link duplicated in submenu
       if (isMobile && hasChildren) {
         return (
-          <li key={item.id ?? ''} className={cx({ hasChildren, open })}>
+          <li key={item.id ?? ''} className={cx('hasChildren', { open })}>
             <button
               type="button"
               className={cx('item-row', 'row-button', { open })}
               aria-expanded={open}
               aria-controls={submenuId}
-              onClick={() => toggleMobileExclusive(item.id)}
+              aria-haspopup="true"
+              onClick={() =>
+                setOpenIds((prev) => (prev.has(item.id) ? new Set() : new Set([item.id])))
+              }
             >
               <span className={cx('row-label')}>{item.label ?? ''}</span>
               <i className={cx('fa-solid', 'fa-chevron-down')} aria-hidden="true" />
             </button>
-
             <ul id={submenuId} className={cx('mobile-submenu', { open })}>
-              {/* parent link inside submenu */}
               <li>
-                <Link {...mkLinkProps(item, 'overview')}>Overview</Link>
+                <Link {...mkLinkProps(item, 'overview')}>{item.label ?? ''}</Link>
               </li>
               {renderMenuItems(item.children)}
             </ul>
@@ -121,37 +123,51 @@ const NavigationMenu = forwardRef(function NavigationMenu(
         );
       }
 
+      // DESKTOP: open subnav on hover for top-level items with children
+      if (hasChildren) {
+        return (
+          <li
+            key={item.id ?? ''}
+            className={cx('hasChildren', { open })}
+            onMouseEnter={() => setOpenIds(new Set([item.id]))}
+            onMouseLeave={() => setOpenIds(new Set())}
+            onFocus={() => setOpenIds(new Set([item.id]))}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) {
+                setOpenIds(new Set());
+              }
+            }}
+          >
+            <span
+              className={cx('item-row', 'menu-trigger')}
+              tabIndex={0}
+              role="button"
+              aria-expanded={open}
+              aria-controls={submenuId}
+              aria-haspopup="true"
+            >
+              <span className={cx('item-label')}>{item.label ?? ''}</span>
+              <i className={cx('fa-solid', 'fa-chevron-down')} aria-hidden="true" />
+            </span>
+            <ul
+              id={submenuId}
+              className={cx('submenu', { visible: open })}
+              role="menu"
+              aria-label={item.label}
+            >
+              <li>
+                <Link {...mkLinkProps(item, 'overview')}>{item.label ?? ''}</Link>
+              </li>
+              {renderMenuItems(item.children)}
+            </ul>
+          </li>
+        );
+      }
+
+      // No children: normal link
       return (
-        <li key={item.id ?? ''} className={cx({ hasChildren, open })}>
-          {hasChildren ? (
-            <>
-              <div className={cx('item-row')}>
-                <Link {...mkLinkProps(item)}>{item.label ?? ''}</Link>
-                <button
-                  type="button"
-                  className={cx('submenu-toggle', { open })}
-                  aria-expanded={open}
-                  aria-haspopup="true"
-                  aria-controls={submenuId}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggle(item.id);
-                  }}
-                >
-                  <span className={cx('visually-hidden')}>
-                    {open ? 'Collapse' : 'Expand'} {item.label}
-                  </span>
-                  <i className={cx('fa-solid', 'fa-chevron-down')} aria-hidden="true" />
-                </button>
-              </div>
-              <ul id={submenuId} className={cx('submenu', { visible: open })}>
-                {renderMenuItems(item.children)}
-              </ul>
-            </>
-          ) : (
-            <Link {...mkLinkProps(item)}>{item.label ?? ''}</Link>
-          )}
+        <li key={item.id ?? ''}>
+          <Link {...mkLinkProps(item)}>{item.label ?? ''}</Link>
         </li>
       );
     });

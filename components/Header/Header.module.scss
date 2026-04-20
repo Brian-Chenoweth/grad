@@ -14,7 +14,7 @@ $header-nav-breakpoint: 1100px;
 
   &.scrolled {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    height: 65px;
+    height: 50px;
   }
 }
 
@@ -37,7 +37,7 @@ $header-nav-breakpoint: 1100px;
   }
 
   .header.scrolled .primary-navigation :global(.menu > li > ul) {
-    top: calc(100% + 1.2rem);
+    // top: calc(100% + 1.2rem);
   }
 }
 

@@ -22,8 +22,60 @@
 
 
 .item-row {
-        display: flex;
-    justify-content: center;
+    display: inline-flex;
     align-items: center;
+    height: 100%;
+    padding: 0 1rem;
+    font-weight: $font-weight-bold;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.menu-trigger {
+    cursor: default;
+    background: transparent;
+    border: 0;
+    white-space: nowrap;
+
+    :global(.fa-chevron-down) {
+        color: #c69215;
+        margin-left: 0.4rem;
+    }
+}
+
+.item-label {
+    display: inline-flex;
+    align-items: center;
+}
+
+.hasChildren {
+    position: relative;
+}
+
+.submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    min-width: 240px;
+    background-color: #e4ece8;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.hasChildren:hover > .submenu,
+.hasChildren:focus-within > .submenu,
+.hasChildren.open > .submenu,
+.submenu.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
