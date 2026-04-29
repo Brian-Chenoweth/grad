@@ -455,7 +455,7 @@ $header-nav-breakpoint: 1100px;
         // border-top: 3px solid var(--color-primary) !important;
         // top: 100%;
         @media (min-width: $header-nav-breakpoint) {
-          right: 100%;
+          // right: 100%;
           top: 0;
         }
         background-color: #e4ece8;

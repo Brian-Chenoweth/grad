@@ -33,6 +33,7 @@
 
 .menu-trigger {
     cursor: default;
+    padding: 1rem 1.5rem;
     background: transparent;
     border: 0;
     white-space: nowrap;
@@ -69,6 +70,20 @@
     z-index: 1000;
 }
 
+.submenu .hasChildren > .submenu {
+    top: 0;
+    left: -110%;
+    // transform: translateX(6px);
+    z-index: 1001;
+}
+
+.submenu .hasChildren:hover > .submenu,
+.submenu .hasChildren:focus-within > .submenu,
+.submenu .hasChildren.open > .submenu,
+.submenu .submenu.visible {
+    transform: translateX(0);
+}
+
 .hasChildren:hover > .submenu,
 .hasChildren:focus-within > .submenu,
 .hasChildren.open > .submenu,
@@ -78,4 +93,3 @@
     transform: translateY(0);
     pointer-events: auto;
 }
-
