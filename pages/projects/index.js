@@ -1,40 +1,28 @@
 import * as MENUS from 'constants/menus';
 
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
 import React from 'react';
 import {
-  FeaturedImage,
   Footer,
   Header,
   EntryHeader,
-  LoadMore,
   Main,
-  Projects,
   SEO,
   NavigationMenu,
 } from 'components';
 import { getNextStaticProps } from '@faustwp/core';
 import { buildKeywordString, pageTitle } from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
-import appConfig from 'app.config';
 
-export default function Page() {
-  const { data, loading, fetchMore } = useQuery(Page.query, {
-    variables: Page.variables(),
-  });
-
-  if (loading) {
-    return <></>;
-  }
-
-  const { title: siteTitle } = data?.generalSettings;
+export default function Page(props) {
+  const data = props?.data;
+  const { title: siteTitle } = data?.generalSettings ?? {};
   const primaryMenu = data?.headerMenuItems?.nodes ?? [];
   const footerMenu = data?.footerMenuItems?.nodes ?? [];
   const footerNavOne = data?.footerSecondaryMenuItems?.nodes ?? [];
   const footerNavTwo = data?.footerTertiaryMenuItems?.nodes ?? [];
-  const projectList = data?.projects?.nodes ?? [];
   const description =
-    'Browse graduate education projects, initiatives, and featured work from Cal Poly.';
+    'Project listings are currently unavailable on this site.';
   const keywords = buildKeywordString({
     title: 'Projects',
     content: description,
@@ -55,14 +43,10 @@ export default function Page() {
       <Main>
         <EntryHeader title="Projects" />
         <div className="container">
-          <Projects projects={projectList} id="project-list" />
-          <LoadMore
-            className="text-center"
-            hasNextPage={data.projects.pageInfo.hasNextPage}
-            endCursor={data.projects.pageInfo.endCursor}
-            isLoading={loading}
-            fetchMore={fetchMore}
-          />
+          <p>
+            Project listings are not currently available from the connected
+            WordPress source.
+          </p>
         </div>
       </Main>
 
@@ -79,27 +63,12 @@ export default function Page() {
 Page.query = gql`
   ${BlogInfoFragment}
   ${NavigationMenu.fragments.entry}
-  ${FeaturedImage.fragments.entry}
-  ${Projects.fragments.entry}
   query GetProjectsPage(
-    $first: Int!
-    $after: String!
     $headerLocation: MenuLocationEnum
     $footerLocation: MenuLocationEnum
     $footerSecondaryLocation: MenuLocationEnum
     $footerTertiaryLocation: MenuLocationEnum
   ) {
-    projects(first: $first, after: $after) {
-      nodes {
-        ...ProjectsFragment
-      }
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-    }
     generalSettings {
       ...BlogInfoFragment
     }
@@ -128,8 +97,6 @@ Page.query = gql`
 
 Page.variables = () => {
   return {
-    first: appConfig.projectsPerPage,
-    after: '',
     headerLocation: MENUS.PRIMARY_LOCATION,
     footerLocation: MENUS.FOOTER_LOCATION,
     footerSecondaryLocation: MENUS.FOOTER_SECONDARY_LOCATION,

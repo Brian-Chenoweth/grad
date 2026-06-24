@@ -228,8 +228,8 @@ export default function Component(props) {
                         <tbody>
                           {programs.map((program) => (
                             <tr key={`${college}-${program.title}`}>
-                              <td>{program.title}</td>
-                              <td>
+                              <td data-label="Program">{program.title}</td>
+                              <td data-label="Coordinator">
                                 {splitMulti(program.coordinator).length ? (
                                   splitMulti(program.coordinator).map((name) => (
                                     <span key={`${program.title}-${name}`} className={styles.multiLineValue}>
@@ -240,7 +240,7 @@ export default function Component(props) {
                                   '-'
                                 )}
                               </td>
-                              <td>
+                              <td data-label="Contact">
                                 {splitMulti(program.contact).length ? (
                                   splitMulti(program.contact).map((email) => (
                                     <span key={`${program.title}-${email}`} className={styles.multiLineValue}>
@@ -251,7 +251,7 @@ export default function Component(props) {
                                   '-'
                                 )}
                               </td>
-                              <td>
+                              <td data-label="Phone">
                                 {splitMulti(program.phone).length ? (
                                   splitMulti(program.phone).map((phone) => (
                                     <span key={`${program.title}-${phone}`} className={styles.multiLineValue}>
