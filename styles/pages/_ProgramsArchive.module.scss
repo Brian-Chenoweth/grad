@@ -57,9 +57,35 @@
 }
 
 .resultCount {
-  margin: 1.4rem 0 0;
+  margin: 0;
   font-size: 1.5rem;
   color: #41564a;
+}
+
+.resultRow {
+  margin-top: 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.viewToggle {
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: #0f4a33;
+  padding: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: #0a2f21;
+  }
 }
 
 .listSection {
@@ -90,6 +116,11 @@
   padding: 1.8rem;
 }
 
+.programCardCompact {
+  border-radius: 0.6rem;
+  padding: 1rem 1.4rem;
+}
+
 .programTitle {
   margin: 0 0 0.8rem;
   font-size: 2.2rem;
@@ -102,8 +133,31 @@
   font-size: 1.6rem;
 }
 
+.programTitleCompact {
+  margin: 0;
+  font-size: 1.9rem;
+  line-height: 1.35;
+
+  a {
+    color: #163126;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+      text-underline-offset: 0.18rem;
+    }
+  }
+}
+
 .viewButton {
   margin-top: 1rem;
+}
+
+.programListCompact {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 @media (min-width: $breakpoint-small) {
@@ -123,6 +177,7 @@
   .programList {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
 }
 
 @media (min-width: $breakpoint-medium) {
@@ -131,6 +186,10 @@
   }
 
   .programList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .programListCompact {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

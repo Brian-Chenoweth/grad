@@ -83,6 +83,7 @@ export default function ProgramsArchive(props) {
   const [search, setSearch] = useState('');
   const [collegeFilter, setCollegeFilter] = useState('all');
   const [programTypeFilter, setProgramTypeFilter] = useState('all');
+  const [isCompactView, setIsCompactView] = useState(false);
 
   const { title: siteTitle, description: siteDescription } =
     data?.generalSettings ?? {};
@@ -237,9 +238,18 @@ export default function ProgramsArchive(props) {
                   </select>
                 </label>
               </div>
-              <p className={styles.resultCount}>
-                Showing {filteredPrograms.length} of {programs.length} programs
-              </p>
+              <div className={styles.resultRow}>
+                <p className={styles.resultCount}>
+                  Showing {filteredPrograms.length} of {programs.length} programs
+                </p>
+                <button
+                  type="button"
+                  className={styles.viewToggle}
+                  onClick={() => setIsCompactView((current) => !current)}
+                >
+                  {isCompactView ? 'Full view' : 'Compact view'}
+                </button>
+              </div>
             </section>
 
             <section className={styles.listSection}>
@@ -248,7 +258,11 @@ export default function ProgramsArchive(props) {
                   No programs matched your filters.
                 </p>
               )}
-              <ul className={styles.programList}>
+              <ul
+                className={`${styles.programList} ${
+                  isCompactView ? styles.programListCompact : ''
+                }`}
+              >
                 {filteredPrograms.map((program) => {
                   const college = toTitleCase(
                     cleanFieldValue(program?.programFields?.college)
@@ -257,20 +271,37 @@ export default function ProgramsArchive(props) {
                     program?.programFields?.programType
                   ).displayValue;
                   return (
-                    <li key={program?.id} className={styles.programCard}>
-                      <h3 className={styles.programTitle}>{program?.title}</h3>
-                      {college && (
-                        <p className={styles.programMeta}>{college}</p>
-                      )}
-                      {programType && (
-                        <p className={styles.programMeta}>
-                          Program Format: {programType}
-                        </p>
-                      )}
-                      {program?.uri && (
-                        <Button href={program.uri} className={styles.viewButton}>
-                          View Program
-                        </Button>
+                    <li
+                      key={program?.id}
+                      className={`${styles.programCard} ${
+                        isCompactView ? styles.programCardCompact : ''
+                      }`}
+                    >
+                      {isCompactView ? (
+                        <h3 className={styles.programTitleCompact}>
+                          {program?.uri ? (
+                            <a href={program.uri}>{program?.title}</a>
+                          ) : (
+                            program?.title
+                          )}
+                        </h3>
+                      ) : (
+                        <>
+                          <h3 className={styles.programTitle}>{program?.title}</h3>
+                          {college && (
+                            <p className={styles.programMeta}>{college}</p>
+                          )}
+                          {programType && (
+                            <p className={styles.programMeta}>
+                              Program Format: {programType}
+                            </p>
+                          )}
+                          {program?.uri && (
+                            <Button href={program.uri} className={styles.viewButton}>
+                              View Program
+                            </Button>
+                          )}
+                        </>
                       )}
                     </li>
                   );
