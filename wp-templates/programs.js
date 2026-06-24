@@ -278,13 +278,13 @@ export default function ProgramsArchive(props) {
                       }`}
                     >
                       {isCompactView ? (
-                        <h3 className={styles.programTitleCompact}>
-                          {program?.uri ? (
-                            <a href={program.uri}>{program?.title}</a>
-                          ) : (
-                            program?.title
-                          )}
-                        </h3>
+                        program?.uri ? (
+                          <a href={program.uri} className={styles.programCardCompactLink}>
+                            <h3 className={styles.programTitleCompact}>{program?.title}</h3>
+                          </a>
+                        ) : (
+                          <h3 className={styles.programTitleCompact}>{program?.title}</h3>
+                        )
                       ) : (
                         <>
                           <h3 className={styles.programTitle}>{program?.title}</h3>

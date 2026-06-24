@@ -35,6 +35,7 @@
 .filterField {
   display: grid;
   gap: 0.5rem;
+  min-width: 0;
 
   span {
     font-size: 1.2rem;
@@ -46,6 +47,10 @@
 
   input,
   select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     min-height: 4.4rem;
     border: 1px solid #cdd8d1;
     border-radius: 0.4rem;
@@ -121,6 +126,26 @@
   padding: 1rem 1.4rem;
 }
 
+.programCardCompactLink {
+  display: block;
+  margin: -1rem -1.4rem;
+  padding: 1rem 1.4rem;
+  border-radius: inherit;
+  color: #163126;
+  text-decoration: none;
+
+  &:hover .programTitleCompact,
+  &:focus-visible .programTitleCompact {
+    text-decoration: underline;
+    text-underline-offset: 0.18rem;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0f4a33;
+    outline-offset: 2px;
+  }
+}
+
 .programTitle {
   margin: 0 0 0.8rem;
   font-size: 2.2rem;
@@ -137,17 +162,6 @@
   margin: 0;
   font-size: 1.9rem;
   line-height: 1.35;
-
-  a {
-    color: #163126;
-    text-decoration: none;
-
-    &:hover,
-    &:focus-visible {
-      text-decoration: underline;
-      text-underline-offset: 0.18rem;
-    }
-  }
 }
 
 .viewButton {
@@ -158,6 +172,12 @@
   display: grid;
   gap: 0.8rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 560px) {
+  .programListCompact {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (min-width: $breakpoint-small) {
