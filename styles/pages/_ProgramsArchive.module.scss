@@ -61,6 +61,13 @@
   }
 }
 
+.filterHint {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: #4d6055;
+}
+
 .resultCount {
   margin: 0;
   font-size: 1.5rem;
@@ -192,6 +199,10 @@
 
   .filterGrid {
     grid-template-columns: 1.3fr 1fr 1fr;
+  }
+
+  .filterHint {
+    grid-column: 3;
   }
 
   .programList {

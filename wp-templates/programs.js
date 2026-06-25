@@ -74,6 +74,55 @@ function getProgramTypeDetails(value = '') {
   };
 }
 
+function matchesProgramTypeFilter(programType, selectedFilter) {
+  if (selectedFilter === 'all') return true;
+
+  // Blended Graduate is a subset of Graduate programs.
+  if (selectedFilter === 'Graduate') {
+    return (
+      programType === 'Graduate' ||
+      programType === 'Blended Graduate'
+    );
+  }
+
+  return programType === selectedFilter;
+}
+
+function getProgramTypeFilterLabel(programType) {
+  if (programType === 'Graduate') {
+    return 'Graduate (includes Blended Graduate)';
+  }
+
+  return programType;
+}
+
+function sortProgramTypeOptions(a, b) {
+  const aIsCertificate = String(a).toLowerCase() === 'certificate';
+  const bIsCertificate = String(b).toLowerCase() === 'certificate';
+
+  if (aIsCertificate && !bIsCertificate) return 1;
+  if (!aIsCertificate && bIsCertificate) return -1;
+
+  return a.localeCompare(b);
+}
+
+function buildProgramSearchText(program) {
+  return [
+    program?.title,
+    program?.content,
+    program?.programFields?.college,
+    program?.programFields?.programType,
+    program?.programFields?.contactName,
+    program?.programFields?.contactPhone,
+    program?.programFields?.contactEmail,
+    program?.programFields?.contactWeb,
+  ]
+    .map((value) => cleanFieldValue(value))
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+}
+
 export default function ProgramsArchive(props) {
   const { uri = '/programs/' } = props?.data?.nodeByUri ?? {};
   const { data, loading } = useQuery(ProgramsArchive.query, {
@@ -121,27 +170,27 @@ export default function ProgramsArchive(props) {
         )
         .filter(Boolean)
     );
-    return Array.from(uniques).sort((a, b) => a.localeCompare(b));
+    return Array.from(uniques).sort(sortProgramTypeOptions);
   }, [programs]);
 
   const filteredPrograms = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase();
     return programs.filter((program) => {
-      const title = program?.title ?? '';
       const collegeRaw = cleanFieldValue(program?.programFields?.college);
       const college = toTitleCase(collegeRaw);
+      const searchableProgramText = buildProgramSearchText(program);
       const programType = getProgramTypeDetails(
         program?.programFields?.programType
       ).filterValue;
 
       const matchesSearch =
-        !normalizedSearch ||
-        title.toLowerCase().includes(normalizedSearch) ||
-        college.toLowerCase().includes(normalizedSearch);
+        !normalizedSearch || searchableProgramText.includes(normalizedSearch);
       const matchesCollege =
         collegeFilter === 'all' || college === collegeFilter;
-      const matchesProgramType =
-        programTypeFilter === 'all' || programType === programTypeFilter;
+      const matchesProgramType = matchesProgramTypeFilter(
+        programType,
+        programTypeFilter
+      );
 
       return matchesSearch && matchesCollege && matchesProgramType;
     });
@@ -201,12 +250,12 @@ export default function ProgramsArchive(props) {
               <h2 className={styles.filtersTitle}>Find a Program</h2>
               <div className={styles.filterGrid}>
                 <label className={styles.filterField}>
-                  <span>Search</span>
+                  <span>Search Programs</span>
                   <input
                     type="search"
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    placeholder="Program name or college"
+                    placeholder="Program name, college, instructor, contact, or keyword"
                   />
                 </label>
                 <label className={styles.filterField}>
@@ -232,11 +281,14 @@ export default function ProgramsArchive(props) {
                     <option value="all">All program formats</option>
                     {programTypeOptions.map((programType) => (
                       <option key={programType} value={programType}>
-                        {programType}
+                        {getProgramTypeFilterLabel(programType)}
                       </option>
                     ))}
                   </select>
                 </label>
+                <p className={styles.filterHint}>
+                  Selecting Graduate includes Blended Graduate programs.
+                </p>
               </div>
               <div className={styles.resultRow}>
                 <p className={styles.resultCount}>
@@ -255,7 +307,7 @@ export default function ProgramsArchive(props) {
             <section className={styles.listSection}>
               {filteredPrograms.length === 0 && (
                 <p className={styles.noResults}>
-                  No programs matched your filters.
+                  No programs matched your search or filters.
                 </p>
               )}
               <ul
@@ -348,9 +400,14 @@ ProgramsArchive.query = gql`
         id
         uri
         title
+        content
         programFields {
           college
           programType
+          contactName
+          contactPhone
+          contactEmail
+          contactWeb
         }
       }
     }
