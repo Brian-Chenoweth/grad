@@ -159,7 +159,7 @@ const NavigationMenu = forwardRef(function NavigationMenu(
       // No children: normal link
       return (
         <li key={item.id ?? ''}>
-          <Link {...mkLinkProps(item)}>{item.label ?? ''}</Link>
+          <Link {...mkLinkProps(item, 'item-row')}>{item.label ?? ''}</Link>
         </li>
       );
     });

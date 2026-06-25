@@ -1,5 +1,23 @@
 @import 'styles/Variables';
 
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 0.15rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu > li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
 .submenu-toggle { 
     
     background-color: transparent;
@@ -29,11 +47,19 @@
     font-weight: $font-weight-bold;
     color: var(--color-primary);
     text-decoration: none;
+    border-radius: 0.6rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+        background-color: rgba(21, 71, 52, 0.08);
+        color: #0f3b2a;
+    }
 }
 
 .menu-trigger {
     cursor: default;
-    padding: 1rem 1.5rem;
+    padding: 1rem 1.25rem;
     background: transparent;
     border: 0;
     white-space: nowrap;
@@ -58,16 +84,51 @@
     top: 100%;
     left: 0;
     margin: 0;
-    padding: 0;
+    padding: 0.65rem 0;
     list-style: none;
     min-width: 240px;
-    background-color: #e4ece8;
+    max-width: min(32rem, calc(100vw - 2rem));
+    background-color: var(--color-white);
+    border: 1px solid rgba(21, 71, 52, 0.08);
+    box-shadow: 0 14px 30px rgba(13, 44, 33, 0.12);
     opacity: 0;
     visibility: hidden;
     transform: translateY(6px);
     transition: opacity 0.2s ease, transform 0.2s ease;
     pointer-events: none;
     z-index: 1000;
+}
+
+.menu > .hasChildren:last-child > .submenu {
+    left: auto;
+    right: 0;
+}
+
+.menu > .hasChildren:last-child > .submenu .hasChildren > .submenu {
+    left: auto;
+    right: 100%;
+}
+
+.submenu a {
+    display: block;
+    margin: 0.15rem 0.75rem;
+    padding: 0.85rem 1.05rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+        background-color: rgba(21, 71, 52, 0.08);
+        color: #0f3b2a;
+    }
+}
+
+.submenu .hasChildren > .item-row,
+.submenu .hasChildren > .menu-trigger {
+    padding: 0.85rem 1.05rem;
+    font-weight: 700;
 }
 
 .submenu .hasChildren > .submenu {
