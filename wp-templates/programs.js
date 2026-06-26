@@ -503,27 +503,19 @@ export default function ProgramsArchive(props) {
               {groupedCollegeSections.map((collegeGroup) => (
                 <section key={collegeGroup.college} className={styles.collegeGroup}>
                   <h2 className={styles.collegeHeading}>{collegeGroup.college}</h2>
-                  {collegeGroup.sections.map((section, index) => (
-                    <section
-                      key={`${collegeGroup.college}-${section.heading}-${index}`}
-                      className={styles.specializationGroup}
-                    >
-                      {section.heading ? (
-                        <h3 className={styles.specializationHeading}>{section.heading}</h3>
-                      ) : null}
-                      <ul
-                        className={`${styles.programList} ${
-                          isCompactView ? styles.programListCompact : ''
-                        }`}
-                      >
-                        {section.programs.map((program) =>
-                          renderProgramCard(program, {
-                            keyPrefix: `${collegeGroup.college}-${section.heading}-`,
-                          })
-                        )}
-                      </ul>
-                    </section>
-                  ))}
+                  <ul
+                    className={`${styles.programList} ${
+                      isCompactView ? styles.programListCompact : ''
+                    }`}
+                  >
+                    {collegeGroup.sections
+                      .flatMap((section) => section.programs)
+                      .map((program) =>
+                        renderProgramCard(program, {
+                          keyPrefix: `${collegeGroup.college}-`,
+                        })
+                      )}
+                  </ul>
                 </section>
               ))}
             </section>
