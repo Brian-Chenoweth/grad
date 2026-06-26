@@ -11,7 +11,12 @@ import {
   SEO,
   Button,
 } from 'components';
-import { buildKeywordString, buildMetaDescription, pageTitle } from 'utilities';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  formatProgramDisplayTitle,
+  pageTitle,
+} from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import styles from 'styles/pages/_ProgramsArchive.module.scss';
 
@@ -107,8 +112,14 @@ function sortProgramTypeOptions(a, b) {
 }
 
 function buildProgramSearchText(program) {
-  return [
+  const displayTitle = formatProgramDisplayTitle(
     program?.title,
+    program?.programFields?.specialization,
+    program?.programFields?.specializationIn
+  );
+
+  return [
+    displayTitle,
     program?.content,
     program?.programFields?.college,
     program?.programFields?.programType,
@@ -196,6 +207,93 @@ export default function ProgramsArchive(props) {
     });
   }, [programs, search, collegeFilter, programTypeFilter]);
 
+  const alphabetizedSections = useMemo(() => {
+    const specializationMarker = ', Specialization in ';
+    const sortLabel = (program) =>
+      formatProgramDisplayTitle(
+        program?.title,
+        program?.programFields?.specialization,
+        program?.programFields?.specializationIn
+      );
+
+    const sortedPrograms = [...filteredPrograms].sort((a, b) =>
+      sortLabel(a).localeCompare(sortLabel(b), undefined, {
+        sensitivity: 'base',
+      })
+    );
+
+    const specializationHeadings = new Set(
+      sortedPrograms
+        .map((program) => {
+          const displayTitle = sortLabel(program);
+          const markerIndex = displayTitle.indexOf(specializationMarker);
+          if (markerIndex < 0) return '';
+          return displayTitle.slice(0, markerIndex).trim();
+        })
+        .filter(Boolean)
+    );
+
+    const headingProgramsMap = new Map();
+    const orderedTokens = [];
+    const pushedHeadingTokens = new Set();
+
+    sortedPrograms.forEach((program) => {
+      const displayTitle = sortLabel(program);
+      const markerIndex = displayTitle.indexOf(specializationMarker);
+      const specializationParent =
+        markerIndex > -1 ? displayTitle.slice(0, markerIndex).trim() : '';
+      const programTitle = cleanFieldValue(program?.title);
+
+      const headingForProgram = specializationParent
+        ? specializationParent
+        : specializationHeadings.has(programTitle)
+          ? programTitle
+          : '';
+
+      if (headingForProgram) {
+        if (!headingProgramsMap.has(headingForProgram)) {
+          headingProgramsMap.set(headingForProgram, []);
+        }
+        headingProgramsMap.get(headingForProgram).push(program);
+
+        if (!pushedHeadingTokens.has(headingForProgram)) {
+          pushedHeadingTokens.add(headingForProgram);
+          orderedTokens.push({ type: 'specialization', heading: headingForProgram });
+        }
+        return;
+      }
+
+      orderedTokens.push({ type: 'regular', program });
+    });
+
+    const sections = [];
+    let regularBuffer = [];
+
+    orderedTokens.forEach((token) => {
+      if (token.type === 'regular') {
+        regularBuffer.push(token.program);
+        return;
+      }
+
+      if (regularBuffer.length > 0) {
+        sections.push({ type: 'regular', programs: regularBuffer });
+        regularBuffer = [];
+      }
+
+      sections.push({
+        type: 'specialization',
+        heading: token.heading,
+        programs: headingProgramsMap.get(token.heading) ?? [],
+      });
+    });
+
+    if (regularBuffer.length > 0) {
+      sections.push({ type: 'regular', programs: regularBuffer });
+    }
+
+    return sections;
+  }, [filteredPrograms]);
+
   if (loading) {
     return null;
   }
@@ -203,7 +301,11 @@ export default function ProgramsArchive(props) {
   const programText = programs
     .map((program) =>
       [
-        program?.title,
+        formatProgramDisplayTitle(
+          program?.title,
+          program?.programFields?.specialization,
+          program?.programFields?.specializationIn
+        ),
         toTitleCase(cleanFieldValue(program?.programFields?.college)),
         getProgramTypeDetails(program?.programFields?.programType).displayValue,
       ]
@@ -223,6 +325,53 @@ export default function ProgramsArchive(props) {
     content: `${description} ${programText}`,
     seedKeywords: ['graduate programs', 'graduate education', 'cal poly'],
   });
+
+  const renderProgramCard = (program, options = {}) => {
+    const { titleOverride = '', keyPrefix = '' } = options;
+    const displayTitle =
+      titleOverride ||
+      formatProgramDisplayTitle(
+        program?.title,
+        program?.programFields?.specialization,
+        program?.programFields?.specializationIn
+      );
+    const college = toTitleCase(cleanFieldValue(program?.programFields?.college));
+    const programType = getProgramTypeDetails(
+      program?.programFields?.programType
+    ).displayValue;
+
+    return (
+      <li
+        key={`${keyPrefix}${program?.id}`}
+        className={`${styles.programCard} ${
+          isCompactView ? styles.programCardCompact : ''
+        }`}
+      >
+        {isCompactView ? (
+          program?.uri ? (
+            <a href={program.uri} className={styles.programCardCompactLink}>
+              <h3 className={styles.programTitleCompact}>{displayTitle}</h3>
+            </a>
+          ) : (
+            <h3 className={styles.programTitleCompact}>{displayTitle}</h3>
+          )
+        ) : (
+          <>
+            <h3 className={styles.programTitle}>{displayTitle}</h3>
+            {college && <p className={styles.programMeta}>{college}</p>}
+            {programType && (
+              <p className={styles.programMeta}>Program Format: {programType}</p>
+            )}
+            {program?.uri && (
+              <Button href={program.uri} className={styles.viewButton}>
+                View Program
+              </Button>
+            )}
+          </>
+        )}
+      </li>
+    );
+  };
 
   return (
     <>
@@ -310,55 +459,37 @@ export default function ProgramsArchive(props) {
                   No programs matched your search or filters.
                 </p>
               )}
-              <ul
-                className={`${styles.programList} ${
-                  isCompactView ? styles.programListCompact : ''
-                }`}
-              >
-                {filteredPrograms.map((program) => {
-                  const college = toTitleCase(
-                    cleanFieldValue(program?.programFields?.college)
-                  );
-                  const programType = getProgramTypeDetails(
-                    program?.programFields?.programType
-                  ).displayValue;
+              {alphabetizedSections.map((section, index) => {
+                if (section.type === 'regular') {
                   return (
-                    <li
-                      key={program?.id}
-                      className={`${styles.programCard} ${
-                        isCompactView ? styles.programCardCompact : ''
+                    <ul
+                      key={`regular-${index}`}
+                      className={`${styles.programList} ${
+                        isCompactView ? styles.programListCompact : ''
                       }`}
                     >
-                      {isCompactView ? (
-                        program?.uri ? (
-                          <a href={program.uri} className={styles.programCardCompactLink}>
-                            <h3 className={styles.programTitleCompact}>{program?.title}</h3>
-                          </a>
-                        ) : (
-                          <h3 className={styles.programTitleCompact}>{program?.title}</h3>
-                        )
-                      ) : (
-                        <>
-                          <h3 className={styles.programTitle}>{program?.title}</h3>
-                          {college && (
-                            <p className={styles.programMeta}>{college}</p>
-                          )}
-                          {programType && (
-                            <p className={styles.programMeta}>
-                              Program Format: {programType}
-                            </p>
-                          )}
-                          {program?.uri && (
-                            <Button href={program.uri} className={styles.viewButton}>
-                              View Program
-                            </Button>
-                          )}
-                        </>
-                      )}
-                    </li>
+                      {section.programs.map((program) => renderProgramCard(program))}
+                    </ul>
                   );
-                })}
-              </ul>
+                }
+
+                return (
+                  <section key={`${section.heading}-${index}`} className={styles.specializationGroup}>
+                    <h2 className={styles.specializationHeading}>{section.heading}</h2>
+                    <ul
+                      className={`${styles.programList} ${
+                        isCompactView ? styles.programListCompact : ''
+                      }`}
+                    >
+                      {section.programs.map((program) =>
+                        renderProgramCard(program, {
+                          keyPrefix: `${section.heading}-`,
+                        })
+                      )}
+                    </ul>
+                  </section>
+                );
+              })}
             </section>
           </div>
         </>
@@ -404,6 +535,8 @@ ProgramsArchive.query = gql`
         programFields {
           college
           programType
+          specialization
+          specializationIn
           contactName
           contactPhone
           contactEmail

@@ -13,7 +13,12 @@ import {
   FeaturedImage,
   SEO,
 } from 'components';
-import { buildKeywordString, buildMetaDescription, pageTitle } from 'utilities';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  formatProgramDisplayTitle,
+  pageTitle,
+} from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import styles from 'styles/pages/_Program.module.scss';
 
@@ -100,11 +105,18 @@ export default function Component(props) {
   const {
     college,
     programType,
+    specialization,
+    specializationIn,
     contactName,
     contactPhone,
     contactEmail,
     contactWeb,
   } = programFields ?? {};
+  const programDisplayTitle = formatProgramDisplayTitle(
+    title,
+    specialization,
+    specializationIn
+  );
   const collegeDisplay = toTitleCase(cleanFieldValue(college));
   const programTypeDisplay = getProgramTypeDetails(programType).displayValue;
   const contactWebValue = cleanFieldValue(contactWeb);
@@ -126,7 +138,7 @@ export default function Component(props) {
   const hasContacts = contacts.length > 0;
   const showMetaPanel = hasProgramMeta || hasContacts || Boolean(applyNowUrl);
   const description = buildMetaDescription({
-    title,
+    title: programDisplayTitle,
     content: [
       content,
       collegeDisplay,
@@ -138,7 +150,7 @@ export default function Component(props) {
     fallback: siteDescription,
   });
   const keywords = buildKeywordString({
-    title,
+    title: programDisplayTitle,
     content: [
       content,
       collegeDisplay,
@@ -161,7 +173,7 @@ export default function Component(props) {
       <SEO
         title={pageTitle(
           props?.data?.generalSettings,
-          title,
+          programDisplayTitle,
           props?.data?.generalSettings?.title
         )}
         description={description}
@@ -175,7 +187,7 @@ export default function Component(props) {
       />
       <Main>
         <>
-          <EntryHeader title={title} image={featuredImage?.node} />
+          <EntryHeader title={programDisplayTitle} image={featuredImage?.node} />
           <div className="container">
             <ContentWrapper className={styles.programContent} content={content}>
               {showMetaPanel && (
@@ -184,6 +196,12 @@ export default function Component(props) {
                     <>
                       <h2 className={styles.metaPanelTitle}>Program Details</h2>
                       <ul className={styles.metaList}>
+                        {programDisplayTitle && (
+                          <li className={styles.metaItem}>
+                            <span className={styles.metaLabel}>Title</span>
+                            <span className={styles.metaValue}>{programDisplayTitle}</span>
+                          </li>
+                        )}
                         {collegeDisplay && (
                           <li className={styles.metaItem}>
                             <span className={styles.metaLabel}>College</span>
@@ -192,13 +210,13 @@ export default function Component(props) {
                         )}
                         {programTypeDisplay && (
                           <li className={styles.metaItem}>
-                            <span className={styles.metaLabel}>Program Format</span>
+                            <span className={styles.metaLabel}>Format</span>
                             <span className={styles.metaValue}>{programTypeDisplay}</span>
                           </li>
                         )}
                         {contactWebValue && (
                           <li className={styles.metaItem}>
-                            <span className={styles.metaLabel}>Program Website</span>
+                            <span className={styles.metaLabel}>Website</span>
                             <a
                               className={styles.contactLink}
                               href={contactWebValue}
@@ -320,6 +338,8 @@ Component.query = gql`
       programFields {
         college
         programType
+        specialization
+        specializationIn
         contactName
         contactPhone
         contactEmail

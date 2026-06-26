@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import {
   buildKeywordString,
   buildMetaDescription,
+  formatProgramDisplayTitle,
   pageTitle,
 } from 'utilities';
 import styles from 'styles/pages/_CoordinatorDirectory.module.scss';
@@ -119,8 +120,14 @@ export default function Component(props) {
   const groupedPrograms = programNodes
     .map((program) => {
       const fields = program?.programFields ?? {};
+      const displayTitle = formatProgramDisplayTitle(
+        normalize(program?.title),
+        fields.specialization,
+        fields.specializationIn
+      );
       return {
-        title: normalize(program?.title),
+        title: displayTitle,
+        uri: normalize(program?.uri),
         college: toTitleCase(normalize(fields.college)) || 'Other Programs',
         coordinator: normalize(fields.contactName),
         contact: normalize(fields.contactEmail),
@@ -228,7 +235,9 @@ export default function Component(props) {
                         <tbody>
                           {programs.map((program) => (
                             <tr key={`${college}-${program.title}`}>
-                              <td data-label="Program">{program.title}</td>
+                              <td data-label="Program">
+                                {program.uri ? <a href={program.uri}>{program.title}</a> : program.title}
+                              </td>
                               <td data-label="Coordinator">
                                 {splitMulti(program.coordinator).length ? (
                                   splitMulti(program.coordinator).map((name) => (
@@ -343,9 +352,12 @@ Component.query = gql`
     }
     programs(first: 500) {
       nodes {
+        uri
         title
         programFields {
           college
+          specialization
+          specializationIn
           contactName
           contactEmail
           contactPhone
