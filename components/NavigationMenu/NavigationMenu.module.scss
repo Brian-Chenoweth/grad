@@ -18,6 +18,16 @@
     white-space: nowrap;
 }
 
+@media (max-width: 1500px) and (min-width: 1281px) {
+    .menu {
+        gap: 0;
+    }
+
+    .menu > li {
+        font-size: 1.8rem;
+    }
+}
+
 .submenu-toggle { 
     
     background-color: transparent;
@@ -54,6 +64,16 @@
     &:focus-visible {
         background-color: rgba(21, 71, 52, 0.08);
         color: #0f3b2a;
+    }
+}
+
+@media (max-width: 1500px) and (min-width: 1281px) {
+    .item-row {
+        padding: 0 0.75rem;
+    }
+
+    .menu-trigger {
+        padding: 1rem 0.9rem;
     }
 }
 

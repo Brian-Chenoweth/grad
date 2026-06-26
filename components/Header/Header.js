@@ -12,7 +12,15 @@ import SkipNavigationLink from '../SkipNavigationLink';
 import MobileNav from './MobileNav';
 import styles from './Header.module.scss';
 let cx = classNames.bind(styles);
-const HEADER_NAV_BREAKPOINT = 1100;
+const HEADER_NAV_BREAKPOINT = 1280;
+const COMPACT_LABEL_BREAKPOINT = 1500;
+
+const COMPACT_TOP_LEVEL_LABELS = {
+  'Prospective Students': 'Prospective',
+  'Blended Programs': 'Blended',
+  'Steps to Graduation & Forms': 'Grad Steps & Forms',
+  'Contact Us': 'Contact',
+};
 
 function useIsMobile(bp = 767) {
   const [isMobile, set] = useState(false);
@@ -26,12 +34,36 @@ function useIsMobile(bp = 767) {
   return isMobile;
 }
 
+function getMenuItemsForViewport(menuItems, useCompactLabels) {
+  if (!useCompactLabels || !Array.isArray(menuItems)) {
+    return menuItems;
+  }
+
+  return menuItems.map((item) => {
+    if (item?.parentId) {
+      return item;
+    }
+
+    const compactLabel = COMPACT_TOP_LEVEL_LABELS[item.label];
+    if (!compactLabel) {
+      return item;
+    }
+
+    return {
+      ...item,
+      label: compactLabel,
+    };
+  });
+}
+
 export default function Header({ className, menuItems }) {
   const router = useRouter();
   const [isNavShown, setIsNavShown] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const isMobile = useIsMobile(HEADER_NAV_BREAKPOINT);
+  const useCompactLabels = useIsMobile(COMPACT_LABEL_BREAKPOINT);
   const menuRef = useRef(null);
+  const menuItemsForViewport = getMenuItemsForViewport(menuItems, useCompactLabels);
 
   const headerClasses = cx('header', className, { scrolled: isScrolled });
   const logoWrapClasses = cx('logo-wrap', { scrolled: isScrolled });
@@ -132,7 +164,7 @@ export default function Header({ className, menuItems }) {
           {isMobile ? (
             <MobileNav
               className={cx('mobile-nav', { open: isNavShown })}
-              menuItems={menuItems}
+              menuItems={menuItemsForViewport}
               onNavigate={() => setIsNavShown(false)}
               onClose={() => setIsNavShown(false)}
               isOpen={isNavShown}
@@ -141,7 +173,7 @@ export default function Header({ className, menuItems }) {
             <NavigationMenu
               id={cx('primary-navigation')}
               className={navClasses}
-              menuItems={menuItems}
+              menuItems={menuItemsForViewport}
               ref={menuRef}
             >
               {isScrolled && (

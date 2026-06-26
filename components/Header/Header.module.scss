@@ -1,7 +1,7 @@
 @import 'styles/Variables';
 
 $header-scroll-offset: 55px;
-$header-nav-breakpoint: 1100px;
+$header-nav-breakpoint: 1280px;
 
 .header {
   color: var(--color-white);
@@ -44,36 +44,36 @@ $header-nav-breakpoint: 1100px;
 
 }
 
-@media screen and (max-width: 1280px) and (min-width: 768px) {
+@media (max-width: 1500px) and (min-width: calc(#{$header-nav-breakpoint} + 1px)) {
   .header.scrolled .bar {
-    flex-wrap: wrap;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 1.4rem;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
   }
 
   .header.scrolled .titleName {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     white-space: nowrap;
-    flex: 0 0 100%;
-    width: 100%;
+    flex: 0 0 auto;
+    width: auto;
   }
 
   .header.scrolled .primary-navigation {
-    flex: 0 0 100%;
+    flex: 1 1 auto;
     min-width: 0;
-    width: 100%;
-    margin-left: 0;
+    width: auto;
+    margin-left: auto;
   }
 
   .header.scrolled .primary-navigation :global(.menu) {
     flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: flex-end;
   }
 
   .header.scrolled .primary-navigation :global(.menu > li > a) {
     white-space: nowrap;
-    padding: 0 0.85rem;
+    padding: 0 0.6rem;
   }
 }
 
@@ -270,6 +270,12 @@ $header-nav-breakpoint: 1100px;
   }
 }
 
+@media (max-width: 1500px) and (min-width: calc(#{$header-nav-breakpoint} + 1px)) {
+  .titleName {
+    font-size: 2.6rem;
+  }
+}
+
 @media (max-width: $header-nav-breakpoint) {
   .titleName {
     flex: 1 1 auto;
@@ -277,13 +283,19 @@ $header-nav-breakpoint: 1100px;
     display: flex;
     align-items: center;
     text-align: left;
-    font-size: 2.4rem;
+    font-size: 2.15rem;
     // line-height: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0;
     // min-height: 4rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .titleName {
+    font-size: 1.95rem;
   }
 }
 
