@@ -104,13 +104,20 @@
 .metaItem,
 .contactItem {
   display: grid;
-  grid-template-columns: 15rem 1fr;
+  grid-template-columns: 10rem 1fr;
   gap: 1.2rem;
-  align-items: start;
   padding: 1.2rem 1.3rem;
   border-radius: 0.6rem;
   background-color: #ffffff;
   border: 1px solid #e0e8e2;
+}
+
+.metaItem {
+  align-items: center;
+}
+
+.contactItem {
+  align-items: start;
 }
 
 .metaLabel {
