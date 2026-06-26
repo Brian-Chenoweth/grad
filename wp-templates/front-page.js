@@ -253,11 +253,6 @@ export default function Component() {
                 <h3 className={styles.highlightedProgramTitle}>
                   {highlightedProgram.title}
                 </h3>
-                {highlightedProgramType && (
-                  <h4 className={styles.highlightedProgramType}>
-                    {highlightedProgramType} Program
-                  </h4>
-                )}
                 <p className={styles.highlightedProgramBlurb}>
                   {truncate(
                     decodeHtmlEntities(stripHtml(highlightedProgram?.content || '')),
