@@ -215,7 +215,8 @@ export default function Component(props) {
           <EntryHeader title={title} image={featuredImage?.node} />
           <div className="container">
             {showContentWrapper && <ContentWrapper content={htmlWithSlot} />}
-            <ContactFormIntoSlot programOptions={contactProgramOptions} />
+            {/* Contact form temporarily disabled. Re-enable when needed. */}
+            {/* <ContactFormIntoSlot programOptions={contactProgramOptions} /> */}
             {isCoordinatorPage && (
               <section className={styles.directorySection}>
                 {/* <h2 className={styles.directoryTitle}>Graduate Program Coordinators</h2> */}
