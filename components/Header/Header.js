@@ -13,7 +13,7 @@ import MobileNav from './MobileNav';
 import styles from './Header.module.scss';
 let cx = classNames.bind(styles);
 const HEADER_NAV_BREAKPOINT = 1280;
-const COMPACT_LABEL_BREAKPOINT = 1500;
+const COMPACT_LABEL_BREAKPOINT = 1600;
 
 const COMPACT_TOP_LEVEL_LABELS = {
   'Prospective Students': 'Prospective',

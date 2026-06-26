@@ -44,7 +44,7 @@ $header-nav-breakpoint: 1280px;
 
 }
 
-@media (max-width: 1500px) and (min-width: calc(#{$header-nav-breakpoint} + 1px)) {
+@media (max-width: 1600px) and (min-width: calc(#{$header-nav-breakpoint} + 1px)) {
   .header.scrolled .bar {
     flex-wrap: nowrap;
     align-items: center;
@@ -74,6 +74,14 @@ $header-nav-breakpoint: 1280px;
   .header.scrolled .primary-navigation :global(.menu > li > a) {
     white-space: nowrap;
     padding: 0 0.6rem;
+  }
+}
+
+@media (min-width: calc(#{$header-nav-breakpoint} + 1px)) {
+  .bar {
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 
@@ -261,6 +269,7 @@ $header-nav-breakpoint: 1280px;
   letter-spacing: 0;
   font-size: 3.2rem;
   display: inline-block;
+  white-space: nowrap;
   text-decoration-color: $gold;
   transition: color 0.2s ease, text-decoration-color 0.2s ease, font-size 0.2s ease;
 
@@ -270,7 +279,7 @@ $header-nav-breakpoint: 1280px;
   }
 }
 
-@media (max-width: 1500px) and (min-width: calc(#{$header-nav-breakpoint} + 1px)) {
+@media (max-width: 1600px) and (min-width: calc(#{$header-nav-breakpoint} + 1px)) {
   .titleName {
     font-size: 2.6rem;
   }
