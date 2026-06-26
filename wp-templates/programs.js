@@ -359,6 +359,8 @@ export default function ProgramsArchive(props) {
     const programType = getProgramTypeDetails(
       program?.programFields?.programType
     ).displayValue;
+    const instructors = cleanFieldValue(program?.programFields?.contactName);
+    const instructorCount = instructors ? instructors.split(',').length : 0;
 
     return (
       <li
@@ -378,9 +380,20 @@ export default function ProgramsArchive(props) {
         ) : (
           <>
             <h3 className={styles.programTitle}>{displayTitle}</h3>
-            {college && <p className={styles.programMeta}>{college}</p>}
+            {college && (
+              <p className={styles.programMeta}>
+                <strong>College:</strong> {college}
+              </p>
+            )}
             {programType && (
-              <p className={styles.programMeta}>Program Format: {programType}</p>
+              <p className={styles.programMeta}>
+                <strong>Program Format:</strong> {programType}
+              </p>
+            )}
+            {instructors && (
+              <p className={styles.programMeta}>
+                <strong>{instructorCount > 1 ? 'Instructors' : 'Instructor'}:</strong> {instructors}
+              </p>
             )}
             {program?.uri && (
               <Button href={program.uri} className={styles.viewButton}>
