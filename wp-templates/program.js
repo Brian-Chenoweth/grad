@@ -48,6 +48,14 @@ function cleanFieldValue(value = '') {
   return normalized;
 }
 
+function formatCollegeDisplay(value = '') {
+  const normalized = toTitleCase(cleanFieldValue(value));
+
+  return normalized.replace(/\(([^)]+)\)\s*$/, (_, suffix) => {
+    return `(${suffix.trim().toUpperCase()})`;
+  });
+}
+
 function getProgramTypeDetails(value = '') {
   const normalized = toTitleCase(cleanFieldValue(value));
   const compact = normalized.toLowerCase();
@@ -117,7 +125,7 @@ export default function Component(props) {
     specialization,
     specializationIn
   );
-  const collegeDisplay = toTitleCase(cleanFieldValue(college));
+  const collegeDisplay = formatCollegeDisplay(college);
   const programTypeDisplay = getProgramTypeDetails(programType).displayValue;
   const contactWebValue = cleanFieldValue(contactWeb);
   const applyNowUrl = getProgramApplyLink(props.data.program) ?? contactWebValue;

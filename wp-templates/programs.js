@@ -48,6 +48,14 @@ function cleanFieldValue(value = '') {
   return normalized;
 }
 
+function formatCollegeDisplay(value = '') {
+  const normalized = toTitleCase(cleanFieldValue(value));
+
+  return normalized.replace(/\(([^)]+)\)\s*$/, (_, suffix) => {
+    return `(${suffix.trim().toUpperCase()})`;
+  });
+}
+
 function getProgramTypeDetails(value = '') {
   const normalized = toTitleCase(cleanFieldValue(value));
   const compact = normalized.toLowerCase();
@@ -257,7 +265,7 @@ export default function ProgramsArchive(props) {
       programs
         .map((program) => program?.programFields?.college)
         .filter(Boolean)
-        .map((value) => toTitleCase(cleanFieldValue(value)))
+        .map((value) => formatCollegeDisplay(value))
         .filter(Boolean)
     );
     return Array.from(uniques).sort((a, b) => a.localeCompare(b));
@@ -278,7 +286,7 @@ export default function ProgramsArchive(props) {
     const normalizedSearch = search.trim().toLowerCase();
     return programs.filter((program) => {
       const collegeRaw = cleanFieldValue(program?.programFields?.college);
-      const college = toTitleCase(collegeRaw);
+      const college = formatCollegeDisplay(collegeRaw);
       const searchableProgramText = buildProgramSearchText(program);
       const programType = getProgramTypeDetails(
         program?.programFields?.programType
@@ -302,7 +310,7 @@ export default function ProgramsArchive(props) {
 
     filteredPrograms.forEach((program) => {
       const collegeName =
-        toTitleCase(cleanFieldValue(program?.programFields?.college)) ||
+        formatCollegeDisplay(program?.programFields?.college) ||
         'Other Programs';
 
       if (!collegeMap.has(collegeName)) {
@@ -332,7 +340,7 @@ export default function ProgramsArchive(props) {
           program?.programFields?.specialization,
           program?.programFields?.specializationIn
         ),
-        toTitleCase(cleanFieldValue(program?.programFields?.college)),
+        formatCollegeDisplay(program?.programFields?.college),
         getProgramTypeDetails(program?.programFields?.programType).displayValue,
       ]
         .filter(Boolean)
@@ -355,7 +363,7 @@ export default function ProgramsArchive(props) {
   const renderProgramCard = (program, options = {}) => {
     const { titleOverride = '', keyPrefix = '' } = options;
     const displayTitle = titleOverride || getProgramDisplayTitle(program);
-    const college = toTitleCase(cleanFieldValue(program?.programFields?.college));
+    const college = formatCollegeDisplay(program?.programFields?.college);
     const programType = getProgramTypeDetails(
       program?.programFields?.programType
     ).displayValue;
