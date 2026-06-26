@@ -104,18 +104,26 @@
   margin-top: 2rem;
 }
 
-.specializationGroup {
+.collegeGroup {
   margin-top: 3.2rem;
-  padding-top: 1.6rem;
-  border-top: 1px solid #d8e2dc;
-  margin-bottom: 1.8rem;
-  padding-bottom: 1.6rem;
-  border-bottom: 1px solid #d8e2dc;
+  padding-top: 2rem;
+  border-top: 1px solid #d5e0d9;
+}
+
+.collegeHeading {
+  margin: 0;
+  font-size: 3.2rem;
+  line-height: 1.2;
+}
+
+.specializationGroup {
+  margin-top: 1.8rem;
+  margin-bottom: 1.4rem;
 }
 
 .specializationHeading {
-  margin: 0 0 1.2rem;
-  font-size: 3rem;
+  margin: 0 0 1rem;
+  font-size: 2.4rem;
   line-height: 1.2;
 }
 

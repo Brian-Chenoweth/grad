@@ -134,6 +134,96 @@ function buildProgramSearchText(program) {
     .toLowerCase();
 }
 
+function getProgramDisplayTitle(program) {
+  return formatProgramDisplayTitle(
+    program?.title,
+    program?.programFields?.specialization,
+    program?.programFields?.specializationIn
+  );
+}
+
+function buildSectionsForPrograms(programsForSection) {
+  const specializationMarker = ', Specialization in ';
+  const sortLabel = (program) => getProgramDisplayTitle(program);
+
+  const sortedPrograms = [...programsForSection].sort((a, b) =>
+    sortLabel(a).localeCompare(sortLabel(b), undefined, {
+      sensitivity: 'base',
+    })
+  );
+
+  const specializationHeadings = new Set(
+    sortedPrograms
+      .map((program) => {
+        const displayTitle = sortLabel(program);
+        const markerIndex = displayTitle.indexOf(specializationMarker);
+        if (markerIndex < 0) return '';
+        return displayTitle.slice(0, markerIndex).trim();
+      })
+      .filter(Boolean)
+  );
+
+  const headingProgramsMap = new Map();
+  const orderedTokens = [];
+  const pushedHeadingTokens = new Set();
+
+  sortedPrograms.forEach((program) => {
+    const displayTitle = sortLabel(program);
+    const markerIndex = displayTitle.indexOf(specializationMarker);
+    const specializationParent =
+      markerIndex > -1 ? displayTitle.slice(0, markerIndex).trim() : '';
+    const programTitle = cleanFieldValue(program?.title);
+
+    const headingForProgram = specializationParent
+      ? specializationParent
+      : specializationHeadings.has(programTitle)
+        ? programTitle
+        : '';
+
+    if (headingForProgram) {
+      if (!headingProgramsMap.has(headingForProgram)) {
+        headingProgramsMap.set(headingForProgram, []);
+      }
+      headingProgramsMap.get(headingForProgram).push(program);
+
+      if (!pushedHeadingTokens.has(headingForProgram)) {
+        pushedHeadingTokens.add(headingForProgram);
+        orderedTokens.push({ type: 'specialization', heading: headingForProgram });
+      }
+      return;
+    }
+
+    orderedTokens.push({ type: 'regular', program });
+  });
+
+  const sections = [];
+  let regularBuffer = [];
+
+  orderedTokens.forEach((token) => {
+    if (token.type === 'regular') {
+      regularBuffer.push(token.program);
+      return;
+    }
+
+    if (regularBuffer.length > 0) {
+      sections.push({ type: 'regular', heading: '', programs: regularBuffer });
+      regularBuffer = [];
+    }
+
+    sections.push({
+      type: 'specialization',
+      heading: token.heading,
+      programs: headingProgramsMap.get(token.heading) ?? [],
+    });
+  });
+
+  if (regularBuffer.length > 0) {
+    sections.push({ type: 'regular', heading: '', programs: regularBuffer });
+  }
+
+  return sections;
+}
+
 export default function ProgramsArchive(props) {
   const { uri = '/programs/' } = props?.data?.nodeByUri ?? {};
   const { data, loading } = useQuery(ProgramsArchive.query, {
@@ -207,91 +297,27 @@ export default function ProgramsArchive(props) {
     });
   }, [programs, search, collegeFilter, programTypeFilter]);
 
-  const alphabetizedSections = useMemo(() => {
-    const specializationMarker = ', Specialization in ';
-    const sortLabel = (program) =>
-      formatProgramDisplayTitle(
-        program?.title,
-        program?.programFields?.specialization,
-        program?.programFields?.specializationIn
-      );
+  const groupedCollegeSections = useMemo(() => {
+    const collegeMap = new Map();
 
-    const sortedPrograms = [...filteredPrograms].sort((a, b) =>
-      sortLabel(a).localeCompare(sortLabel(b), undefined, {
-        sensitivity: 'base',
-      })
-    );
+    filteredPrograms.forEach((program) => {
+      const collegeName =
+        toTitleCase(cleanFieldValue(program?.programFields?.college)) ||
+        'Other Programs';
 
-    const specializationHeadings = new Set(
-      sortedPrograms
-        .map((program) => {
-          const displayTitle = sortLabel(program);
-          const markerIndex = displayTitle.indexOf(specializationMarker);
-          if (markerIndex < 0) return '';
-          return displayTitle.slice(0, markerIndex).trim();
-        })
-        .filter(Boolean)
-    );
-
-    const headingProgramsMap = new Map();
-    const orderedTokens = [];
-    const pushedHeadingTokens = new Set();
-
-    sortedPrograms.forEach((program) => {
-      const displayTitle = sortLabel(program);
-      const markerIndex = displayTitle.indexOf(specializationMarker);
-      const specializationParent =
-        markerIndex > -1 ? displayTitle.slice(0, markerIndex).trim() : '';
-      const programTitle = cleanFieldValue(program?.title);
-
-      const headingForProgram = specializationParent
-        ? specializationParent
-        : specializationHeadings.has(programTitle)
-          ? programTitle
-          : '';
-
-      if (headingForProgram) {
-        if (!headingProgramsMap.has(headingForProgram)) {
-          headingProgramsMap.set(headingForProgram, []);
-        }
-        headingProgramsMap.get(headingForProgram).push(program);
-
-        if (!pushedHeadingTokens.has(headingForProgram)) {
-          pushedHeadingTokens.add(headingForProgram);
-          orderedTokens.push({ type: 'specialization', heading: headingForProgram });
-        }
-        return;
+      if (!collegeMap.has(collegeName)) {
+        collegeMap.set(collegeName, []);
       }
 
-      orderedTokens.push({ type: 'regular', program });
+      collegeMap.get(collegeName).push(program);
     });
 
-    const sections = [];
-    let regularBuffer = [];
-
-    orderedTokens.forEach((token) => {
-      if (token.type === 'regular') {
-        regularBuffer.push(token.program);
-        return;
-      }
-
-      if (regularBuffer.length > 0) {
-        sections.push({ type: 'regular', programs: regularBuffer });
-        regularBuffer = [];
-      }
-
-      sections.push({
-        type: 'specialization',
-        heading: token.heading,
-        programs: headingProgramsMap.get(token.heading) ?? [],
-      });
-    });
-
-    if (regularBuffer.length > 0) {
-      sections.push({ type: 'regular', programs: regularBuffer });
-    }
-
-    return sections;
+    return Array.from(collegeMap.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([college, collegePrograms]) => ({
+        college,
+        sections: buildSectionsForPrograms(collegePrograms),
+      }));
   }, [filteredPrograms]);
 
   if (loading) {
@@ -328,13 +354,7 @@ export default function ProgramsArchive(props) {
 
   const renderProgramCard = (program, options = {}) => {
     const { titleOverride = '', keyPrefix = '' } = options;
-    const displayTitle =
-      titleOverride ||
-      formatProgramDisplayTitle(
-        program?.title,
-        program?.programFields?.specialization,
-        program?.programFields?.specializationIn
-      );
+    const displayTitle = titleOverride || getProgramDisplayTitle(program);
     const college = toTitleCase(cleanFieldValue(program?.programFields?.college));
     const programType = getProgramTypeDetails(
       program?.programFields?.programType
@@ -459,37 +479,32 @@ export default function ProgramsArchive(props) {
                   No programs matched your search or filters.
                 </p>
               )}
-              {alphabetizedSections.map((section, index) => {
-                if (section.type === 'regular') {
-                  return (
-                    <ul
-                      key={`regular-${index}`}
-                      className={`${styles.programList} ${
-                        isCompactView ? styles.programListCompact : ''
-                      }`}
+              {groupedCollegeSections.map((collegeGroup) => (
+                <section key={collegeGroup.college} className={styles.collegeGroup}>
+                  <h2 className={styles.collegeHeading}>{collegeGroup.college}</h2>
+                  {collegeGroup.sections.map((section, index) => (
+                    <section
+                      key={`${collegeGroup.college}-${section.heading}-${index}`}
+                      className={styles.specializationGroup}
                     >
-                      {section.programs.map((program) => renderProgramCard(program))}
-                    </ul>
-                  );
-                }
-
-                return (
-                  <section key={`${section.heading}-${index}`} className={styles.specializationGroup}>
-                    <h2 className={styles.specializationHeading}>{section.heading}</h2>
-                    <ul
-                      className={`${styles.programList} ${
-                        isCompactView ? styles.programListCompact : ''
-                      }`}
-                    >
-                      {section.programs.map((program) =>
-                        renderProgramCard(program, {
-                          keyPrefix: `${section.heading}-`,
-                        })
-                      )}
-                    </ul>
-                  </section>
-                );
-              })}
+                      {section.heading ? (
+                        <h3 className={styles.specializationHeading}>{section.heading}</h3>
+                      ) : null}
+                      <ul
+                        className={`${styles.programList} ${
+                          isCompactView ? styles.programListCompact : ''
+                        }`}
+                      >
+                        {section.programs.map((program) =>
+                          renderProgramCard(program, {
+                            keyPrefix: `${collegeGroup.college}-${section.heading}-`,
+                          })
+                        )}
+                      </ul>
+                    </section>
+                  ))}
+                </section>
+              ))}
             </section>
           </div>
         </>
