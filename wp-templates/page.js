@@ -5,7 +5,7 @@ import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { createPortal } from 'react-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   buildKeywordString,
   buildMetaDescription,
@@ -72,6 +72,13 @@ function toTitleCase(value) {
     .join(' ');
 }
 
+function formatCollegeDisplay(value) {
+  const normalized = toTitleCase(normalize(value));
+  return normalized.replace(/\(([^)]+)\)/g, (_, suffix) => {
+    return `(${suffix.trim().toUpperCase()})`;
+  });
+}
+
 function formatPhoneForHref(value = '') {
   return String(value).replace(/[^\d+]/g, '');
 }
@@ -95,6 +102,8 @@ function hasRenderableContent(value = '') {
 
 export default function Component(props) {
   const router = useRouter();
+  const [coordinatorSearch, setCoordinatorSearch] = useState('');
+  const [coordinatorCollegeFilter, setCoordinatorCollegeFilter] = useState('all');
 
   // Loading state for previews
   if (props.loading) {
@@ -117,33 +126,71 @@ export default function Component(props) {
     String(uri ?? '').replace(/\/+$/, '') === '/graduate-program-coordinators';
   const programNodes = props?.data?.programs?.nodes ?? [];
 
-  const groupedPrograms = programNodes
-    .map((program) => {
-      const fields = program?.programFields ?? {};
-      const displayTitle = formatProgramDisplayTitle(
-        normalize(program?.title),
-        fields.specialization,
-        fields.specializationIn
+  const coordinatorPrograms = useMemo(() => {
+    return programNodes
+      .map((program) => {
+        const fields = program?.programFields ?? {};
+        const displayTitle = formatProgramDisplayTitle(
+          normalize(program?.title),
+          fields.specialization,
+          fields.specializationIn
+        );
+        return {
+          title: displayTitle,
+          uri: normalize(program?.uri),
+          college: formatCollegeDisplay(fields.college) || 'Other Programs',
+          coordinator: normalize(fields.contactName),
+          contact: normalize(fields.contactEmail),
+          phone: normalize(fields.contactPhone),
+        };
+      })
+      .filter(
+        (program) =>
+          program.title && (program.coordinator || program.contact || program.phone)
+      )
+      .sort((a, b) =>
+        a.title.localeCompare(b.title, undefined, {
+          sensitivity: 'base',
+        })
       );
-      return {
-        title: displayTitle,
-        uri: normalize(program?.uri),
-        college: toTitleCase(normalize(fields.college)) || 'Other Programs',
-        coordinator: normalize(fields.contactName),
-        contact: normalize(fields.contactEmail),
-        phone: normalize(fields.contactPhone),
-      };
-    })
-    .filter((program) => program.title && (program.coordinator || program.contact || program.phone))
-    .sort((a, b) => a.title.localeCompare(b.title))
-    .reduce((acc, program) => {
+  }, [programNodes]);
+  const coordinatorCollegeOptions = useMemo(() => {
+    const colleges = new Set(coordinatorPrograms.map((program) => program.college));
+    return Array.from(colleges).sort((a, b) => a.localeCompare(b));
+  }, [coordinatorPrograms]);
+  const filteredCoordinatorPrograms = useMemo(() => {
+    const normalizedSearch = coordinatorSearch.trim().toLowerCase();
+
+    return coordinatorPrograms.filter((program) => {
+      const searchable = [
+        program.title,
+        program.college,
+        program.coordinator,
+        program.contact,
+        program.phone,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      const matchesSearch =
+        !normalizedSearch || searchable.includes(normalizedSearch);
+      const matchesCollege =
+        coordinatorCollegeFilter === 'all' ||
+        program.college === coordinatorCollegeFilter;
+
+      return matchesSearch && matchesCollege;
+    });
+  }, [coordinatorPrograms, coordinatorSearch, coordinatorCollegeFilter]);
+  const groupedByCollege = useMemo(() => {
+    const grouped = filteredCoordinatorPrograms.reduce((acc, program) => {
       if (!acc[program.college]) acc[program.college] = [];
       acc[program.college].push(program);
       return acc;
     }, {});
-  const groupedByCollege = Object.entries(groupedPrograms).sort(([a], [b]) =>
-    a.localeCompare(b)
-  );
+
+    return Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b));
+  }, [filteredCoordinatorPrograms]);
   const contactProgramOptions = Array.from(
     new Set(
       programNodes
@@ -219,7 +266,45 @@ export default function Component(props) {
             {/* <ContactFormIntoSlot programOptions={contactProgramOptions} /> */}
             {isCoordinatorPage && (
               <section className={styles.directorySection}>
+                <section className={styles.filters}>
+                  <h2 className={styles.filtersTitle}>Find a Coordinator</h2>
+                  <div className={styles.filterGrid}>
+                    <label className={styles.filterField}>
+                      <span>Search</span>
+                      <input
+                        type="search"
+                        value={coordinatorSearch}
+                        onChange={(event) => setCoordinatorSearch(event.target.value)}
+                        placeholder="Program, coordinator, contact, or phone"
+                      />
+                    </label>
+                    <label className={styles.filterField}>
+                      <span>College</span>
+                      <select
+                        value={coordinatorCollegeFilter}
+                        onChange={(event) =>
+                          setCoordinatorCollegeFilter(event.target.value)
+                        }
+                      >
+                        <option value="all">All colleges</option>
+                        {coordinatorCollegeOptions.map((college) => (
+                          <option key={college} value={college}>
+                            {college}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                  <p className={styles.resultCount}>
+                    Showing {filteredCoordinatorPrograms.length} of {coordinatorPrograms.length} programs
+                  </p>
+                </section>
                 {/* <h2 className={styles.directoryTitle}>Graduate Program Coordinators</h2> */}
+                {filteredCoordinatorPrograms.length === 0 && (
+                  <p className={styles.noResults}>
+                    No coordinators matched your search or selected college.
+                  </p>
+                )}
                 {groupedByCollege.map(([college, programs]) => (
                   <div key={college} className={styles.collegeBlock}>
                     <h3 className={styles.collegeTitle}>{college}</h3>
