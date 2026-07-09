@@ -201,31 +201,6 @@ export default function Component() {
           </div>
         </section>
 
-        <section className={styles.requestInfo}>
-          <div className={`container ${styles.requestInfoInner}`}>
-            <div className={styles.requestInfoImage}>
-              <Image
-                src="/home/request-information.jpg"
-                alt="Student requesting program information"
-                width={1100}
-                height={760}
-              />
-            </div>
-            <div className={styles.requestInfoContent}>
-              <Heading className={styles.requestInfoTitle} level="h2">
-                Request Information
-              </Heading>
-              <ul className={styles.requestInfoLinks}>
-                <li>
-                  <Link href="/contact-us">Contact Us</Link>
-                </li>
-                <li>
-                  <Link href="/faqs">FAQs</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
         {highlightedProgram && (
           <section className={styles.highlightedProgram}>
             <div className={`container ${styles.highlightedProgramInner}`}>
