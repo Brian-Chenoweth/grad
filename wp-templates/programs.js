@@ -70,7 +70,7 @@ function getProgramTypeDetails(value = '') {
   if (compact.includes('blended')) {
     return {
       filterValue: 'Blended Graduate',
-      displayValue: 'Graduate Program with Blended Format',
+      displayValue: 'Graduate Program with Blended Option',
     };
   }
 
