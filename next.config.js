@@ -13,9 +13,10 @@ module.exports = withFaust({
     // Prefer modern formats where supported
     formats: ['image/avif', 'image/webp'],
 
-    // Fine-tune the generated widths so Next doesn’t overshoot as much
-    deviceSizes: [360, 480, 640, 768, 1024, 1280], // responsive layouts
-    imageSizes: [160, 240, 320, 340, 420],         // fixed/card/avatar sizes
+    // Keep the default Next widths available so older markup and cached pages
+    // do not request optimizer widths that the server rejects.
+    deviceSizes: [360, 480, 640, 750, 768, 828, 1024, 1080, 1200, 1280, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 160, 240, 256, 320, 340, 384, 420],
 
     // Long-lived cache for optimized images
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
