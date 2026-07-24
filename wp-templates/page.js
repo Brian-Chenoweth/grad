@@ -37,7 +37,7 @@ const BLENDED_PROGRAM_DETAILS = {
   },
   'architectural engineering': {
     graduateTitle: 'Architectural Engineering',
-    bachelorsDegrees: ['Architectural Engineering', 'Architecture - SUSPENDED'],
+    bachelorsDegrees: ['Architectural Engineering'],
   },
   'biomedical engineering': {
     graduateTitle: 'Biomedical Engineering',
