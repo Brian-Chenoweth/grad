@@ -758,8 +758,14 @@ export default function Component(props) {
   );
 }
 
-Component.variables = ({ databaseId }, ctx) => {
+Component.variables = ({ databaseId, uri }, ctx) => {
   const fallbackFooterLocation = MENUS.FOOTER_LOCATION ?? null;
+  const normalizedUri = String(uri ?? ctx?.uri ?? '').replace(/\/+$/, '');
+  const includePrograms = new Set([
+    '/graduate-program-coordinators',
+    '/blended-programs',
+    '/graduate-certificate-programs',
+  ]).has(normalizedUri);
 
   return {
     databaseId,
@@ -774,6 +780,7 @@ Component.variables = ({ databaseId }, ctx) => {
       MENUS.FOOTER_TERTIARY_LOCATION ?? fallbackFooterLocation,
     resourcesFooterLocation:
       MENUS.RESOURCES_FOOTER_LOCATION ?? fallbackFooterLocation,
+    includePrograms,
     asPreview: ctx?.asPreview,
   };
 };
@@ -791,6 +798,7 @@ Component.query = gql`
     $footerSecondaryLocation: MenuLocationEnum
     $footerTertiaryLocation: MenuLocationEnum
     $resourcesFooterLocation: MenuLocationEnum
+    $includePrograms: Boolean = false
     $asPreview: Boolean = false
   ) {
     page(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
@@ -811,7 +819,7 @@ Component.query = gql`
         metaRobotsNofollow
       }
     }
-    programs(first: 500) {
+    programs(first: 500) @include(if: $includePrograms) {
       nodes {
         uri
         title
