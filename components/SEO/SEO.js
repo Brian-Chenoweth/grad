@@ -34,14 +34,15 @@ import {
  */
 
 const DEFAULTS = {
-  siteName: 'Graduate Education',
+  siteName: 'Cal Poly Graduate Education',
   twitterHandle: '@CalPolyGradEd',
   themeColor: '#003831',
   locale: 'en_US',
   type: 'website',
   schemaType: 'WebPage',
-  defaultTitle: 'Graduate Education',
-  defaultDescription: 'Official site for Graduate Education.',
+  defaultTitle: 'Cal Poly Graduate Education',
+  defaultDescription:
+    'Official site for Cal Poly Graduate Education, offering advanced programs, research opportunities, and professional graduate education.',
   defaultImage: '/static/banner.jpeg',
 };
 
@@ -65,8 +66,19 @@ export default function SEO({
   const router = useRouter();
   const baseUrl = getSiteUrl();
   const canonical = normalizeCanonicalUrl(url || router?.asPath, baseUrl);
+  const resolvedSiteName = siteName || DEFAULTS.siteName;
 
   const resolvedTitle = title || DEFAULTS.defaultTitle;
+  const formattedTitle =
+    resolvedTitle &&
+    resolvedTitle !== resolvedSiteName &&
+    !resolvedTitle.toLowerCase().includes(`| ${resolvedSiteName.toLowerCase()}`) &&
+    !resolvedTitle.toLowerCase().includes(`${resolvedSiteName.toLowerCase()} |`) &&
+    !resolvedTitle.toLowerCase().endsWith(`| ${resolvedSiteName.toLowerCase()}`) &&
+    !resolvedTitle.toLowerCase().endsWith(`- ${resolvedSiteName.toLowerCase()}`)
+      ? `${resolvedTitle} | ${resolvedSiteName}`
+      : resolvedTitle || DEFAULTS.defaultTitle;
+
   const resolvedDescription = description || DEFAULTS.defaultDescription;
   const resolvedImageAbs = toAbsoluteUrl(
     imageUrl || DEFAULTS.defaultImage,
@@ -75,7 +87,7 @@ export default function SEO({
   const breadcrumbItems =
     breadcrumbs?.length
       ? breadcrumbs
-      : buildBreadcrumbs(router?.asPath, resolvedTitle);
+      : buildBreadcrumbs(router?.asPath, formattedTitle);
 
   const robots = noindex
     ? 'noindex, nofollow, noarchive'
@@ -218,12 +230,12 @@ export default function SEO({
         <meta name="robots" content={robots} />
 
         {/* Titles */}
-        {resolvedTitle && (
+        {formattedTitle && (
           <>
-            <title>{resolvedTitle}</title>
-            <meta name="title" content={resolvedTitle} />
-            <meta property="og:title" content={resolvedTitle} />
-            <meta property="twitter:title" content={resolvedTitle} />
+            <title>{formattedTitle}</title>
+            <meta name="title" content={formattedTitle} />
+            <meta property="og:title" content={formattedTitle} />
+            <meta property="twitter:title" content={formattedTitle} />
           </>
         )}
 
@@ -242,13 +254,13 @@ export default function SEO({
 
         {/* Open Graph */}
         <meta property="og:type" content={type || 'website'} />
-        {siteName && <meta property="og:site_name" content={siteName} />}
+        {resolvedSiteName && <meta property="og:site_name" content={resolvedSiteName} />}
         {locale && <meta property="og:locale" content={locale} />}
         {canonical && <meta property="og:url" content={canonical} />}
         {resolvedImageAbs && (
           <>
             <meta property="og:image" content={resolvedImageAbs} />
-            <meta property="og:image:alt" content={resolvedTitle} />
+            <meta property="og:image:alt" content={formattedTitle || resolvedTitle} />
           </>
         )}
         {article?.modifiedTime && (
@@ -262,7 +274,10 @@ export default function SEO({
         )}
         {canonical && <meta name="twitter:url" content={canonical} />}
         {resolvedImageAbs && (
-          <meta name="twitter:image" content={resolvedImageAbs} />
+          <>
+            <meta name="twitter:image" content={resolvedImageAbs} />
+            <meta name="twitter:image:alt" content={formattedTitle || resolvedTitle} />
+          </>
         )}
 
         {/* Article-specific meta for OG (optional) */}
