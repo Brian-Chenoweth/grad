@@ -463,6 +463,7 @@ export default function Component(props) {
         <>
           <EntryHeader title={title} image={featuredImage?.node} />
           <div className="container">
+            {showContentWrapper && <ContentWrapper content={htmlWithSlot} />}
             {isCertificateProgramsPage && certificateProgramsByCollege.length > 0 && (
               <section className={styles.directorySection}>
                 <h2 className={styles.sectionTitle}>Graduate Certificate Programs</h2>
@@ -636,7 +637,6 @@ export default function Component(props) {
                 ))}
               </section>
             )}
-            {showContentWrapper && <ContentWrapper content={htmlWithSlot} />}
             {/* Contact form temporarily disabled. Re-enable when needed. */}
             {/* <ContactFormIntoSlot programOptions={contactProgramOptions} /> */}
             {isCoordinatorPage && (
