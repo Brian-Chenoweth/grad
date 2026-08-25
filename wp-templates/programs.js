@@ -400,7 +400,7 @@ export default function ProgramsArchive(props) {
             )}
             {instructors && (
               <p className={styles.programMeta}>
-                <strong>{instructorCount > 1 ? 'Instructors' : 'Instructor'}:</strong> {instructors}
+                <strong>{instructorCount > 1 ? 'Graduate Coordinators' : 'Graduate Coordinator'}:</strong> {instructors}
               </p>
             )}
             {program?.uri && (
@@ -445,7 +445,7 @@ export default function ProgramsArchive(props) {
                     type="search"
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    placeholder="Program name, college, instructor, contact, or keyword"
+                    placeholder="Program name, college, contact, or keyword"
                   />
                 </label>
                 <label className={styles.filterField}>
